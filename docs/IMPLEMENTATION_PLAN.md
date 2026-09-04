@@ -9,7 +9,8 @@ Constraint: keep the two-lane identity (Software = blue, Marketing = orange)
 
 # §0 Orchestrator Contract
 
-- **Orchestrator:** Qwen 3.8 Max. **Workers:** Qwen 3.8 Flash.
+- **Orchestrator:** Qwen 3.8 Max. **Workers:** Muse Spark 1.3 Free (via OpenCode Zen) OR Qwen 3.8-Flash.
+- Worker backend is interchangeable: the orchestrator may dispatch any task to either backend. Both follow the identical contract below. Do not switch backends mid-phase — finish the in-flight phase on the backend it started with.
 - Dispatch tasks from §3 in phase order. Within a phase, tasks marked `∥` may run in parallel; everything else is sequential.
 - After each phase gate, run `npm run build`. If it fails, route the failing task back to a worker before starting the next phase.
 - Workers are **not allowed to**: add dependencies, add code comments, edit `src/data/resume.ts`, edit files outside their task's file list, or revisit any decision in §1.
