@@ -136,29 +136,11 @@ const setupTheme = () => {
   });
 };
 
-// Prevents right-click context menu and drag downloads on site-wide protected image elements
-const setupImageProtection = () => {
-  document.addEventListener('contextmenu', (e) => {
-    const target = e.target as HTMLElement;
-    if (target.tagName === 'IMG' || target.closest('.protected-image')) {
-      e.preventDefault();
-    }
-  });
-
-  document.addEventListener('dragstart', (e) => {
-    const target = e.target as HTMLElement;
-    if (target.tagName === 'IMG' || target.closest('.protected-image')) {
-      e.preventDefault();
-    }
-  });
-};
-
 // Initialization runner
 const initMain = () => {
   setupModals();
   setupProjectModals();
   setupTheme();
-  setupImageProtection(); // Invokes global image security
 };
 
 if (document.readyState === 'loading') {

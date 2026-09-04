@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/layout.astro";
 import SiteNav from "../components/site_nav.astro";
 import HeroHome from "../components/hero_home.astro";
 import ProofBand from "../components/proof_band.astro";
+import TrackFork from "../components/track_fork.astro";
 import ProjectCard from "../components/project_card.astro";
 import CategorySwitcher from "../components/category_switcher.astro";
 import ProjectModal from "../components/project_modal.astro";
@@ -39,6 +40,8 @@ const allProjects = projects.slice(0, 18);
     <HeroHome />
 
     <ProofBand />
+
+    <TrackFork />
 
     <section id="work" class="relative py-16 md:py-32">
       <div class="max-w-6xl mx-auto px-5 md:px-8">
@@ -178,11 +181,6 @@ const allProjects = projects.slice(0, 18);
           </p>
 
           <div class="mt-8 relative">
-            <div
-              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-44 rounded-full blur-3xl animate-cta-glow -z-10"
-              style="background: linear-gradient(90deg, var(--mkt-soft), var(--sw-soft));"
-            >
-            </div>
             <BookCall
               id="book-call-mobile"
               title="Book a 15-min intro call"
@@ -315,11 +313,6 @@ const allProjects = projects.slice(0, 18);
 
           <!-- Right column: form -->
           <div class="relative">
-            <div
-              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-44 rounded-full blur-3xl animate-cta-glow -z-10"
-              style="background: linear-gradient(90deg, var(--mkt-soft), var(--sw-soft));"
-            >
-            </div>
             <BookCall
               title="Book a 15-min intro call"
               subtitle="Short form first. Then pick a time on Google Appointments or reply over email."
@@ -348,6 +341,7 @@ const allProjects = projects.slice(0, 18);
     name={name}
     statusText={hub.status}
     resumeUrl={resumes.software}
+    resumeUrlAlt={resumes.marketing}
     ctaHref="#contact"
     email={contact.email}
   />

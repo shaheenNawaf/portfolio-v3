@@ -231,12 +231,12 @@
   .track-btn {
     background-color: var(--accent);
     color: #fff;
-    box-shadow: 0 8px 24px -10px var(--accent);
+    box-shadow: 0 10px 24px -12px rgb(0 0 0 / 0.45);
     transition: filter 0.2s cubic-bezier(0.16,1,0.3,1), transform 0.15s cubic-bezier(0.16,1,0.3,1), box-shadow 0.2s cubic-bezier(0.16,1,0.3,1);
   }
   .track-btn:hover {
     filter: brightness(1.08);
-    box-shadow: 0 14px 40px -10px var(--accent);
+    box-shadow: 0 14px 32px -12px rgb(0 0 0 / 0.55);
   }
 
   /* Dual-track identity helpers (always available, independent of data-track) */
@@ -253,10 +253,6 @@
     border: 1px solid var(--border);
     box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.6);
   }
-
-  /* Ambient dual-track glow blobs */
-  .glow-mkt { background-color: var(--mkt); opacity: 0.1; }
-  .glow-sw { background-color: var(--sw); opacity: 0.08; }
 
   /* Premium card hover glow */
   .project-card:hover {
@@ -377,33 +373,6 @@
 }
 .animate-bob { animation: bob 3s ease-in-out infinite; }
 
-/* Animated dual-accent gradient border (floating trust bar) */
-@keyframes border-sync {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-.animate-border-sync {
-  position: relative;
-  background:
-    linear-gradient(
-        color-mix(in srgb, var(--bg) 72%, transparent),
-        color-mix(in srgb, var(--bg) 72%, transparent)
-      )
-      padding-box,
-    linear-gradient(90deg, var(--mkt), var(--sw), var(--mkt)) border-box;
-  background-size: 200% 100%, 200% 100%;
-  border: 1px solid transparent;
-  animation: border-sync 6s linear infinite;
-}
-
-/* Breathing dual-accent glow behind the contact CTA */
-@keyframes cta-glow {
-  0%, 100% { opacity: 0.55; transform: scale(1); }
-  50% { opacity: 0.9; transform: scale(1.06); }
-}
-.animate-cta-glow { animation: cta-glow 4.5s ease-in-out infinite; }
-
 .reveal-section {
   opacity: 0;
   transform: translateY(24px);
@@ -413,22 +382,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .animate-bob,
-  .animate-border-sync,
-  .animate-cta-glow,
   .reveal-section,
   .skip-link {
     animation: none !important;
     transition: none !important;
-  }
-  .animate-border-sync {
-    background:
-      linear-gradient(
-          color-mix(in srgb, var(--bg) 72%, transparent),
-          color-mix(in srgb, var(--bg) 72%, transparent)
-        )
-        padding-box,
-      linear-gradient(90deg, var(--mkt), var(--sw), var(--mkt)) border-box;
-    border: 1px solid transparent;
   }
   .reveal-section { opacity: 1; transform: none; }
   html { scroll-behavior: auto; }

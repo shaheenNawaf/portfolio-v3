@@ -1,5 +1,4 @@
 ---
-import Watermark from "./watermark.astro";
 import type { Category } from "../data/resume";
 
 interface Props {
@@ -40,7 +39,7 @@ const {
 
 const cardImage =
   media?.type === "video" && media.thumbnail ? media.thumbnail : media?.url;
-const fallBackImage = `https://picsum.photos/seed/${id}/800/600`;
+const fallBackImage = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="800" height="600" fill="#18181b"/><path d="M0 600L800 0M0 0l800 600" stroke="#26262a" stroke-width="2"/></svg>')}`;
 ---
 
 <article
@@ -75,7 +74,6 @@ const fallBackImage = `https://picsum.photos/seed/${id}/800/600`;
             class="w-full h-full object-cover opacity-90"
             loading="lazy"
           />
-          <Watermark />
         </div>
       ) : (
         <img

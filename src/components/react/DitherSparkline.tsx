@@ -10,12 +10,6 @@ type DitherSparklineProps = {
   className?: string
 }
 
-const W = 100
-const H = 40
-const CELL = 2
-const MAX_COLS = 100
-const MAX_ROWS = 40
-
 export function DitherSparkline({
   data,
   color = "orange",
@@ -44,8 +38,8 @@ export function DitherSparkline({
     const paint = () => {
       const box = wrap.getBoundingClientRect()
       const dpr = window.devicePixelRatio || 1
-      const cols = Math.min(MAX_COLS, Math.max(4, Math.round((box.width / CELL) * dpr / dpr)))
-      const rows = Math.min(MAX_ROWS, Math.max(4, Math.round((box.height / CELL) * dpr / dpr)))
+      const cols = Math.max(4, Math.round(box.width * dpr))
+      const rows = Math.max(4, Math.round(box.height * dpr))
       canvas.width = cols
       canvas.height = rows
       canvas.style.width = "100%"
@@ -55,9 +49,10 @@ export function DitherSparkline({
       const min = Math.min(...data)
       const range = max - min || 1
 
+      const padY = Math.max(2, Math.round(rows * 0.08))
       const points = data.map((v, i) => ({
         x: (i / (data.length - 1)) * (cols - 1),
-        y: rows - 1 - ((v - min) / range) * (rows - 3) - 1,
+        y: padY + (1 - (v - min) / range) * (rows - padY * 2),
       }))
 
       ctx.clearRect(0, 0, cols, rows)
@@ -65,8 +60,7 @@ export function DitherSparkline({
       // Draw ordered-dither fill below the line
       for (let y = 0; y < rows; y++) {
         for (let x = 0; x < cols; x++) {
-          // Find if this point is below the line (interpolated)
-          let lineY = 0
+          let lineY = rows
           for (let i = 0; i < points.length - 1; i++) {
             if (x >= points[i].x && x <= points[i + 1].x) {
               const t = (x - points[i].x) / (points[i + 1].x - points[i].x || 1)
@@ -74,30 +68,28 @@ export function DitherSparkline({
               break
             }
           }
-          const isBelow = y > lineY
-          if (!isBelow) continue
-          const distanceFromLine = (y - lineY) / (rows - lineY)
-          const density = 1 - distanceFromLine
+          if (y <= lineY) continue
+          const density = 1 - (y - lineY) / (rows - lineY || 1)
           const lit = density > BAYER4[y & 3][x & 3]
           if (!lit) continue
-          const alpha = (0.15 + 0.4 * density) * (hovered ? 1.2 : 1)
+          const alpha = (0.18 + 0.55 * density) * (hovered ? 1.15 : 1)
           ctx.fillStyle = rgb(fill, 1, alpha)
           ctx.fillRect(x, y, 1, 1)
         }
       }
 
-      // Draw the line itself with dither
-      for (let i = 0; i < points.length; i++) {
-        const p = points[i]
-        // Draw a 2px-wide line with dither
-        for (let dx = 0; dx < 2; dx++) {
-          for (let dy = 0; dy < 2; dy++) {
-            const x = Math.round(p.x) + dx
-            const y = Math.round(p.y) + dy
-            if (x >= cols || y >= rows) continue
-            ctx.fillStyle = rgb(fill, 1, 0.9)
-            ctx.fillRect(x, y, 1, 1)
-          }
+      // Draw the line itself
+      for (let i = 0; i < points.length - 1; i++) {
+        const p0 = points[i]
+        const p1 = points[i + 1]
+        const steps = Math.max(Math.abs(p1.x - p0.x), Math.abs(p1.y - p0.y), 1)
+        for (let s = 0; s <= steps; s++) {
+          const t = s / steps
+          const x = Math.round(p0.x + t * (p1.x - p0.x))
+          const y = Math.round(p0.y + t * (p1.y - p0.y))
+          if (x >= cols || y >= rows) continue
+          ctx.fillStyle = rgb(fill, 1, 0.9)
+          ctx.fillRect(x, y, 1, 1)
         }
       }
 

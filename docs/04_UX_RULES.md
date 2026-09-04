@@ -70,9 +70,9 @@ Scrolling should feel natural.
 
 # Navigation
 
-Navbar hidden until hero exits.
+Navbar always visible as a fixed glass bar.
 
-Sticky after reveal.
+Glass strength interpolates on scroll.
 
 Minimal links only.
 

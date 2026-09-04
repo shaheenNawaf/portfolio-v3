@@ -94,17 +94,28 @@ const initScrollSpy = () => {
 };
 
 const initTrustBarObserver = () => {
-  const proofSection = document.getElementById("proof");
   const stickyBar = document.getElementById("sticky-cta");
-  if (!proofSection || !stickyBar) return;
+  const hero = document.getElementById("hero");
+  if (!stickyBar || !hero) return;
+
+  const state = { hero: true, contact: false };
+  const update = () =>
+    stickyBar.classList.toggle("is-hidden", state.hero || state.contact);
 
   const io = new IntersectionObserver(
-    ([entry]) => {
-      stickyBar.classList.toggle("is-hidden", !entry.isIntersecting);
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.target.id === "hero") state.hero = e.isIntersecting;
+        if (e.target.id === "contact") state.contact = e.isIntersecting;
+      });
+      update();
     },
-    { threshold: 0 }
+    { threshold: 0, rootMargin: "-1px 0px 0px 0px" }
   );
-  io.observe(proofSection);
+  io.observe(hero);
+  const contact = document.getElementById("contact");
+  if (contact) io.observe(contact);
+  update();
 };
 
 const initIndex = () => {

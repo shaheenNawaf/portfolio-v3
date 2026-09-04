@@ -7,7 +7,7 @@ interface Props {
 
 const { mode } = Astro.props;
 const otherHref = mode === "software" ? "/marketing" : "/software";
-const otherLabel = mode === "software" ? "Studio" : "Lab";
+const otherLabel = mode === "software" ? "Marketing" : "Engineering";
 const accentHover =
   mode === "software"
     ? "hover:text-blue-400 hover:border-blue-500/30"
@@ -26,13 +26,17 @@ const accentHover =
       <svg class="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
       </svg>
-      Hub
+      Home
     </a>
     <a
       href={otherHref}
-      class="hidden sm:inline-flex items-center py-2 px-4 h-auto md:h-[48px] rounded-xl surface text-[color:var(--text-faint)] hover:text-[color:var(--text)] hover:border-[color:var(--border-strong)] transition-all text-[10px] md:text-[11px] font-bold uppercase tracking-[0.15em]"
+      class:list={[
+        "inline-flex items-center py-2 px-3 md:px-4 h-auto md:h-[48px] rounded-xl surface text-[color:var(--text-faint)] hover:text-[color:var(--text)] hover:border-[color:var(--border-strong)] transition-all text-[10px] md:text-[11px] font-bold uppercase tracking-[0.15em]",
+        accentHover,
+      ]}
     >
-      Switch to {otherLabel}
+      <span class="sm:hidden">→ {otherLabel}</span>
+      <span class="hidden sm:inline">Switch to {otherLabel}</span>
     </a>
   </div>
   <div class="flex items-center gap-2">

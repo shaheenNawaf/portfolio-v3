@@ -3,7 +3,6 @@ import {
   name,
   contact,
   hub,
-  resumes,
   hubStats,
   trustLogos,
 } from "../data/resume";
@@ -38,7 +37,7 @@ const headlineWords = [words[0] + " " + words[1], words.slice(2).join(" ")];
             class="absolute top-2 -right-8 sm:top-2 sm:-right-12 md:top-4 md:-right-16 z-20 pointer-events-none"
           >
             <span
-              class="hero-annotation block text-[18px] font-normal text-white leading-none mb-0.5"
+              class="hero-annotation block text-[18px] font-normal text-[color:var(--text)] leading-none mb-0.5"
               style="font-family: 'Caveat', cursive; transform: rotate(-4deg);"
             >
               That's me.
@@ -207,50 +206,6 @@ const headlineWords = [words[0] + " " + words[1], words.slice(2).join(" ")];
                 d="M7 17L17 7M17 7H7M17 7v10"></path>
             </svg>
           </a>
-          <div class="flex items-center gap-2.5 mt-2">
-            <a
-              href={resumes.software}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="hero-resume-btn inline-flex items-center gap-1.5 px-7 py-3.5 rounded-full text-xs font-medium uppercase tracking-wider text-white/60 border border-white/20 hover:text-white hover:border-white/50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]"
-            >
-              SWE Resume
-              <svg
-                class="w-3 h-3"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2.5"
-                  d="M12 5v14m0 0l-6-6m6 6l6-6"></path>
-              </svg>
-            </a>
-            <a
-              href={resumes.marketing}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="hero-resume-btn inline-flex items-center gap-1.5 px-7 py-3.5 rounded-full text-xs font-medium uppercase tracking-wider text-white/60 border border-white/20 hover:text-white hover:border-white/50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]"
-            >
-              MKT Resume
-              <svg
-                class="w-3 h-3"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2.5"
-                  d="M12 5v14m0 0l-6-6m6 6l6-6"></path>
-              </svg>
-            </a>
-          </div>
         </div>
 
         <!-- Metrics row + Annotation 3: metric note -->

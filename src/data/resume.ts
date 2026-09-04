@@ -458,22 +458,6 @@ export const projects: Project[] = [
     caseStudyHref: '/software',
   },
   {
-    id: 'proj-friendslop',
-    category: 'software',
-    title: 'Friendslop - Game Discovery App',
-    date: 'March 2026 -',
-    role: 'Developer',
-    color: '#6366f1',
-    tags: ['Next.js', 'Steam API', 'Google Drive'],
-    description: "Building a TikTok-style game discovery platform for Steam users, surfacing personalized game recommendations based on existing library data and integrating Steam login to filter already-owned games from the discovery feed without third-party data sharing.",
-    media: {
-      type: 'image' as const,
-      url: '/friendslop/cover.png',
-    },
-    liveUrl: '',
-    repoUrl: '',
-  },
-  {
     id: 'proj-JCSD',
     category: 'software',
     title: 'Inventory & Employee Management System',

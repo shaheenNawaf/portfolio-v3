@@ -16,11 +16,11 @@ Recruiters value demonstrated work over chronology.
 
 # Decision 002
 
-Navbar hidden until Hero finishes.
+Navbar always visible as a fixed glass bar (glass strength interpolates on scroll).
 
 Reason
 
-Hero deserves full attention.
+Recruiters need persistent access to Book a Call; the hero is strong enough to share the viewport.
 
 ---
 

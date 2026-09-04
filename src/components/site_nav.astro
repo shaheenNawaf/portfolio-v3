@@ -1,6 +1,6 @@
 ---
 import ThemeToggle from "./theme_toggle.astro";
-import { name } from "../data/resume";
+import { name, hub } from "../data/resume";
 import { DitherAvatar } from "./dither-kit/avatar";
 
 const navLinks = [
@@ -145,6 +145,26 @@ const navLinks = [
         </a>
       ))
     }
+    <a
+      href="#contact"
+      class="mobile-link mt-8 inline-flex items-center gap-2 px-8 py-4 rounded-xl text-white text-sm font-bold uppercase tracking-[0.15em] transition-all active:scale-95"
+      style="background: var(--accent); box-shadow: 0 8px 32px -8px color-mix(in srgb, var(--accent) 60%, transparent);"
+    >
+      {hub.ctaPrimary}
+      <svg
+        class="w-4 h-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2.5"
+          d="M9 5l7 7-7 7"></path>
+      </svg>
+    </a>
   </div>
 </div>
 

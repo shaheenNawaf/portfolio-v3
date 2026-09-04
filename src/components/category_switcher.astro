@@ -141,7 +141,7 @@ const defaultId = categories[0]?.id ?? "all";
 
       const cards = grid.querySelectorAll<HTMLElement>(itemSelector);
 
-      const saved = localStorage.getItem(storageKey) || defaultId;
+      const saved = defaultId;
 
       const updateIndicator = (btn: HTMLElement) => {
         const rect = btn.getBoundingClientRect();
@@ -201,7 +201,6 @@ const defaultId = categories[0]?.id ?? "all";
           btn.tabIndex = 0;
 
           updateIndicator(btn);
-          localStorage.setItem(storageKey, category);
           filterItems(category);
         });
 

@@ -8,6 +8,7 @@ interface Props {
   name: string;
   statusText?: string;
   resumeUrl?: string;
+  resumeUrlAlt?: string;
   ctaHref?: string;
   email?: string;
 }
@@ -19,9 +20,17 @@ const {
   name,
   statusText = "Open to roles",
   resumeUrl = "/resume.pdf",
+  resumeUrlAlt,
   ctaHref = "#book-call",
   email,
 } = Astro.props;
+
+const resumeLinks = resumeUrlAlt
+  ? [
+      { href: resumeUrl, label: "SWE", title: "Download software resume (PDF)" },
+      { href: resumeUrlAlt, label: "MKT", title: "Download marketing resume (PDF)" },
+    ]
+  : [{ href: resumeUrl, label: "", title: "View Resume" }];
 ---
 
 <div
@@ -75,27 +84,37 @@ const {
           )
         }
 
-        <a
-          href={resumeUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="flex surface p-2 md:p-2.5 rounded-lg md:rounded-xl text-[color:var(--text-muted)] hover:text-[color:var(--accent)] hover:border-[color:var(--border-strong)] transition-all shrink-0"
-          title="View Resume"
-        >
-          <svg
-            class="w-4 h-4 md:w-5 md:h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            ></path>
-          </svg>
-        </a>
+        {
+          resumeLinks.map((r) => (
+            <a
+              href={r.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={r.title}
+              class="flex items-center gap-1.5 surface p-2 md:p-2.5 rounded-lg md:rounded-xl text-[color:var(--text-muted)] hover:text-[color:var(--accent)] hover:border-[color:var(--border-strong)] transition-all shrink-0"
+              title={r.title}
+            >
+              <svg
+                class="w-4 h-4 md:w-5 md:h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+              {r.label && (
+                <span class="text-[9px] md:text-[10px] font-mono font-bold tracking-wider">
+                  {r.label}
+                </span>
+              )}
+            </a>
+          ))
+        }
 
         <a
           href={`https://${linkedinUrl}`}
