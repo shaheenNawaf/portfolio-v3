@@ -33,7 +33,26 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
     </p>
   </div>
 
-  <form id={`${id}-form`} class="grid gap-4 md:grid-cols-2" novalidate>
+  <form
+    id={`${id}-form`}
+    name="book-call"
+    method="POST"
+    data-netlify="true"
+    data-netlify-honeypot="bot-field"
+    class="grid gap-4 md:grid-cols-2"
+    novalidate
+  >
+    <input type="hidden" name="form-name" value="book-call" />
+    <p class="hidden" aria-hidden="true">
+      <label
+        >Don't fill this out if you're human: <input
+          name="bot-field"
+          tabindex="-1"
+          autocomplete="off"
+          class="book-field"
+        /></label
+      >
+    </p>
     <div class="md:col-span-1">
       <label class="book-label" for={`${id}-name`}>Name</label>
       <input
@@ -118,8 +137,8 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
       <p class="text-[11px] muted leading-snug max-w-xs">
         {
           appointmentUrl
-            ? "Opens Google Appointments after you submit."
-            : "Sends a structured email — I reply within 24–48 hours."
+            ? "Sends your note, then opens Google Appointments to pick a time."
+            : "Sends directly — I reply within 24–48 hours."
         }
       </p>
     </div>
@@ -146,33 +165,21 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
       const contactEmail = (section as HTMLElement).dataset.contactEmail ?? "";
       const submitBtn = form.querySelector("button[type='submit']") as HTMLButtonElement | null;
       const label = submitBtn?.querySelector(".btn-label") as HTMLElement | null;
+      const idleLabel = label?.textContent ?? "Book a Call";
 
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const data = new FormData(form);
-        const name = String(data.get("name") ?? "").trim();
-        const email = String(data.get("email") ?? "").trim();
-        const interest = String(data.get("interest") ?? "hybrid");
-        const note = String(data.get("note") ?? "").trim();
-
-        if (!name || !email) {
-          if (status) {
-            status.classList.remove("hidden");
-            status.textContent = "Name and work email are required.";
-          }
-          return;
+      const say = (msg: string) => {
+        if (status) {
+          status.classList.remove("hidden");
+          status.textContent = msg;
         }
+      };
 
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          if (status) {
-            status.classList.remove("hidden");
-            status.textContent = "Please enter a valid work email.";
-          }
-          return;
-        }
+      const setBusy = (busy: boolean) => {
+        if (submitBtn) submitBtn.disabled = busy;
+        if (label) label.textContent = busy ? "Sending..." : idleLabel;
+      };
 
-        if (submitBtn) { submitBtn.disabled = true; if (label) label.textContent = "Sending..."; }
-
+      const openMailDraft = (name: string, email: string, interest: string, note: string) => {
         const subject = encodeURIComponent(
           `Intro call request - ${interest} - ${name}`,
         );
@@ -188,21 +195,55 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
             .filter(Boolean)
             .join("\n"),
         );
+        window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
+      };
 
-        if (appointmentUrl) {
-          window.open(appointmentUrl, "_blank", "noopener,noreferrer");
-          window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
-        } else {
-          window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+        const name = String(data.get("name") ?? "").trim();
+        const email = String(data.get("email") ?? "").trim();
+        const interest = String(data.get("interest") ?? "hybrid");
+        const note = String(data.get("note") ?? "").trim();
+
+        if (!name || !email) {
+          say("Name and work email are required.");
+          return;
         }
 
-        if (status) {
-          status.classList.remove("hidden");
-          status.textContent = appointmentUrl
-            ? "Opening calendar and email draft. Pick a slot, then send if needed."
-            : "Opening your email client with the intro request.";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          say("Please enter a valid work email.");
+          return;
         }
-        if (submitBtn) { submitBtn.disabled = false; if (label) label.textContent = "Book intro call"; }
+
+        setBusy(true);
+        say("Sending…");
+
+        const encoded = new URLSearchParams();
+        data.forEach((value, key) => encoded.append(key, String(value)));
+
+        fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: encoded.toString(),
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error(`form-${res.status}`);
+            form.reset();
+            setBusy(false);
+            if (appointmentUrl) {
+              window.open(appointmentUrl, "_blank", "noopener,noreferrer");
+              say("Note sent. Opening the calendar — pick a slot to lock it in.");
+            } else {
+              say("Sent. I reply within 24–48 hours.");
+            }
+          })
+          .catch(() => {
+            // Form service unreachable (offline, blocker): fall back to mail app.
+            setBusy(false);
+            openMailDraft(name, email, interest, note);
+            say("Couldn't reach the form service — opened your email app with the note instead.");
+          });
       });
     });
   };
