@@ -39,9 +39,6 @@ collections:
       - label: Systems
         field: category
         pattern: "^systems$"
-      - label: Drafts
-        field: draft
-        pattern: true
     fields:
       - { label: Title, name: title, widget: string }
       - label: Category
@@ -62,7 +59,7 @@ collections:
         collapsed: true
         fields:
           - { label: Type, name: type, widget: select, options: [image, video], default: image }
-          - { label: File, name: url, widget: image, allow_multiple: false, hint: "Upload an image, or paste any URL (Cloudinary video URLs work too)", required: false }
+          - { label: File, name: url, widget: image, hint: "Upload an image, or paste any URL (Cloudinary video URLs work too)", required: false }
           - { label: Thumbnail, name: thumbnail, widget: image, required: false, hint: "Poster frame for videos" }
       - label: Gallery
         name: gallery
