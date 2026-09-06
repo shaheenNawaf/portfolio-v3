@@ -10,13 +10,20 @@ interface Props {
 const { social, idPrefix = "" } = Astro.props;
 const { label, href, icon, tint, external, popover, id } = social;
 const tipId = `${idPrefix}${id}-preview`;
+// rel="me" on owned identity profiles consolidates the entity for search/AI graphs.
+const identityIds = new Set(["github", "linkedin"]);
+const rel = external
+  ? identityIds.has(id)
+    ? "me noopener noreferrer"
+    : "noopener noreferrer"
+  : undefined;
 ---
 
 <span class={`group/social relative inline-flex align-baseline sticker-${tint}`}>
   <a
     href={href}
     target={external ? "_blank" : undefined}
-    rel={external ? "noopener noreferrer" : undefined}
+    rel={rel}
     aria-describedby={tipId}
     data-ui-sound="none"
     class="inline-flex w-fit items-center gap-1 rounded-full border border-[color:var(--sticker-bd)] bg-[color:var(--sticker-bg)] px-2 py-0.5 text-xs font-medium text-[color:var(--sticker-fg)] transition-transform duration-150 hover:underline active:translate-y-px active:scale-[0.98] motion-reduce:transition-none"
