@@ -1,33 +1,33 @@
 ---
 import BaseLayout from "../layouts/layout.astro";
 import IdentityHero from "../components/identity_hero.astro";
-import ProjectCard from "../components/project_card.astro";
-import ProjectModal from "../components/project_modal.astro";
-import ExperienceCard from "../components/experience_card.astro";
-import StickyBar from "../components/sticky_bar.astro";
-import ZoneNav from "../components/zone_nav.astro";
+import SectionDivider from "../components/section_divider.astro";
+import SectionHead from "../components/section_head.astro";
+import WorkCard from "../components/work_card.astro";
+import JourneyRow from "../components/journey_row.astro";
 import BookCall from "../components/book_call.astro";
+import SiteFooter from "../components/site_footer.astro";
 
 import {
   name,
   marketingSummary,
-  projects,
-  experiences,
   marketingSkills,
-  contact,
-  resumes,
   featuredProjectIds,
   marketingFit,
-  hub,
-  trustLogos,
 } from "../data/resume";
+import { getExperiences, getProjects } from "../data/content";
+
+const projects = await getProjects();
+const experiences = await getExperiences();
+
+const visible = projects.filter((p) => !p.draft);
 
 const featured = featuredProjectIds.marketing
-  .map((id) => projects.find((p) => p.id === id))
-  .filter(Boolean);
+  .map((id) => visible.find((p) => p.id === id))
+  .filter((p): p is (typeof visible)[number] => Boolean(p));
 
 const featuredIds = new Set<string>(featuredProjectIds.marketing);
-const moreProjects = projects.filter(
+const moreProjects = visible.filter(
   (p) => p.category === "marketing" && !featuredIds.has(p.id),
 );
 const marketingExp = experiences.filter((e) => e.category === "marketing");
@@ -37,119 +37,87 @@ const marketingExp = experiences.filter((e) => e.category === "marketing");
   title="Shaheen | Creator Partnerships"
   description="Growth marketer and creator strategist. SEA scale, ROAS, communities. Book an intro call."
   track="marketing"
-  hideToggle={true}
 >
-  <div id="hero-trigger" class="absolute top-0 h-20 w-full pointer-events-none">
-  </div>
+  <main id="main" class="wrap flex flex-col gap-8 sm:gap-10 pt-10 md:pt-16 pb-4">
+    <IdentityHero
+      name={name}
+      headline="Growth Marketing"
+      summary={marketingSummary}
+      skills={marketingSkills}
+      mode="marketing"
+      impactBadge="$355K+ Managed Volume in 4 months"
+    />
+    <p class="mt-6 text-[12px] faint" data-reveal style="--i:2">
+      Creator partnerships, community systems, and performance plays that move
+      volume.
+    </p>
 
-  <main id="main" class="marketing-page max-w-4xl mx-auto w-full flex flex-col py-12 px-5 md:px-8">
-    <ZoneNav mode="marketing" />
-
-    <div class="flex flex-col gap-16 md:gap-20">
-      <IdentityHero
-        name={name}
-        headline="Growth Marketing"
-        image={contact.profileImage}
-        summary={marketingSummary}
-        skills={marketingSkills}
-        contact={contact}
-        mode="marketing"
-        impactBadge="$355K+ Managed Volume in 4 m"
-        resumeUrl={resumes.marketing}
-      />
-
+    <div data-reveal style="--i:3">
+      <SectionDivider />
       <section>
-        <div
-          class="flex flex-wrap items-center justify-between gap-4 radius-card border track-accent-bg px-5 py-4"
-        >
-          <p class="text-xs muted max-w-sm leading-relaxed">
-            Creator partnerships, community systems, and performance plays that
-            move volume. SEA market operator who builds the stack behind the
-            campaigns.
-          </p>
-          <div class="flex items-center gap-6 opacity-70">
-            {
-              trustLogos.map((logo) => (
-                <img src={logo.src} alt={logo.alt} class="h-6 w-auto object-contain" />
-              ))
-            }
-          </div>
+        <SectionHead
+          title="Flagship campaigns"
+          subtitle="Volume, ROAS, and systems, not just creative drops."
+        />
+        <div class="mt-6 grid grid-flow-row-dense grid-cols-1 gap-4 sm:grid-cols-2">
+          {featured.map((p, i) => p && <WorkCard {...p} index={i} />)}
         </div>
       </section>
+    </div>
 
+    <div data-reveal style="--i:4">
+      <SectionDivider />
       <section>
-        <div class="flex items-end justify-between gap-4 mb-8">
-          <div>
-            <h2
-              class="zone-heading text-xl md:text-2xl font-bold tracking-tight"
-            >
-              Flagship campaigns
-            </h2>
-            <p class="mt-1 text-sm muted">
-              Volume, ROAS, and systems, not just creative drops.
-            </p>
-          </div>
-          <a
-            href="#book-call"
-            class="hidden sm:inline-flex text-[10px] font-bold uppercase tracking-wider text-orange-400 hover:text-orange-300 transition-colors"
-          >
-            {hub.ctaPrimary}
-          </a>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {
-            featured.map(
-              (project) => project && <ProjectCard {...project} />,
-            )
-          }
-        </div>
-      </section>
-
-      <section class="zone-surface p-6 md:p-8">
-        <h2
-          class="zone-heading text-lg font-bold mb-4"
-        >
-          Good fit when you need
-        </h2>
-        <ul class="space-y-3">
+        <SectionHead title="Good fit when you need" />
+        <ul class="mt-5 space-y-3">
           {
             marketingFit.map((item) => (
-              <li class="flex items-start gap-3 text-sm muted">
-                <span class="mt-1.5 w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0" />
+              <li class="flex items-start gap-3 text-[14px] muted leading-[1.7]">
+                <span
+                  class="mt-[7px] w-1.5 h-1.5 rounded-full shrink-0"
+                  style="background-color: var(--mkt)"
+                ></span>
                 {item}
               </li>
             ))
           }
         </ul>
       </section>
+    </div>
 
-      {
-        moreProjects.length > 0 && (
+    {
+      moreProjects.length > 0 && (
+        <div data-reveal style="--i:5">
+          <SectionDivider />
           <section>
-            <div class="flex items-center gap-4 mb-8">
-              <h2 class="text-sm font-semibold muted">More campaigns</h2>
-              <div class="h-px flex-1 hairline" />
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {moreProjects.map((project) => (
-                <ProjectCard {...project} />
+            <SectionHead title="More campaigns" />
+            <div class="mt-6 grid grid-flow-row-dense grid-cols-1 gap-4 sm:grid-cols-2">
+              {moreProjects.map((p, i) => (
+                <WorkCard {...p} index={i} />
               ))}
             </div>
           </section>
-        )
-      }
-
-      <section>
-        <div class="flex items-center gap-4 mb-8">
-          <h2 class="text-sm font-semibold muted">Professional history</h2>
-          <div class="h-px flex-1 hairline" />
         </div>
-        <div class="flex flex-col gap-4">
-          {marketingExp.map((exp) => <ExperienceCard {...exp} />)}
+      )
+    }
+
+    <div data-reveal style="--i:6">
+      <SectionDivider />
+      <section>
+        <SectionHead title="Professional history" />
+        <div class="mt-6 timeline">
+          {
+            marketingExp.map((exp) => (
+              <JourneyRow {...exp} />
+            ))
+          }
         </div>
       </section>
+    </div>
 
-      <section class="pb-24">
+    <div data-reveal style="--i:7">
+      <SectionDivider />
+      <section>
         <BookCall
           defaultInterest="marketing"
           title="Book a studio intro"
@@ -159,19 +127,5 @@ const marketingExp = experiences.filter((e) => e.category === "marketing");
     </div>
   </main>
 
-  <StickyBar
-    ctaText={hub.ctaPrimary}
-    linkedinUrl={contact.linkedin}
-    profileImage={contact.profileImage}
-    name={name}
-    statusText="Remote · SEA · Marketing roles"
-    resumeUrl={resumes.marketing}
-    ctaHref="#book-call"
-    email={contact.email}
-  />
-
-  {/* Project Modals */}
-  {[...featured, ...moreProjects].filter(Boolean).map((project) => project && (
-    <ProjectModal {...project} />
-  ))}
+  <SiteFooter />
 </BaseLayout>

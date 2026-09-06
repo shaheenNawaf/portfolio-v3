@@ -4,381 +4,113 @@ import {
   contact,
   hub,
   hubStats,
-  trustLogos,
+  socials,
+  secrets,
+  swaps,
 } from "../data/resume";
+import VerifiedBadge from "./verified_badge.astro";
+import SecretSwap from "./secret_swap.astro";
+import SecretTooltip from "./secret_tooltip.astro";
+import StickerPill from "./sticker_pill.astro";
+import StatCounter from "./stat_counter.astro";
+import ActivityHeatmap from "./activity_heatmap.astro";
 
-const heroMetrics = [hubStats[0], hubStats[3], hubStats[1], hubStats[2]];
-const words = hub.position.split(" ");
-const headlineWords = [words[0] + " " + words[1], words.slice(2).join(" ")];
+const subtextParts = hub.subtext.split(secrets.roas.trigger);
 ---
 
-<section
-  id="hero"
-  class="relative isolate min-h-[100dvh] flex items-center pt-16 md:pt-24 pb-12 md:pb-20 overflow-hidden"
->
-  <div class="relative z-10 max-w-6xl mx-auto w-full px-5 md:px-8">
-    <div class="grid lg:grid-cols-[11fr_9fr] gap-6 lg:gap-16 items-center">
-      <!-- Portrait (desktop only) -->
-      <div
-        class="hidden md:flex order-1 lg:order-2 relative justify-center lg:justify-end"
+<section id="hero" class="pt-2" data-reveal="hero" style="--i:0">
+  <div class="flex items-center gap-3 leading-relaxed">
+    <button
+      type="button"
+      id="avatar-egg"
+      aria-label={`${name} profile picture`}
+      data-ui-sound="none"
+      class="relative w-12 h-12 shrink-0 cursor-default overflow-hidden rounded-full"
+    >
+      <img
+        src={contact.profileImage}
+        alt=""
+        width="48"
+        height="48"
+        class="w-full h-full object-cover"
+        loading="eager"
+      />
+      <span
+        aria-hidden="true"
+        id="avatar-shades"
+        class="absolute top-[38%] left-1/2 flex -translate-x-1/2 items-center opacity-0 transition-opacity duration-150"
       >
-        <!-- Depth layer: static radial gradient behind portrait -->
-        <div
-          class="absolute inset-0 -inset-x-8 -inset-y-8 pointer-events-none"
-          aria-hidden="true"
-          style="background: radial-gradient(circle at 50% 50%, rgba(249,115,22,0.05), transparent 70%);"
-        >
-        </div>
-
-        <!-- Portrait group: all annotations move with the portrait -->
-        <div class="relative ml-auto overflow-visible">
-          <!-- Annotation 1: "That's me." + arrow pointing to left shoulder -->
-          <div
-            class="absolute top-2 -right-8 sm:top-2 sm:-right-12 md:top-4 md:-right-16 z-20 pointer-events-none"
-          >
-            <span
-              class="hero-annotation block text-[18px] font-normal text-[color:var(--text)] leading-none mb-0.5"
-              style="font-family: 'Caveat', cursive; transform: rotate(-4deg);"
-            >
-              That's me.
-            </span>
-            <svg
-              class="hero-annotation-arrow w-10 h-7"
-              viewBox="0 0 50 30"
-              fill="none"
-              aria-hidden="true"
-            >
-              <!-- Wobbly shaft curving down-left toward shoulder -->
-              <path
-                d="M 44,3 C 40,5 36,9 30,14 C 24,19 18,23 12,26"
-                stroke="var(--mkt)"
-                stroke-width="2"
-                stroke-linecap="round"
-                fill="none"></path>
-              <!-- Imperfect arrowhead with wobble -->
-              <path
-                d="M 18,20 L 12,26 L 19,25"
-                stroke="var(--mkt)"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                fill="none"></path>
-            </svg>
-          </div>
-
-          <!-- Portrait card -->
-          <div
-            class="hero-reveal-portrait relative w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-2xl overflow-hidden panel"
-          >
-            <div
-              class="absolute inset-0 rounded-2xl pointer-events-none"
-              style="box-shadow: 0 0 0 1px var(--border);"
-            >
-            </div>
-            <img
-              src={contact.profileImage}
-              alt={`Portrait of ${name}`}
-              class="absolute inset-0 w-full h-full object-cover"
-              width="384"
-              height="384"
-              loading="eager"
-            />
-          </div>
-
-          <!-- Trust bar — anchored to portrait -->
-          <div
-            id="trust-bar"
-            class="hero-trust-bar mt-5 panel rounded-2xl pl-4 md:pl-5 pr-2 py-3 flex items-center justify-center gap-3 md:gap-0 w-56 sm:w-64 md:w-72 overflow-visible"
-          >
-            <span
-              class="font-medium text-[10px] md:text-[11px] uppercase tracking-[0.1em] text-[color:var(--text-faint)] shrink-0 pr-1 md:pr-2"
-            >
-              Trusted by
-            </span>
-            <div
-              class="flex items-center gap-1.5 md:gap-2 opacity-40 transition-opacity duration-300 hover:opacity-100"
-            >
-              {
-                trustLogos.map((l, i) => (
-                  <img
-                    src={l.src}
-                    alt={l.alt}
-                    class="h-4 md:h-6 w-auto object-contain px-1 md:px-1.5 shrink-0 last:h-4 md:last:h-5"
-                  />
-                ))
-              }
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Left column: argument -->
-      <div class="order-2 lg:order-1">
-        <!-- Name eyebrow -->
-        <!-- <p
-          class="hero-reveal-name text-[13px] font-bold uppercase tracking-[0.08em] text-[color:var(--accent)] mb-5"
-        >
-          {name}
-        </p> -->
-
-        <!-- Headline + Annotation 4: check mark -->
-        <h1
-          class="relative text-5xl sm:text-6xl md:text-7xl font-semibold text-[color:var(--text)] tracking-tighter leading-[1.1] max-w-2xl"
-        >
-          {
-            headlineWords.map((word, i) => (
-              <span
-                class="hero-word inline-block"
-                style={`animation-delay: ${i * 80}ms;`}
-              >
-                {word}
-                {i < headlineWords.length - 1 ? "\u00A0" : ""}
-              </span>
-            ))
-          }
-          <!-- Hand-drawn check mark near end of headline (hidden on mobile) -->
-          <svg
-            class="hero-check hidden sm:block absolute right-0 md:-right-2 bottom-2 md:bottom-3 w-4 h-4 md:w-5 md:h-5 pointer-events-none"
-            viewBox="0 0 20 20"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M 3,11 C 5,13 7,15 8,16 C 10,14 14,8 17,4"
-              stroke="var(--mkt)"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              fill="none"></path>
-          </svg>
-        </h1>
-
-        <!-- Supporting copy + Annotation 2: handwritten underline -->
-        <p
-          class="hero-reveal-copy relative mt-6 text-base md:text-lg muted leading-relaxed max-w-[52ch]"
-        >
-          I Build <span class="relative">
-            Products That Convert.
-            <!-- Hand-drawn orange underline SVG (only under "Products That Convert.") -->
-            <svg
-              class="hero-underline absolute -bottom-2.5 left-0 w-full h-3 pointer-events-none"
-              viewBox="0 0 200 12"
-              fill="none"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M 2,7 C 20,4 50,9 80,5 C 110,2 140,8 170,4 C 185,3 195,6 198,5"
-                stroke="var(--mkt)"
-                stroke-width="2"
-                stroke-linecap="round"
-                fill="none"></path>
-            </svg>
-          </span>
-        </p>
-
-        <!-- CTA group -->
-        <div class="hero-reveal-cta mt-8 flex flex-wrap items-center gap-2.5">
-          <a
-            href="#contact"
-            class="track-btn inline-flex items-center justify-center px-7 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.15em] transition-all active:scale-[0.98]"
-          >
-            {hub.ctaPrimary}
-          </a>
-          <a
-            href={`https://${contact.linkedin}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="surface inline-flex items-center justify-center gap-1.5 px-7 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.22em] text-[color:var(--text)] hover:text-[color:var(--text-muted)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]"
-          >
-            Linked_In
-            <svg
-              class="w-3 h-3"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2.5"
-                d="M7 17L17 7M17 7H7M17 7v10"></path>
-            </svg>
-          </a>
-        </div>
-
-        <!-- Metrics row + Annotation 3: metric note -->
-        <div
-          class="hero-reveal-metrics relative mt-8 pt-6 border-t border-[color:var(--border)]"
-        >
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {
-              heroMetrics.map((metric, i) => (
-                <div
-                  class:list={[
-                    "hero-metric-item flex flex-col text-center md:text-left",
-                    {
-                      "md:border-l md:border-[color:var(--border)] md:pl-6":
-                        i > 0,
-                    },
-                  ]}
-                  style={`animation-delay: ${240 + i * 20}ms;`}
-                >
-                  <span
-                    class="stat-number text-2xl md:text-3xl font-bold text-[color:var(--text)] tracking-tight"
-                    data-value={metric.value}
-                  >
-                    {metric.value}
-                  </span>
-                  <span class="mt-1 text-[11px] font-medium uppercase tracking-wider text-[color:var(--text-muted)] leading-snug line-clamp-2">
-                    {metric.label}
-                  </span>
-                </div>
-              ))
-            }
-          </div>
-          <!-- Handwritten review note (hidden on mobile) -->
-          <span
-            class="hero-metric-note hidden sm:inline-block mt-3 text-sm text-[color:var(--mkt)] pointer-events-none"
-            style="font-family: 'Caveat', cursive; transform: rotate(-2deg); opacity: 0.7;"
-          >
-            Real results.
-          </span>
-        </div>
-      </div>
+        <span
+          class="h-2.5 w-4 bg-black [clip-path:polygon(0_0,100%_0,88%_100%,22%_100%)]"
+        ></span>
+        <span class="h-0.5 w-1 bg-black"></span>
+        <span
+          class="h-2.5 w-4 bg-black [clip-path:polygon(0_0,100%_0,78%_100%,12%_100%)]"
+        ></span>
+      </span>
+    </button>
+    <div class="flex flex-col min-w-0">
+      <h1
+        id="hero-name"
+        class="flex items-center gap-1 text-[22px] md:text-[26px] font-medium tracking-[-0.01em] leading-[1.2]"
+      >
+        {name}
+        <VerifiedBadge />
+      </h1>
+      <span class="muted">
+        <SecretSwap from={swaps.position.from} to={swaps.position.to} />
+      </span>
     </div>
+  </div>
+
+  <p class="mt-6 text-[15px] muted leading-[1.7] max-w-[52ch]">
+    {
+      subtextParts.map((part, i) => (
+        <span>
+          {part}
+          {i < subtextParts.length - 1 && (
+            <SecretTooltip trigger={secrets.roas.trigger} reveal={secrets.roas.reveal} />
+          )}
+        </span>
+      ))
+    }
+  </p>
+
+  <p class="mt-4 text-[15px] muted leading-[1.9] max-w-[56ch]">
+    You can find me <ActivityHeatmap phrase="shipping" /> on{" "}
+    <StickerPill social={socials[0]} idPrefix="hero-" />, hiring-side on{" "}
+    <StickerPill social={socials[1]} idPrefix="hero-" />, or reach me at{" "}
+    <StickerPill social={socials[2]} idPrefix="hero-" />.
+  </p>
+
+  <p class="mt-4 text-[13px]">
+    <SecretTooltip
+      trigger={secrets.location.trigger}
+      reveal={secrets.location.reveal}
+    />
+  </p>
+
+  <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-[13px]">
+    <a
+      href="#contact"
+      data-ui-sound="crisp"
+      class="font-semibold fg hover:opacity-70 transition-opacity"
+    >
+      {hub.ctaPrimary} →
+    </a>
+    <StickerPill social={socials[3]} idPrefix="hero-" />
+    <StickerPill social={socials[4]} idPrefix="hero-" />
+  </div>
+
+  <div
+    class="mt-10 pt-6 border-t hairline grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-6"
+  >
+    {hubStats.map((s) => <StatCounter stat={s} />)}
   </div>
 </section>
 
-<style>
-  /* ── Hero staggered reveal animations ── */
-  @keyframes hero-fade-up {
-    from {
-      opacity: 0;
-      transform: translateY(12px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  @keyframes hero-fade {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  @keyframes hero-blur-in {
-    from {
-      opacity: 0;
-      filter: blur(8px);
-      transform: translateY(6px);
-    }
-    to {
-      opacity: 1;
-      filter: blur(0px);
-      transform: translateY(0);
-    }
-  }
-  @keyframes draw-stroke {
-    to {
-      stroke-dashoffset: 0;
-    }
-  }
-
-  /* Headline words: staggered blur-dissolve reveal */
-  .hero-word {
-    opacity: 0;
-    animation: hero-blur-in 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-
-  /* Left column reveals */
-  .hero-reveal-name {
-    animation: hero-fade 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    opacity: 0;
-  }
-  .hero-reveal-copy {
-    animation: hero-fade-up 400ms cubic-bezier(0.16, 1, 0.3, 1) 80ms forwards;
-    opacity: 0;
-  }
-  .hero-reveal-cta {
-    animation: hero-fade 400ms cubic-bezier(0.16, 1, 0.3, 1) 160ms forwards;
-    opacity: 0;
-  }
-
-  /* Metrics container: no animation (individual items stagger) */
-  .hero-metric-item {
-    opacity: 0;
-    animation: hero-fade 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-
-  /* Portrait */
-  .hero-reveal-portrait {
-    animation: hero-fade 400ms cubic-bezier(0.16, 1, 0.3, 1) 100ms forwards;
-    opacity: 0;
-  }
-
-  /* Trust bar under portrait */
-  .hero-trust-bar {
-    animation: hero-fade 400ms cubic-bezier(0.16, 1, 0.3, 1) 250ms forwards;
-    opacity: 0;
-  }
-
-  /* Annotation 1: "That's me." arrow draws, then text fades */
-  .hero-annotation-arrow path {
-    stroke-dasharray: 80;
-    stroke-dashoffset: 80;
-    animation: draw-stroke 500ms cubic-bezier(0.16, 1, 0.3, 1) 400ms forwards;
-  }
-  .hero-annotation {
-    opacity: 0;
-    animation: hero-fade 150ms cubic-bezier(0.16, 1, 0.3, 1) 900ms forwards;
-  }
-
-  /* Annotation 2: Underline draws beneath tagline */
-  .hero-underline path {
-    stroke-dasharray: 350;
-    stroke-dashoffset: 350;
-    animation: draw-stroke 500ms cubic-bezier(0.16, 1, 0.3, 1) 500ms forwards;
-  }
-
-  /* Annotation 4: Check mark draws */
-  .hero-check path {
-    stroke-dasharray: 50;
-    stroke-dashoffset: 50;
-    animation: draw-stroke 400ms cubic-bezier(0.16, 1, 0.3, 1) 600ms forwards;
-  }
-
-  /* Annotation 3: Metric note fades */
-  .hero-metric-note {
-    opacity: 0;
-    animation: hero-fade 150ms cubic-bezier(0.16, 1, 0.3, 1) 1100ms forwards;
-  }
-
-  /* ── Reduced motion ── */
-  @media (prefers-reduced-motion: reduce) {
-    .hero-word,
-    .hero-reveal-name,
-    .hero-reveal-copy,
-    .hero-reveal-cta,
-    .hero-metric-item,
-    .hero-reveal-portrait,
-    .hero-trust-bar,
-    .hero-annotation,
-    .hero-metric-note {
-      animation: none !important;
-      opacity: 1 !important;
-      transform: none !important;
-      filter: none !important;
-    }
-    .hero-annotation-arrow path,
-    .hero-underline path,
-    .hero-check path {
-      animation: none !important;
-      stroke-dashoffset: 0 !important;
-    }
-  }
-</style>
+<script>
+  document.getElementById("avatar-egg")?.addEventListener("click", () => {
+    document.getElementById("avatar-shades")?.classList.toggle("opacity-100");
+  });
+</script>

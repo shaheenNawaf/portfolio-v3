@@ -1,23 +1,13 @@
 ---
-/**
- * Generic segmented-control filter switcher.
- * Pass target/item selectors + storage key via props;
- * script reads them from data-* attributes so nothing is hardcoded.
- */
-
 export interface CategoryDef {
   id: string;
   label: string;
 }
 
 interface Props {
-  /** CSS selector for the container whose children to filter */
   targetSelector?: string;
-  /** CSS selector for individual filterable items inside the target */
   itemSelector?: string;
-  /** localStorage key to persist the active category */
   storageKey?: string;
-  /** Pill definitions – defaults to the project categories */
   categories?: CategoryDef[];
 }
 
@@ -37,7 +27,7 @@ const defaultId = categories[0]?.id ?? "all";
 ---
 
 <div
-  class="category-switcher"
+  class="category-switcher flex flex-wrap gap-2"
   role="tablist"
   aria-label="Filter items"
   data-target={targetSelector}
@@ -48,7 +38,7 @@ const defaultId = categories[0]?.id ?? "all";
   {
     categories.map((cat, i) => (
       <button
-        class="category-btn"
+        class="category-btn px-3 py-1 rounded-full border hairline text-[12px] font-medium muted transition-colors"
         role="tab"
         aria-selected={i === 0 ? "true" : "false"}
         data-category={cat.id}
@@ -58,71 +48,22 @@ const defaultId = categories[0]?.id ?? "all";
       </button>
     ))
   }
-  <div class="category-indicator" aria-hidden="true" />
 </div>
 
 <style>
-  .category-switcher {
-    display: inline-flex;
-    position: relative;
-    padding: 4px;
-    background-color: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-btn);
-    gap: 2px;
-  }
-
   .category-btn {
-    position: relative;
-    z-index: 1;
-    padding: 8px 16px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--text-muted);
     background: transparent;
-    border: none;
-    border-radius: calc(var(--radius-btn) - 2px);
     cursor: pointer;
-    transition: color 0.2s ease;
     white-space: nowrap;
   }
-
   .category-btn:hover {
     color: var(--text);
+    border-color: var(--border-strong);
   }
-
   .category-btn[aria-selected="true"] {
-    color: var(--text);
-  }
-
-  .category-indicator {
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    height: calc(100% - 8px);
-    background-color: var(--card-bg-2);
-    border: 1px solid var(--border-strong);
-    border-radius: calc(var(--radius-btn) - 2px);
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-                width 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    pointer-events: none;
-  }
-
-  @media (max-width: 640px) {
-    .category-switcher {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .category-switcher::-webkit-scrollbar {
-      display: none;
-    }
-    .category-btn {
-      padding: 8px 12px;
-      font-size: 11px;
-    }
+    background-color: var(--text);
+    border-color: var(--text);
+    color: var(--bg);
   }
 </style>
 
@@ -135,40 +76,29 @@ const defaultId = categories[0]?.id ?? "all";
       const defaultId = switcher.dataset.default ?? "all";
 
       const buttons = switcher.querySelectorAll<HTMLElement>(".category-btn");
-      const indicator = switcher.querySelector<HTMLElement>(".category-indicator");
       const grid = document.querySelector<HTMLElement>(targetSelector);
-      if (!grid || !indicator) return;
+      if (!grid) return;
 
       const cards = grid.querySelectorAll<HTMLElement>(itemSelector);
 
-      const saved = defaultId;
-
-      const updateIndicator = (btn: HTMLElement) => {
-        const rect = btn.getBoundingClientRect();
-        const switcherRect = switcher.getBoundingClientRect();
-        indicator.style.width = `${rect.width}px`;
-        indicator.style.transform = `translateX(${rect.left - switcherRect.left - 4}px)`;
-      };
+      let saved = defaultId;
+      try {
+        saved = localStorage.getItem(storageKey) || defaultId;
+      } catch {}
 
       const filterItems = (category: string) => {
         cards.forEach((card) => {
-          const cardCategory = card.getAttribute("data-category");
           const el = card as HTMLElement;
+          const cardCategory = el.getAttribute("data-category");
           if (category === "all" || cardCategory === category) {
             el.style.display = "";
-            el.style.opacity = "1";
-            el.style.transform = "";
+            el.classList.add("is-in", "reveal-done");
           } else {
-            el.style.opacity = "0";
-            el.style.transform = "scale(0.95)";
-            setTimeout(() => {
-              el.style.display = "none";
-            }, 200);
+            el.style.display = "none";
           }
         });
       };
 
-      // Initialize ARIA states
       buttons.forEach((btn) => {
         const category = btn.getAttribute("data-category");
         if (category === saved) {
@@ -180,15 +110,8 @@ const defaultId = categories[0]?.id ?? "all";
         }
       });
 
-      // Set initial indicator position
-      const activeBtn = switcher.querySelector<HTMLElement>('.category-btn[aria-selected="true"]');
-      if (activeBtn) {
-        requestAnimationFrame(() => updateIndicator(activeBtn));
-      }
-
       filterItems(saved);
 
-      // Click + keyboard handlers
       buttons.forEach((btn) => {
         btn.addEventListener("click", () => {
           const category = btn.getAttribute("data-category") || defaultId;
@@ -200,8 +123,10 @@ const defaultId = categories[0]?.id ?? "all";
           btn.setAttribute("aria-selected", "true");
           btn.tabIndex = 0;
 
-          updateIndicator(btn);
           filterItems(category);
+          try {
+            localStorage.setItem(storageKey, category);
+          } catch {}
         });
 
         btn.addEventListener("keydown", (e) => {
@@ -220,12 +145,6 @@ const defaultId = categories[0]?.id ?? "all";
             prev.focus();
           }
         });
-      });
-
-      // Recalculate indicator on resize
-      window.addEventListener("resize", () => {
-        const active = switcher.querySelector<HTMLElement>('.category-btn[aria-selected="true"]');
-        if (active) updateIndicator(active);
       });
     });
   };

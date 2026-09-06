@@ -1,0 +1,54 @@
+---
+import { hubStats } from "../data/resume";
+---
+
+<section id="tracks">
+  <h2 class="text-[15px] font-semibold tracking-tight">Tracks</h2>
+  <p class="mt-1 text-[13px] muted">
+    Two lanes, one owner. Pick the seat you're hiring for.
+  </p>
+  <div class="mt-6 border-t hairline">
+    <a
+      href="/software"
+      class="squash group flex items-center gap-4 py-5 border-b hairline row-hover px-2 -mx-2"
+    >
+      <span
+        class="w-2 h-2 rounded-full shrink-0"
+        style="background-color: var(--sw)"
+      ></span>
+      <span class="text-[12px] font-semibold faint w-7 shrink-0">01</span>
+      <span class="flex-1 min-w-0">
+        <span class="block text-[15px] font-semibold fg"
+          >Software Engineering</span
+        >
+        <span class="block text-[13px] muted truncate"
+          >{hubStats[4].value} {hubStats[4].label.toLowerCase()}</span
+        >
+      </span>
+      <span
+        class="text-[13px] faint group-hover:text-[color:var(--text)] transition-colors shrink-0"
+        >→</span
+      >
+    </a>
+    <a
+      href="/marketing"
+      class="squash group flex items-center gap-4 py-5 border-b hairline row-hover px-2 -mx-2"
+    >
+      <span
+        class="w-2 h-2 rounded-full shrink-0"
+        style="background-color: var(--mkt)"
+      ></span>
+      <span class="text-[12px] font-semibold faint w-7 shrink-0">02</span>
+      <span class="flex-1 min-w-0">
+        <span class="block text-[15px] font-semibold fg">Growth Marketing</span>
+        <span class="block text-[13px] muted truncate"
+          >{hubStats[0].value} transaction volume in 4 months</span
+        >
+      </span>
+      <span
+        class="text-[13px] faint group-hover:text-[color:var(--text)] transition-colors shrink-0"
+        >→</span
+      >
+    </a>
+  </div>
+</section>

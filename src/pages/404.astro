@@ -1,99 +1,73 @@
 ---
 import BaseLayout from "../layouts/layout.astro";
-import SiteNav from "../components/site_nav.astro";
-import StickyBar from "../components/sticky_bar.astro";
-import { name, contact, hub, resumes } from "../data/resume";
+import SiteFooter from "../components/site_footer.astro";
+import { name, contact, resumes } from "../data/resume";
 ---
 
 <BaseLayout
   title={`Page not found · ${name}`}
   description="The page you are looking for does not exist."
   track="hub"
-  hideToggle={true}
 >
-  <SiteNav />
-
-  <main
-    id="main"
-    class="relative min-h-[80dvh] flex items-center justify-center px-5 md:px-8"
-  >
-    <div class="max-w-xl w-full text-center py-20">
-      <p
-        class="font-mono text-[10px] font-bold uppercase tracking-[0.35em] text-[color:var(--accent)] mb-4"
-      >
-        404
-      </p>
-      <h1
-        class="text-4xl md:text-5xl font-bold text-[color:var(--text)] tracking-tight leading-[1.1]"
-      >
+  <main id="main" class="wrap min-h-[70dvh] flex items-center justify-center" data-reveal>
+    <div class="text-center">
+      <p class="eyebrow">404</p>
+        <h1 class="mt-3 text-[22px] md:text-[26px] font-bold tracking-[-0.01em] leading-[1.2]">
         Page not found
       </h1>
-      <p
-        class="mt-5 muted text-base md:text-lg leading-relaxed max-w-md mx-auto"
-      >
-        The page you are looking for does not exist or has been moved. Pick a destination below.
+      <p class="mt-4 text-[15px] muted leading-[1.7] max-w-md mx-auto">
+        The page you are looking for does not exist or has been moved. Pick a
+        destination below.
       </p>
-
-      <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
+      <div
+        class="mt-8 flex flex-wrap items-center justify-center gap-6 text-[13px]"
+      >
         <a
           href="/"
-          class="track-btn inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-[0.15em] transition-all active:scale-[0.98] shadow-lg"
+          class="font-semibold fg hover:opacity-70 transition-opacity"
         >
-          Back to home
+          Back to home →
         </a>
         <a
           href={`https://${contact.linkedin}`}
           target="_blank"
           rel="noopener noreferrer"
-          class="panel inline-flex items-center px-4 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider text-[color:var(--text)] hover:border-[color:var(--border-strong)] transition-all"
+          class="muted hover:text-[color:var(--text)] transition-colors"
         >
-          LinkedIn
+          LinkedIn ↗
         </a>
         <a
           href={resumes.software}
           target="_blank"
           rel="noopener noreferrer"
-          class="panel inline-flex items-center px-4 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider text-[color:var(--text)] hover:border-[color:var(--border-strong)] transition-all"
+          class="muted hover:text-[color:var(--text)] transition-colors"
         >
-          Resume
+          Resume ↗
         </a>
       </div>
-
       <div
-        class="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[12px] font-mono uppercase tracking-widest muted"
+        class="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[12px] faint"
       >
         <a
           href="/software"
           class="hover:text-[color:var(--text)] transition-colors"
+          >Engineering</a
         >
-          Engineering
-        </a>
-        <span class="faint">/</span>
+        <span>/</span>
         <a
           href="/marketing"
           class="hover:text-[color:var(--text)] transition-colors"
+          >Growth</a
         >
-          Growth
-        </a>
-        <span class="faint">/</span>
+        <span>/</span>
         <a
           href={`mailto:${contact.email}`}
           class="hover:text-[color:var(--text)] transition-colors"
+          >{contact.email}</a
         >
-          {contact.email}
-        </a>
       </div>
     </div>
   </main>
 
-  <StickyBar
-    ctaText={hub.ctaPrimary}
-    contactEmail={contact.email}
-    linkedinUrl={contact.linkedin}
-    profileImage={contact.profileImage}
-    name={name}
-    statusText={hub.status}
-    resumeUrl={resumes.software}
-    ctaHref="/#contact"
-  />
+  <SiteFooter />
 </BaseLayout>

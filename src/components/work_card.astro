@@ -1,262 +1,209 @@
 ---
+import type { Category } from "../data/resume";
+import Icon from "./icon.astro";
 
 interface Props {
   id: string;
   title: string;
-  date: string;
-  role: string;
-  color: string;
+  category: Category;
   description: string;
-  mode: "software" | "marketing";
+  date?: string;
+  role?: string;
+  results?: string;
+  impact?: string;
+  problem?: string;
+  solution?: string;
   tags?: readonly string[];
   deliverables?: readonly string[];
-  results?: string;
-  liveUrl?: string;
-  repoUrl?: string;
   media?: { type: "video" | "image"; url: string; thumbnail?: string };
   gallery?: readonly string[];
+  liveUrl?: string;
+  repoUrl?: string;
+  caseStudyHref?: string;
+  index?: number;
+  featured?: boolean;
 }
 
 const {
   id,
   title,
+  category,
+  description,
   date,
   role,
-  color,
-  description,
-  mode,
+  results,
+  impact,
+  problem,
+  solution,
   tags = [],
   deliverables = [],
-  results,
-  liveUrl,
-  repoUrl,
   media,
   gallery = [],
+  liveUrl,
+  repoUrl,
+  caseStudyHref,
+  index = 0,
+  featured = false,
 } = Astro.props;
 
-const cardImage =
-  media?.type === "video" && media.thumbnail ? media.thumbnail : media?.url;
-const fallBackImage = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="800" height="600" fill="#18181b"/><path d="M0 600L800 0M0 0l800 600" stroke="#26262a" stroke-width="2"/></svg>')}`;
-const badge = results ?? date;
-const listItems = mode === "software" ? tags : deliverables;
-const listHeading = mode === "software" ? "Stack & Tags" : "Deliverables";
-const overviewHeading = mode === "software" ? "Project Overview" : "Strategy & Execution";
-const shadowClass =
-  mode === "software" ? "modal-shadow-software" : "modal-shadow-marketing";
+const thumb =
+  media?.type === "video"
+    ? media.thumbnail ?? undefined
+    : media?.url ?? gallery[0];
+const metric = results ?? impact;
+const hasDepth = Boolean(
+  problem || solution || impact || gallery.length > 0 || media,
+);
+const currentPath = Astro.url.pathname.replace(/\/$/, "");
+const showCaseStudy = Boolean(caseStudyHref) && caseStudyHref !== currentPath;
+const linkHref =
+  liveUrl && liveUrl.length > 0
+    ? liveUrl
+    : repoUrl && repoUrl.length > 0
+      ? repoUrl
+      : showCaseStudy
+        ? caseStudyHref
+        : undefined;
+const domainLabel =
+  liveUrl && liveUrl.length > 0
+    ? new URL(liveUrl).hostname.replace(/^www\./, "")
+    : "";
+const categoryLabel =
+  category === "marketing"
+    ? "Growth"
+    : category === "software"
+      ? "Software"
+      : "Systems";
+const accentVar =
+  category === "marketing"
+    ? "var(--mkt)"
+    : category === "software"
+      ? "var(--sw)"
+      : "var(--text)";
+const initials = title
+  .split(/\s+/)
+  .slice(0, 2)
+  .map((w) => w.charAt(0))
+  .join("");
+const listItems = category === "marketing" ? deliverables : tags;
+const frameClass =
+  "card-media relative aspect-video w-full overflow-hidden rounded-[var(--radius)] border bg-[color:var(--surface)]";
+const outerAttrs = {
+  "class": "work-card group/preview",
+  "data-project-card": id,
+  "data-category": category,
+  "data-featured": featured ? "true" : "false",
+  "data-reveal": true,
+  "style": `--i:${index}; --card-accent:${accentVar}`,
+};
 ---
 
-<div
-  class="group surface radius-card overflow-hidden cursor-pointer transition-all duration-500 hover:border-[color:var(--accent-border)] hover:-translate-y-1 shadow-xl"
-  data-modal-id={id}
->
-  <div
-    class="aspect-video w-full relative overflow-hidden"
-    style={`background-color: ${color}18`}
-  >
-    {
-      media?.type === "video" && (
-        <div class="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-colors z-10">
-          <div
-            class="w-12 h-12 flex items-center justify-center rounded-full shadow-xl group-hover:scale-110 transition-transform text-white"
-            style={`background-color: var(--accent)`}
-          >
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z" />
-            </svg>
+{
+  hasDepth ? (
+    <details {...outerAttrs}>
+      <summary data-ui-sound="crisp">
+        <div class:list={[frameClass, { "is-loaded": !thumb }]}>
+          <div class="card-pulse" aria-hidden="true" />
+          {thumb ? (
+            <img
+              src={thumb}
+              alt={`${title} preview`}
+              loading="lazy"
+              decoding="async"
+              data-fade
+              class="card-thumb h-full w-full object-cover"
+            />
+          ) : (
+            <div class="absolute inset-0 grid place-items-center text-sm font-semibold faint">
+              {initials}
+            </div>
+          )}
+        </div>
+
+        <div class="card-caption">
+          <h3 class="card-title">{title}</h3>
+          <p class="card-metric">{metric ?? description}</p>
+          <div class="card-chips">
+            <span class="card-chip">{categoryLabel}</span>
+            {domainLabel && <span class="card-chip">{domainLabel}</span>}
+            <Icon name="chevron-down" class="row-chevron w-3.5 h-3.5 faint" />
           </div>
         </div>
-      )
-    }
+      </summary>
 
-    {
-      cardImage ? (
-        <div class="relative w-full h-full overflow-hidden protected-image select-none">
-          <img
-            src={cardImage}
-            alt={title}
-            class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-700"
-          />
-        </div>
-      ) : (
-        <div class="absolute inset-0">
-          <img
-            src={fallBackImage}
-            alt={title}
-            class="w-full h-full object-cover opacity-50 group-hover:opacity-80 transition-opacity duration-700"
-          />
-          <div
-            class="absolute inset-0 opacity-20"
- style="background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px); background-size: 20px 20px;"
-          />
-        </div>
-      )
-    }
+      <div class="card-body">
+        {role && (
+          <p class="max-w-[68ch] text-[12px] faint">
+            {role}
+            {date ? ` · ${date}` : ""}
+          </p>
+        )}
 
-    {
-      badge && (
-        <div
-          class="absolute top-4 left-4 z-20 text-white px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-tighter shadow-2xl"
-          style={`background-color: var(--accent)`}
-        >
-          {badge}
-        </div>
-      )
-    }
-  </div>
-
-  <div class="p-6">
-    <div class="mb-4">
-      <h3
-        class="text-lg font-semibold text-[color:var(--text)] group-hover:text-[color:var(--accent)] transition-colors tracking-tight"
-      >
-        {title}
-      </h3>
-      <p
-        class="text-[color:var(--accent)] text-xs font-medium uppercase tracking-widest mt-1"
-      >
-        {role}
-      </p>
-    </div>
-
-    <p class="muted text-sm line-clamp-2 mb-6 leading-relaxed">
-      {description}
-    </p>
-
-    <div class="flex flex-wrap gap-2">
-      {
-        listItems.map((item: string) => (
-          <span class="text-[10px] font-bold muted uppercase tracking-widest border hairline px-2 py-1 rounded bg-[color:var(--card-bg-2)]">
-            {item}
-          </span>
-        ))
-      }
-    </div>
-  </div>
-</div>
-
-<dialog
-  id={id}
-  class={`modal fixed inset-0 m-auto backdrop-blur-xl radius-card max-w-3xl w-[95%] focus:outline-none overflow-hidden ${shadowClass}`}
->
-  <div class="flex flex-col relative max-h-[90dvh] overflow-y-auto">
-    <button
-      class="close-modal absolute top-4 right-4 z-50 w-10 h-10 rounded-full flex items-center justify-center transition-all border"
-    >
-      ✕
-    </button>
-
-    <div
-      class:list={[
-        "w-full relative flex items-center justify-center shrink-0 border-b hairline overflow-hidden",
-        media?.type === "video" ? "aspect-video" : "aspect-square",
-      ]}
-      style={`background-color: ${color}18`}
-    >
-      {
-        media?.type === "video" ? (
-          <video class="w-full h-full" controls playsinline preload="metadata">
-            <source src={media.url} type="video/mp4" />
-          </video>
-        ) : media?.url ? (
-          <div class="relative w-full h-full overflow-hidden protected-image select-none">
-            <img src={media.url} alt={title} class="w-full h-full object-contain" />
+        {problem || solution || impact ? (
+          <div class="flex max-w-[68ch] flex-col gap-4">
+            {problem && (
+              <div>
+                <p class="eyebrow mb-1">Problem</p>
+                <p class="muted leading-[1.7]">{problem}</p>
+              </div>
+            )}
+            {solution && (
+              <div>
+                <p class="eyebrow mb-1">Solution</p>
+                <p class="muted leading-[1.7]">{solution}</p>
+              </div>
+            )}
+            {impact && (
+              <div>
+                <p class="eyebrow mb-1">Impact</p>
+                <p class="muted leading-[1.7]">{impact}</p>
+              </div>
+            )}
           </div>
         ) : (
-          <div class="absolute inset-0">
-            <img
-              src={fallBackImage}
-              alt={title}
-              class="w-full h-full object-cover opacity-70"
-            />
-            <div
-              class="absolute inset-0 opacity-20"
-              style="background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px); background-size: 24px 24px;"
-            />
+          <p class="max-w-[68ch] muted leading-[1.7]">{description}</p>
+        )}
+
+        {listItems.length > 0 && (
+          <div class="flex flex-wrap gap-1.5">
+            {listItems.slice(0, 8).map((item: string) => (
+              <span class="card-chip">{item}</span>
+            ))}
           </div>
-        )
-      }
-    </div>
+        )}
 
-    <div class="p-8 md:p-12">
-      <div
-        class="flex flex-col md:flex-row justify-between items-start gap-6 mb-10"
-      >
-        <div class="flex-1">
-          <h2
-            class="text-3xl md:text-4xl font-semibold text-[color:var(--text)] tracking-tighter mb-2 leading-tight"
-          >
-            {title}
-          </h2>
-          <p
-            class="text-[color:var(--accent)] font-bold uppercase tracking-[0.2em] text-xs"
-          >
-            {role}
-          </p>
-        </div>
-        {
-          results && (
-            <div
-              class="p-4 rounded-2xl min-w-[140px] text-center border track-accent-bg"
-            >
-              <span
-                class="text-[10px] font-bold uppercase block mb-1 tracking-widest text-[color:var(--accent)]/70"
-              >
-                Outcome
-              </span>
-              <span class="text-xl font-bold text-[color:var(--text)]">{results}</span>
-            </div>
-          )
-        }
-      </div>
+        {media?.type === "video" && (
+          <video
+            src={media.url}
+            poster={media.thumbnail}
+            controls
+            class="w-full rounded-[var(--radius)] border hairline"
+          />
+        )}
 
-      <div class="grid md:grid-cols-3 gap-10 mb-12">
-        <div class="md:col-span-2">
-          <h4
-            class="text-[10px] font-bold uppercase tracking-[0.2em] muted mb-4"
-          >
-            {overviewHeading}
-          </h4>
-          <p class="text-base leading-relaxed muted">{description}</p>
-        </div>
-        <div
-          class="p-6 rounded-2xl border hairline h-fit bg-[color:var(--card-bg-2)]"
-        >
-          <h4
-            class="text-[10px] font-bold uppercase tracking-[0.2em] muted mb-4"
-          >
-            {listHeading}
-          </h4>
-          <ul class="space-y-3">
-            {
-              listItems.map((item: string) => (
-                <li class="text-xs muted flex items-start gap-3">
-                  <span
-                    class="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0"
-                    style={`background-color: var(--accent)`}
-                  />
-                  {item}
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-      </div>
+        {gallery.length > 0 && (
+          <div class="card-gallery">
+            {gallery.map((g, gi) => (
+              <img
+                src={g}
+                alt={`${title} — image ${gi + 1} of ${gallery.length}`}
+                loading="lazy"
+                decoding="async"
+              />
+            ))}
+          </div>
+        )}
 
-      {
-        mode === "software" && (liveUrl || repoUrl) && (
-          <div class="border-t hairline pt-8 flex flex-wrap gap-3">
+        {(liveUrl || repoUrl || showCaseStudy) && (
+          <div class="card-links">
             {liveUrl && liveUrl.length > 0 && (
               <a
                 href={liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-95 text-white"
-                style={`background-color: var(--accent)`}
+                style={`color: ${accentVar}`}
               >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-                Visit Live Site
+                Live ↗
               </a>
             )}
             {repoUrl && repoUrl.length > 0 && (
@@ -264,38 +211,47 @@ const shadowClass =
                 href={repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 px-6 py-2.5 bg-[color:var(--card-bg-2)] hover:border-[color:var(--border-strong)] text-[color:var(--text)] rounded-xl text-sm font-semibold transition-colors active:scale-95 border hairline"
+                style={`color: ${accentVar}`}
               >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
-                </svg>
-                View Code
+                GitHub ↗
+              </a>
+            )}
+            {showCaseStudy && (
+              <a
+                href={caseStudyHref}
+                style={`color: ${accentVar}`}
+              >
+                Case study ↗
               </a>
             )}
           </div>
-        )
-      }
-
-      {
-        mode === "marketing" && gallery.length > 0 && (
-          <div class="border-t hairline pt-10">
-            <h4 class="text-[10px] font-bold muted uppercase tracking-[0.2em] mb-6">
-              Campaign Assets
-            </h4>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {gallery.map((img) => (
-                <div class="aspect-square rounded-xl overflow-hidden border hairline bg-[color:var(--card-bg-2)] group/img protected-image relative select-none">
-                  <img
-                    src={img}
-                    alt="Campaign asset"
-                    class="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )
-      }
+        )}
+      </div>
+    </details>
+  ) : (
+    <div {...outerAttrs}>
+      <div class:list={[frameClass, "is-loaded"]}>
+        <div class="absolute inset-0 grid place-items-center text-sm font-semibold faint">
+          {initials}
+        </div>
+      </div>
+      <div class="card-caption">
+        <h3 class="card-title">{title}</h3>
+        <p class="card-metric">{metric ?? description}</p>
+        <div class="card-chips">
+          <span class="card-chip">{categoryLabel}</span>
+          {linkHref && (
+            <a
+              href={linkHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="card-chip transition-transform duration-150 motion-reduce:transition-none hover:-translate-y-0.5 active:translate-y-px motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0"
+            >
+              {domainLabel || categoryLabel} ↗
+            </a>
+          )}
+        </div>
+      </div>
     </div>
-  </div>
-</dialog>
+  )
+}

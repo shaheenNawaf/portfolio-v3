@@ -22,133 +22,116 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
 
 <section
   id={id}
-  class="zone-surface relative overflow-hidden p-8 md:p-10"
+  class="pt-2"
   data-appointment-url={appointmentUrl}
   data-contact-email={contact.email}
 >
-  <div
-    class="pointer-events-none absolute inset-0 opacity-40"
-    style="background: radial-gradient(ellipse 70% 60% at 50% 0%, var(--accent-soft), transparent 70%);"
-  >
+  <div class:list={["mb-6 md:mb-8 max-w-xl", { hidden: compact }]}>
+    <h2 class="text-[15px] font-semibold tracking-tight">{title}</h2>
+    <p class="mt-2 muted text-[13px] leading-relaxed max-w-prose">
+      {subtitle}
+    </p>
   </div>
 
-  <div class="relative z-10">
-    <div class:list={["mb-6 md:mb-8 max-w-xl", { "hidden": compact }]}>
-      <h2
-        class="zone-heading text-2xl md:text-3xl font-bold tracking-tight"
+  <form id={`${id}-form`} class="grid gap-4 md:grid-cols-2" novalidate>
+    <div class="md:col-span-1">
+      <label class="book-label" for={`${id}-name`}>Name</label>
+      <input
+        id={`${id}-name`}
+        name="name"
+        type="text"
+        required
+        autocomplete="name"
+        class="book-field"
+        placeholder="Your name"
+      />
+    </div>
+
+    <div class="md:col-span-1">
+      <label class="book-label" for={`${id}-email`}>Work email</label>
+      <input
+        id={`${id}-email`}
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        class="book-field"
+        placeholder="you@company.com"
+      />
+    </div>
+
+    <div class="md:col-span-2">
+      <label class="book-label" for={`${id}-interest`}>Hiring for</label>
+      <select id={`${id}-interest`} name="interest" class="book-field" required>
+        <option value="hybrid" selected={defaultInterest === "hybrid"}
+          >Hybrid / either track</option
+        >
+        <option value="software" selected={defaultInterest === "software"}
+          >Software / product</option
+        >
+        <option value="marketing" selected={defaultInterest === "marketing"}
+          >Growth / marketing</option
+        >
+      </select>
+    </div>
+
+    <div class="md:col-span-2">
+      <label class="book-label" for={`${id}-note`}>Context (optional)</label>
+      <textarea
+        id={`${id}-note`}
+        name="note"
+        rows="3"
+        class="book-field resize-y min-h-[80px]"
+        placeholder="Role, timeline, or anything useful before the call"
+      ></textarea>
+    </div>
+
+    <div
+      class:list={[
+        "md:col-span-2 flex flex-col gap-3 pt-1",
+        { "sm:flex-row sm:items-center sm:gap-4": !compact },
+      ]}
+    >
+      <button
+        type="submit"
+        id={`${id}-submit`}
+        class:list={[
+          "inline-flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius)] border hairline text-[13px] font-semibold fg hover:border-[color:var(--border-strong)] transition-colors disabled:opacity-60 disabled:cursor-not-allowed",
+          { "w-full": compact },
+        ]}
       >
-        {title}
-      </h2>
-      <p class="mt-2 muted text-sm leading-relaxed max-w-prose">
-        {subtitle}
+        <span class="btn-label">{hub.ctaPrimary}</span>
+        <svg
+          class="w-3.5 h-3.5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2.5"
+            d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+      <p class="text-[11px] muted leading-snug max-w-xs">
+        {
+          appointmentUrl
+            ? "Opens Google Appointments after you submit."
+            : "Sends a structured email — I reply within 24–48 hours."
+        }
       </p>
     </div>
 
-    <form id={`${id}-form`} class="grid gap-4 md:grid-cols-2" novalidate>
-      <div class="md:col-span-1">
-        <label class="book-label" for={`${id}-name`}>Name</label>
-        <input
-          id={`${id}-name`}
-          name="name"
-          type="text"
-          required
-          autocomplete="name"
-          class="book-field track-ring"
-          placeholder="Your name"
-        />
-      </div>
-
-      <div class="md:col-span-1">
-        <label class="book-label" for={`${id}-email`}>Work email</label>
-        <input
-          id={`${id}-email`}
-          name="email"
-          type="email"
-          required
-          autocomplete="email"
-          class="book-field track-ring"
-          placeholder="you@company.com"
-        />
-      </div>
-
-      <div class="md:col-span-2">
-        <label class="book-label" for={`${id}-interest`}>Hiring for</label>
-        <select
-          id={`${id}-interest`}
-          name="interest"
-          class="book-field track-ring"
-          required
-        >
-          <option value="hybrid" selected={defaultInterest === "hybrid"}
-            >Hybrid / either track</option
-          >
-          <option value="software" selected={defaultInterest === "software"}
-            >Software / product</option
-          >
-          <option value="marketing" selected={defaultInterest === "marketing"}
-            >Growth / marketing</option
-          >
-        </select>
-      </div>
-
-      <div class="md:col-span-2">
-        <label class="book-label" for={`${id}-note`}>Context (optional)</label>
-        <textarea
-          id={`${id}-note`}
-          name="note"
-          rows="3"
-          class="book-field track-ring resize-y min-h-[80px]"
-          placeholder="Role, timeline, or anything useful before the call"
-        ></textarea>
-      </div>
-
-      <div
-        class:list={[
-          "md:col-span-2 flex flex-col gap-3 pt-1",
-          { "sm:flex-row sm:items-center sm:gap-4": !compact },
-        ]}
-      >
-        <button
-          type="submit"
-          id={`${id}-submit`}
-          class:list={[
-            "track-btn inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-[0.15em] transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed",
-            { "w-full min-h-[52px]": compact },
-          ]}
-        >
-          <span class="btn-label">{hub.ctaPrimary}</span>
-          <svg
-            class="w-3.5 h-3.5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2.5"
-              d="M9 5l7 7-7 7"></path>
-          </svg>
-        </button>
-        <p class="text-[11px] muted leading-snug max-w-xs">
-          {
-            appointmentUrl
-              ? "Opens Google Appointments after you submit."
-              : "Sends a structured email — I reply within 24–48 hours."
-          }
-        </p>
-      </div>
-
-      <p
-        id={`${id}-status`}
-        class="md:col-span-2 text-sm muted hidden"
-        role="status"
-        aria-live="polite"
-      >
-      </p>
-    </form>
-  </div>
+    <p
+      id={`${id}-status`}
+      class="md:col-span-2 text-sm muted hidden"
+      role="status"
+      aria-live="polite"
+    >
+    </p>
+  </form>
 </section>
 
 <script>

@@ -1,0 +1,131 @@
+---
+import type { Category } from "../data/resume";
+import { secrets } from "../data/resume";
+import SecretTooltip from "./secret_tooltip.astro";
+
+interface Props {
+  id: string;
+  category: Category;
+  title: string;
+  company: string;
+  date: string;
+  location: string;
+  description: string;
+  color: string;
+  details?: readonly string[];
+  gallery?: readonly string[];
+  video?: string;
+  tech?: readonly string[];
+}
+
+const {
+  title,
+  company,
+  date,
+  location,
+  category,
+  description,
+  details = [],
+  gallery = [],
+  video,
+  tech = [],
+} = Astro.props;
+
+const accentVar =
+  category === "marketing"
+    ? "var(--mkt)"
+    : category === "software"
+      ? "var(--sw)"
+      : "var(--text)";
+---
+
+<details class="journey-item" data-category={category}>
+  <summary>
+    <span class="journey-drop" aria-hidden="true"></span>
+
+    <div class="flex min-w-0 flex-1 items-start gap-2">
+      <span class="journey-marker" aria-hidden="true" style={`--marker-c: ${accentVar}`}></span>
+      <div class="min-w-0">
+        <h3 class="text-[0.95rem] font-medium fg line-clamp-2">{title}</h3>
+        <p class="text-sm muted line-clamp-2">{company} · {location}</p>
+      </div>
+    </div>
+
+    <span class="flex shrink-0 items-center gap-2 self-start">
+      {date.includes("Present") ? (
+        <SecretTooltip trigger={date} reveal={secrets.present.reveal} />
+      ) : (
+        <span class="journey-pill">{date}</span>
+      )}
+      <svg
+        class="row-chevron w-3.5 h-3.5 shrink-0"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M6 9l6 6 6-6"></path>
+      </svg>
+    </span>
+  </summary>
+
+  <div class="journey-body mt-3 pb-1 space-y-3">
+    <p class="text-[14px] muted leading-[1.7]">{description}</p>
+
+    {
+      details.length > 0 && (
+        <ul class="space-y-2">
+          {details.map((item) => (
+            <li class="flex items-start gap-2 text-[14px] muted leading-[1.7]">
+              <span
+                class="mt-[7px] w-1 h-1 rounded-full shrink-0"
+                style={`background-color: ${accentVar}`}
+              ></span>
+              {item}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      tech.length > 0 && (
+        <div class="flex flex-wrap gap-1.5">
+          {tech.map((t) => (
+            <span class="px-2 py-0.5 border hairline rounded-[var(--radius)] text-[12px] faint">
+              {t}
+            </span>
+          ))}
+        </div>
+      )
+    }
+
+    {
+      video && video.length > 0 && (
+        <video
+          src={video}
+          controls
+          class="w-full rounded-[var(--radius)] border hairline"
+        ></video>
+      )
+    }
+
+    {
+      gallery.length > 0 && (
+        <div class="flex flex-wrap gap-2">
+          {gallery.map((g) => (
+            <img
+              src={g}
+              alt={title}
+              loading="lazy"
+              class="h-24 w-auto rounded-[var(--radius)] border hairline"
+            />
+          ))}
+        </div>
+      )
+    }
+  </div>
+</details>

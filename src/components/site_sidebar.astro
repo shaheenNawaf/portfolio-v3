@@ -1,0 +1,80 @@
+---
+import { socials } from "../data/resume";
+import Icon from "./icon.astro";
+import StickerPill from "./sticker_pill.astro";
+import ThemeToggle from "./theme_toggle.astro";
+import SoundToggle from "./sound_toggle.astro";
+
+const path = Astro.url.pathname.replace(/\/$/, "");
+
+const navItems = [
+  { href: "/#work", label: "Work", spy: true, tint: "" },
+  { href: "/software", label: "Software", spy: false, tint: "var(--sw)" },
+  { href: "/marketing", label: "Growth", spy: false, tint: "var(--mkt)" },
+  { href: "/#experience", label: "Experience", spy: true, tint: "" },
+  { href: "/#skills", label: "Skills", spy: true, tint: "" },
+  { href: "/#contact", label: "Contact", spy: true, tint: "" },
+];
+---
+
+<button
+  id="rail-open"
+  type="button"
+  aria-label="Open navigation"
+  aria-expanded="false"
+  aria-controls="rail-panel"
+  class="fixed bottom-4 left-4 z-30 inline-flex items-center gap-2 rounded-full border hairline bg-[color:var(--surface)] px-3.5 py-2 text-[13px] font-semibold shadow-md lg:hidden"
+>
+  <Icon name="menu" class="w-4 h-4" />
+  Menu
+</button>
+
+<div
+  id="rail-backdrop"
+  class="pointer-events-none fixed inset-0 z-40 bg-black/50 opacity-0 transition-opacity duration-200 lg:hidden"
+>
+</div>
+
+<aside
+  id="rail-panel"
+  aria-label="Primary"
+  class="fixed bottom-3 left-3 right-3 z-50 flex max-lg:max-h-[75dvh] max-lg:overflow-y-auto flex-col rounded-[20px] bg-[color:var(--rail-bg)] p-4 transition-transform duration-200 lg:top-16 lg:bottom-0 lg:left-0 lg:right-auto lg:w-[12.75rem] lg:max-w-none lg:rounded-none lg:bg-transparent lg:px-5 lg:py-6"
+>
+  <div class="rail-grab lg:hidden" id="rail-grab" aria-hidden="true"></div>
+  <button
+    id="rail-close"
+    type="button"
+    aria-label="Close navigation"
+    class="absolute top-3 right-3 inline-flex w-7 h-7 items-center justify-center rounded-md muted transition-colors hover:text-[color:var(--text)] lg:hidden"
+  >
+    <Icon name="close" class="w-4 h-4" />
+  </button>
+
+  <nav class="rail-nav flex flex-col" aria-label="Sections">
+    {
+      navItems.map((item) => (
+        <a
+          href={item.href}
+          data-spy={item.spy ? item.href : undefined}
+          aria-current={!item.spy && path === item.href ? "true" : "false"}
+          class:list={[
+            "rail-link relative flex items-center py-2.5 pl-5 pr-2 text-[13px]",
+            { "rail-link--tinted": Boolean(item.tint) },
+          ]}
+          style={item.tint ? `--node-c: ${item.tint}` : undefined}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+
+  <div class="rail-stickers mt-7 flex flex-col items-start gap-2.5">
+    {socials.slice(0, 3).map((s) => <StickerPill social={s} idPrefix="rail-" />)}
+  </div>
+
+  <div class="rail-foot mt-6 flex items-center justify-between gap-2">
+    <ThemeToggle />
+    <SoundToggle />
+  </div>
+</aside>

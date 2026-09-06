@@ -1,0 +1,25 @@
+---
+import Icon from "./icon.astro";
+---
+
+<span class="group/secret relative inline-flex align-baseline whitespace-nowrap">
+  <button
+    type="button"
+    data-ui-sound="none"
+    aria-label="Verified profile"
+    aria-describedby="verified-tip"
+    class="group/badge inline-flex appearance-none items-baseline border-0 bg-transparent p-0"
+  >
+    <Icon
+      name="badge-check"
+      class="w-4 h-4 shrink-0 text-[color:#3b82f6] transition-transform duration-500 group-hover/badge:rotate-[360deg] motion-reduce:transition-none"
+    />
+  </button>
+  <span
+    id="verified-tip"
+    role="tooltip"
+    class="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 hidden w-max -translate-x-1/2 translate-y-1 rounded-md border hairline bg-[color:var(--popover)] px-2 py-1 font-mono text-[0.7rem] leading-tight text-[color:var(--popover-fg)] opacity-0 shadow-sm transition-[opacity,transform] duration-150 group-hover/secret:block group-hover/secret:translate-y-0 group-hover/secret:opacity-100 group-focus-within/secret:block group-focus-within/secret:translate-y-0 group-focus-within/secret:opacity-100 motion-reduce:transition-none"
+  >
+    source: trust me bro
+  </span>
+</span>

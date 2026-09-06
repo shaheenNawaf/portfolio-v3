@@ -1,0 +1,36 @@
+---
+import { githubUser } from "../data/resume";
+
+interface Props {
+  phrase: string;
+}
+
+const { phrase } = Astro.props;
+---
+
+<span
+  class="group/activity relative inline-flex align-baseline"
+  data-activity-trigger
+  data-activity-user={githubUser}
+>
+  <button
+    type="button"
+    data-ui-sound="none"
+    aria-label={`Public activity for ${githubUser} over the last 90 days`}
+    class="appearance-none border-0 border-b border-dotted border-current bg-transparent p-0 font-[inherit] leading-[inherit] text-[inherit] muted transition-colors hover:text-[color:var(--text)]"
+  >
+    {phrase}
+  </button>
+  <span
+    role="status"
+    class="pointer-events-none absolute top-full left-0 z-50 mt-2 hidden w-[min(22rem,calc(100vw-2rem))] rounded-2xl border hairline bg-[color:var(--popover)] p-3 text-left text-[color:var(--popover-fg)] opacity-0 shadow-sm transition-[opacity,transform] duration-150 group-hover/activity:block group-hover/activity:opacity-100 group-focus-within/activity:block group-focus-within/activity:opacity-100 motion-reduce:transition-none"
+  >
+    <span class="block text-xs font-medium">Public activity · last 90 days</span>
+    <span
+      class="mt-2 grid grid-flow-col grid-rows-7 gap-1"
+      data-activity-grid
+    >
+      <span class="text-[11px] muted" data-activity-skeleton>Loading…</span>
+    </span>
+  </span>
+</span>

@@ -1,7 +1,10 @@
 # Implementation Plan — Minimal Redesign
 
+> **SUPERSEDED.** This document is v2.0 and is no longer the active plan.
+> The current, worker-ready plan is [`docs/PLAN_v3.md`](./PLAN_v3.md). Kept for historical reference only.
+
 Version: 2.0
-Status: Approved
+Status: Superseded by PLAN_v3.md
 Target style: Read.cv-style / dark minimalist / text-first personal portfolio (reference: jansencadorna.com)
 Constraint: keep the two-lane identity (Software = blue, Marketing = orange)
 
@@ -9,7 +12,7 @@ Constraint: keep the two-lane identity (Software = blue, Marketing = orange)
 
 # §0 Orchestrator Contract
 
-- **Orchestrator:** Qwen 3.8 Max. **Workers:** Muse Spark 1.3 Free (via OpenCode Zen) OR Qwen 3.8-Flash.
+- **Orchestrator:** Qwen 3.8 Max. **Workers:** Qwen 3.8 Flash (Alibaba Token Plan, max variant) OR Muse 1.3 (OpenCode Zen, xhigh). Active backend since 2026-09-05 (user directive): `alibaba-token-plan/qwen3.8-flash`, variant `max`, for worker and reviewer sub-agents.
 - Worker backend is interchangeable: the orchestrator may dispatch any task to either backend. Both follow the identical contract below. Do not switch backends mid-phase — finish the in-flight phase on the backend it started with.
 - Dispatch tasks from §3 in phase order. Within a phase, tasks marked `∥` may run in parallel; everything else is sequential.
 - After each phase gate, run `npm run build`. If it fails, route the failing task back to a worker before starting the next phase.

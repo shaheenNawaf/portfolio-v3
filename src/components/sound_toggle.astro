@@ -1,0 +1,20 @@
+---
+import Icon from "./icon.astro";
+---
+
+<button
+  type="button"
+  id="sound-toggle"
+  data-ui-sound="none"
+  aria-pressed="false"
+  aria-label="Enable interface sounds"
+  class="inline-flex items-center gap-1.5 text-[12px] muted transition-colors hover:text-[color:var(--text)]"
+>
+  <span data-icon="off">
+    <Icon name="volume-off" class="w-3.5 h-3.5" />
+  </span>
+  <span data-icon="on" class="hidden">
+    <Icon name="volume-on" class="w-3.5 h-3.5" />
+  </span>
+  <span data-label>Sound off</span>
+</button>

@@ -1,11 +1,11 @@
 ---
 import "../styles/global.css";
-import ThemeToggle from "../components/theme_toggle.astro";
+import themeInit from "../scripts/theme-init.js?raw";
+import SiteSidebar from "../components/site_sidebar.astro";
 
 interface Props {
   title: string;
   description?: string;
-  hideToggle?: boolean;
   /** Visual biome: hub (dual), software (lab), marketing (studio) */
   track?: "hub" | "software" | "marketing";
 }
@@ -13,33 +13,21 @@ interface Props {
 const {
   title,
   description = "Full-stack Software Engineer & Growth Marketer based in Davao, Philippines. Remote-first SEA. Book an intro call.",
-  hideToggle = false,
   track = "hub",
 } = Astro.props;
 
 const siteUrl = "https://shaheen.works";
 const ogImage = `${siteUrl}/thumbnail.png`;
 const canonicalURL = new URL(Astro.url.pathname, siteUrl);
-const selectionClass =
-  track === "marketing"
-    ? "selection:bg-orange-500/30"
-    : track === "software"
-      ? "selection:bg-blue-500/30"
-      : "selection:bg-blue-500/30";
 ---
 
-<html
-  lang="en"
-  class:list={["antialiased", selectionClass]}
-  data-track={track}
->
+<html lang="en" class="antialiased" data-track={track}>
   <head>
-    <script src="../scripts/theme-init.ts"></script>
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    {/* Standardized multi-platform favicon declarations with cache-busters */}
+    <script is:inline set:html={themeInit} />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
     <link rel="alternate icon" type="image/x-icon" href="/favicon.ico?v=2" />
     <link
@@ -48,8 +36,11 @@ const selectionClass =
       href="/apple-touch-icon.png?v=2"
     />
 
-    <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="canonical" href={canonicalURL} />
+
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#fbfbfc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#272629" media="(prefers-color-scheme: dark)" />
 
     <title>{title}</title>
     <meta name="title" content={title} />
@@ -68,26 +59,21 @@ const selectionClass =
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={ogImage} />
-
-    {/* Handwritten annotation font (hero portrait only) */}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
   </head>
 
   <body class="min-h-screen relative transition-colors duration-300">
+    <SiteSidebar />
     <a href="#main" class="skip-link">Skip to content</a>
-
-    {!hideToggle && <ThemeToggle />}
 
     <slot />
 
-    {
-      /* Loads general site-wide interactives including modals and CTA tracking */
-    }
-    <script src="../scripts/main.ts"></script>
+    <script src="../scripts/reveal.ts"></script>
+    <script src="../scripts/rail.ts"></script>
+    <script src="../scripts/tilt.ts"></script>
+    <script src="../scripts/card-media.ts"></script>
+    <script src="../scripts/count-up.ts"></script>
+    <script src="../scripts/github-activity.ts"></script>
+    <script src="../scripts/ui-sound.ts"></script>
+    <script src="../scripts/portal.ts"></script>
   </body>
 </html>
