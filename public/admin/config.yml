@@ -1,17 +1,31 @@
 # Sveltia CMS config — visual editor at yoursite.com/admin/
-# Login: "Sign in with Token" + a GitHub fine-grained PAT (contents: read+write).
-# Every save commits straight to `main`, which retriggers your host's rebuild.
+# Login: "Sign in with Token" + a GitHub fine-grained PAT.
+# PAT scopes needed: contents (read+write) AND pull requests (read+write).
+# Editorial workflow: saves create a `cms/<collection>/<slug>` branch + PR;
+# nothing touches `main` until you hit Publish (which merges the PR).
 backend:
   name: github
   repo: shaheenNawaf/portfolio-v3
   branch: main
   auth_methods: [token, oauth]
+  squash_merges: true
   commit_messages:
     create: "cms: add {{collection}} {{slug}}"
     update: "cms: update {{collection}} {{slug}}"
     delete: "cms: remove {{collection}} {{slug}}"
     uploadMedia: "cms: upload {{path}}"
     deleteMedia: "cms: remove {{path}}"
+
+# Draft -> In Review -> Ready board with PR-backed entry states.
+publish_mode: editorial_workflow
+
+# Branding
+app_title: "Shaheen Al Adwani — Portfolio Admin"
+logo:
+  src: /favicon.svg
+  show_in_header: true
+site_url: https://shaheen.works
+logout_redirect_url: https://shaheen.works/
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
@@ -40,39 +54,42 @@ collections:
         field: category
         pattern: "^systems$"
     fields:
-      - { label: Title, name: title, widget: string }
+      - { label: Title, name: title, widget: string, hint: "Card headline, e.g. GymEasy - SaaS Gym Management Platform" }
       - label: Category
         name: category
         widget: select
         options: [software, marketing, systems]
         default: software
-      - { label: Date, name: date, widget: string, hint: "e.g. June 2025 - Present" }
-      - { label: Role, name: role, widget: string }
-      - { label: Accent color, name: color, widget: color, default: "#3b82f6" }
+        hint: "software = blue lane, marketing = orange lane"
+      - { label: Date, name: date, widget: string, hint: "Free text, e.g. June 2025 - Present" }
+      - { label: Role, name: role, widget: string, hint: "e.g. Founder · Project Manager, Back-end Developer" }
+      - { label: Accent color, name: color, widget: color, default: "#3b82f6", hint: "Blue #3b82f6 for software, orange #f97316 for marketing" }
       - { label: Result metric, name: results, widget: string, required: false, hint: "Headline stat on the card, e.g. 67% Staff Reduction" }
-      - { label: Tags, name: tags, widget: list, required: false, summary: "{{fields.string}}", field: { label: Tag, name: string, widget: string } }
-      - { label: Deliverables, name: deliverables, widget: list, required: false, hint: "Marketing cards show these instead of tags", summary: "{{fields.string}}", field: { label: Item, name: string, widget: string } }
       - label: Media
         name: media
         widget: object
         required: false
         collapsed: true
+        hint: "Card thumbnail or case-study video"
         fields:
           - { label: Type, name: type, widget: select, options: [image, video], default: image }
           - { label: File, name: url, widget: image, hint: "Upload an image, or paste any URL (Cloudinary video URLs work too)", required: false }
           - { label: Thumbnail, name: thumbnail, widget: image, required: false, hint: "Poster frame for videos" }
+      - { label: Tags, name: tags, widget: list, required: false, hint: "Tech chips — shown on software cards", summary: "{{fields.string}}", field: { label: Tag, name: string, widget: string } }
+      - { label: Deliverables, name: deliverables, widget: list, required: false, hint: "Marketing cards show these instead of tags", summary: "{{fields.string}}", field: { label: Item, name: string, widget: string } }
+      - { label: Problem, name: problem, widget: text, required: false, hint: "Case-study section 1 — shown in the expanded card" }
+      - { label: Solution, name: solution, widget: text, required: false, hint: "Case-study section 2 — shown in the expanded card" }
+      - { label: Impact, name: impact, widget: text, required: false, hint: "Case-study section 3 — shown in the expanded card" }
+      - { label: Live URL, name: liveUrl, widget: string, required: false, pattern: ["^$|^https?://.+", "Must be a full URL starting with http:// or https:// — or left empty"] }
+      - { label: Repo URL, name: repoUrl, widget: string, required: false, pattern: ["^$|^https?://.+", "Must be a full URL starting with http:// or https:// — or left empty"] }
+      - { label: Case study link, name: caseStudyHref, widget: string, required: false, pattern: ["^$|^/.*", "Must start with / (e.g. /software) — or left empty"], hint: "e.g. /software — hidden when it equals the current page" }
       - label: Gallery
         name: gallery
         widget: list
         required: false
+        hint: "Extra case-study images"
         summary: "{{fields.image}}"
         field: { label: Image, name: image, widget: image }
-      - { label: Live URL, name: liveUrl, widget: string, required: false }
-      - { label: Repo URL, name: repoUrl, widget: string, required: false }
-      - { label: Problem, name: problem, widget: text, required: false }
-      - { label: Solution, name: solution, widget: text, required: false }
-      - { label: Impact, name: impact, widget: text, required: false }
-      - { label: Case study link, name: caseStudyHref, widget: string, required: false, hint: "e.g. /software — hidden when it equals the current page" }
       - { label: Draft, name: draft, widget: boolean, default: false, hint: "Drafts are hidden on the live site" }
       - { label: Description, name: body, widget: markdown, hint: "Main card text. Plain paragraphs are fine." }
 
@@ -99,24 +116,26 @@ collections:
       - { label: Job title, name: title, widget: string }
       - { label: Company, name: company, widget: string }
       - { label: Date, name: date, widget: string, hint: "Include the word Present for current roles" }
-      - { label: Location, name: location, widget: string }
+      - { label: Location, name: location, widget: string, hint: "e.g. Remote or Manila, PH" }
       - label: Category
         name: category
         widget: select
         options: [software, marketing, systems]
         default: software
-      - { label: Accent color, name: color, widget: color, default: "#3b82f6" }
+        hint: "software = blue lane, marketing = orange lane"
+      - { label: Accent color, name: color, widget: color, default: "#3b82f6", hint: "Blue #3b82f6 for software, orange #f97316 for marketing" }
       - label: Bullet points
         name: details
         widget: list
+        hint: "Achievement bullets — lead with metrics where possible"
         summary: "{{fields.text}}"
         field: { label: Point, name: text, widget: text }
+      - { label: Tech chips, name: tech, widget: list, required: false, summary: "{{fields.string}}", field: { label: Tech, name: string, widget: string } }
       - label: Gallery
         name: gallery
         widget: list
         required: false
         summary: "{{fields.image}}"
         field: { label: Image, name: image, widget: image }
-      - { label: Video, name: video, widget: string, required: false, hint: "Embed/file URL, e.g. Facebook plugin URL — leave empty for none" }
-      - { label: Tech chips, name: tech, widget: list, required: false, summary: "{{fields.string}}", field: { label: Tech, name: string, widget: string } }
+      - { label: Video, name: video, widget: string, required: false, pattern: ["^$|^https?://.+", "Must be a full URL — or left empty"], hint: "Embed/file URL, e.g. Facebook plugin URL — leave empty for none" }
       - { label: Description, name: body, widget: markdown, hint: "One or two sentences shown under the role." }
