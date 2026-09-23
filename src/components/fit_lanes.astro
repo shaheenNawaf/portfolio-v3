@@ -9,12 +9,15 @@ import { softwareFit, marketingFit, trustLogos } from "../data/resume";
     by lane — the hybrid is the point.
   </p>
   <div class="mt-6 grid gap-4 sm:grid-cols-2">
-    <div class="rounded-[var(--radius)] border p-5" style="border-color: var(--sw)">
-      <p class="eyebrow text-center text-[15px] font-bold">Software Engineering</p>
-      <ul class="mt-4 space-y-2.5">
+    <div
+      class="rounded-[var(--radius)] border p-6"
+      style="border-color: color-mix(in srgb, var(--sw) 55%, transparent); background-color: color-mix(in srgb, var(--sw) 8%, var(--surface))"
+    >
+      <p class="eyebrow text-center text-[13px] font-bold tracking-[0.08em]">Software Engineering</p>
+      <ul class="mt-5 space-y-3">
         {
           softwareFit.map((item) => (
-            <li class="flex items-start gap-2.5 text-[13px] muted leading-[1.6]">
+            <li class="flex items-start gap-2.5 text-[14px] muted leading-[1.55]">
               <span
                 class="mt-[7px] w-1 h-1 rounded-full shrink-0"
                 style="background-color: var(--sw)"
@@ -26,12 +29,15 @@ import { softwareFit, marketingFit, trustLogos } from "../data/resume";
         }
       </ul>
     </div>
-    <div class="rounded-[var(--radius)] border p-5" style="border-color: var(--mkt)">
-      <p class="eyebrow text-center text-[15px] font-bold">Growth Marketing</p>
-      <ul class="mt-4 space-y-2.5">
+    <div
+      class="rounded-[var(--radius)] border p-6"
+      style="border-color: color-mix(in srgb, var(--mkt) 55%, transparent); background-color: color-mix(in srgb, var(--mkt) 8%, var(--surface))"
+    >
+      <p class="eyebrow text-center text-[13px] font-bold tracking-[0.08em]">Growth Marketing</p>
+      <ul class="mt-5 space-y-3">
         {
           marketingFit.map((item) => (
-            <li class="flex items-start gap-2.5 text-[13px] muted leading-[1.6]">
+            <li class="flex items-start gap-2.5 text-[14px] muted leading-[1.55]">
               <span
                 class="mt-[7px] w-1 h-1 rounded-full shrink-0"
                 style="background-color: var(--mkt)"
@@ -44,9 +50,9 @@ import { softwareFit, marketingFit, trustLogos } from "../data/resume";
       </ul>
     </div>
   </div>
-  <div class="mt-6">
+  <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
     <p class="text-[12px] faint">Partnerships include</p>
-    <ul class="mt-3 flex flex-wrap items-center gap-4">
+    <ul class="flex flex-wrap items-center gap-5">
       {
         trustLogos.map((l) => (
           <li class="flex items-center">
