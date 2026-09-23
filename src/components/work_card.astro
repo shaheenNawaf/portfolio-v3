@@ -19,7 +19,6 @@ interface Props {
   gallery?: readonly string[];
   liveUrl?: string;
   repoUrl?: string;
-  caseStudyHref?: string;
   index?: number;
   featured?: boolean;
 }
@@ -41,7 +40,6 @@ const {
   gallery = [],
   liveUrl,
   repoUrl,
-  caseStudyHref,
   index = 0,
   featured = false,
 } = Astro.props;
@@ -54,16 +52,12 @@ const metric = results ?? impact;
 const hasDepth = Boolean(
   problem || solution || impact || gallery.length > 0 || media,
 );
-const currentPath = Astro.url.pathname.replace(/\/$/, "");
-const showCaseStudy = Boolean(caseStudyHref) && caseStudyHref !== currentPath;
 const linkHref =
   liveUrl && liveUrl.length > 0
     ? liveUrl
     : repoUrl && repoUrl.length > 0
       ? repoUrl
-      : showCaseStudy
-        ? caseStudyHref
-        : undefined;
+      : undefined;
 const domainLabel =
   liveUrl && liveUrl.length > 0
     ? new URL(liveUrl).hostname.replace(/^www\./, "")
@@ -194,7 +188,7 @@ const outerAttrs = {
           </div>
         )}
 
-        {(liveUrl || repoUrl || showCaseStudy) && (
+        {(liveUrl || repoUrl) && (
           <div class="card-links">
             {liveUrl && liveUrl.length > 0 && (
               <a
@@ -214,14 +208,6 @@ const outerAttrs = {
                 style={`color: ${accentVar}`}
               >
                 GitHub ↗
-              </a>
-            )}
-            {showCaseStudy && (
-              <a
-                href={caseStudyHref}
-                style={`color: ${accentVar}`}
-              >
-                Case study ↗
               </a>
             )}
           </div>

@@ -16,12 +16,14 @@
 
 ## Pages
 
-- Home (dual-track overview, experience timeline, skills, contact form):
+- Home (single page: dual-track overview, selected work, experience
+  timeline, skills, contact form):
   https://shaheen.works/
-- Software Engineering track (SaaS builds, engineering history):
-  https://shaheen.works/software/
-- Growth Marketing track (campaigns, creator partnerships, marketing history):
-  https://shaheen.works/marketing/
+
+Note: the former track URLs https://shaheen.works/software/ and
+https://shaheen.works/marketing/ now 301-redirect to the home page. All
+software and marketing proof points below remain valid and live on the
+single page.
 
 ## Software proof points
 

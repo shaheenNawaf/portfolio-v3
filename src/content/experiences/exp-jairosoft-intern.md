@@ -2,7 +2,7 @@
 category: "software"
 title: "Bubble.io Web Developer - Internship"
 company: "JairoSoft"
-date: "May 2025 - June 2025"
+date: "May 2025 - Jun 2025"
 location: "Davao, Philippines (On-site)"
 color: "#10b981"
 details:

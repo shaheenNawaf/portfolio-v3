@@ -2,7 +2,7 @@
 category: "marketing"
 title: "Community Marketing Specialist"
 company: "Rivalry.com"
-date: "June 2023 - July 2024"
+date: "Jun 2023 - Jul 2024"
 location: "Remote"
 color: "#3b82f6"
 details:
@@ -16,7 +16,7 @@ gallery:
   - "/rivalry/bbc.jpg"
   - "/rivalry/nsns.jpg"
   - "/rivalry/tt.jpg"
-video: "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fkuyanicwxc%2Fvideos%2F1425324814659531&show_text=0"
+video: ""
 tech:
   - "Meta Business Suite"
   - "Viber"

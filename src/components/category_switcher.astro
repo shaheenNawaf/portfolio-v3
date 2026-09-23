@@ -65,6 +65,12 @@ const defaultId = categories[0]?.id ?? "all";
     border-color: var(--text);
     color: var(--bg);
   }
+  @media (pointer: coarse) {
+    .category-btn {
+      min-height: 44px;
+      padding-inline: 1.1rem;
+    }
+  }
 </style>
 
 <script>

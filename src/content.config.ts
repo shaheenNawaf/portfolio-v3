@@ -30,7 +30,6 @@ const projects = defineCollection({
     problem: z.string().optional(),
     solution: z.string().optional(),
     impact: z.string().optional(),
-    caseStudyHref: z.string().optional(),
     draft: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
   }),

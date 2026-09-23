@@ -9,7 +9,14 @@ const mkt = skillGroups.marketing;
   <h2 class="text-[15px] font-semibold tracking-tight">Skills</h2>
   <div class="mt-6 grid gap-8 sm:grid-cols-2 sm:gap-10">
     <div>
-      <p class="eyebrow mb-4">Engineering</p>
+      <p class="eyebrow mb-4 flex items-center gap-2">
+        <span
+          class="w-1.5 h-1.5 rounded-full shrink-0"
+          style="background-color: var(--sw)"
+          aria-hidden="true"
+        ></span>
+        Engineering
+      </p>
       <div class="space-y-3">
         {
           Object.entries(eng).map(([label, items]) => (
@@ -22,7 +29,14 @@ const mkt = skillGroups.marketing;
       </div>
     </div>
     <div>
-      <p class="eyebrow mb-4">Marketing</p>
+      <p class="eyebrow mb-4 flex items-center gap-2">
+        <span
+          class="w-1.5 h-1.5 rounded-full shrink-0"
+          style="background-color: var(--mkt)"
+          aria-hidden="true"
+        ></span>
+        Marketing
+      </p>
       <div class="space-y-3">
         {
           Object.entries(mkt).map(([label, items]) => (

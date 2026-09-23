@@ -1,8 +1,8 @@
 # Personal Portfolio
 
-A text-first, dark-minimal portfolio built with Astro, Tailwind CSS v4, and TypeScript — a dual-lane digital resume for someone who doesn't fit neatly into one lane.
+A text-first, minimal portfolio built with Astro, Tailwind CSS v4, and TypeScript — a single-page dual-lane digital resume for someone who doesn't fit neatly into one lane.
 
-The blue lane showcases software engineering work: a live SaaS gym management platform, an AI agricultural chatbot built on RAG pipelines and Flutter, and end-to-end builds across web and mobile. The orange lane covers four years of high-performance creator partnerships, affiliate ecosystems, and community growth across the Philippine and SEA market — $355K in transaction volume, 37M combined creator reach, and deals structured with some of SEA's biggest talent agencies.
+The blue lane (software category accent) showcases software engineering work: a live SaaS gym management platform, an AI agricultural chatbot built on RAG pipelines and Flutter, and end-to-end builds across web and mobile. The orange lane (marketing category accent) covers four years of high-performance creator partnerships, affiliate ecosystems, and community growth across the Philippine and SEA market — $355K in transaction volume, 37M combined creator reach, and deals structured with some of SEA's biggest talent agencies.
 
 Built for recruiters who want to see both sides of the same person.
 
@@ -16,8 +16,8 @@ Built for recruiters who want to see both sides of the same person.
 
 ## Features
 
-- **Dual-lane identity:** blue marks software items/links, orange marks marketing items/links. The sidebar's timeline line and active node pick up the current zone's accent.
-- **Sidebar navigation:** fixed 12.75rem left rail (no name, no divider, no container — it sits flat on the page background) whose single list is a vertical timeline — line + node per entry with an accent progress line — covering both on-page sections and the `/software` + `/marketing` zone pages; below 1024px it becomes a bottom sheet (grabber + left-edge swipe-in, drag-down to dismiss) opened by a bottom-left button. At ≥1280px the rail docks 20px left of the centred content column and travels with it; at 1024–1279px it docks at the viewport edge.
+- **Dual-lane identity:** blue marks software items/links, orange marks marketing items/links — as category accents on a single page (work filters, timeline markers, skills groups, fit lanes).
+- **Sidebar navigation:** fixed 12.75rem left rail (no name, no divider, no container — it sits flat on the page background) whose single list is a vertical timeline — line + node per entry with an accent progress line — covering the on-page sections; below 1024px it becomes a bottom sheet (grabber + left-edge swipe-in, drag-down to dismiss) opened by a bottom-left button. At ≥1280px the rail docks 20px left of the centred content column and travels with it; at 1024–1279px it docks at the viewport edge.
 - **Reference-style Works grid:** 2-column cards with hover-reveal thumbnails (hidden at rest, 70% on hover), 3D tilt, shadow bloom, sticker-peel corner, and expandable full-width case-study bodies (Problem/Solution/Impact, gallery, Live/GitHub links). Featured-first with a "See all" expander on the hub.
 - **Faint section dividers:** a 1px hairline between every section, revealed on scroll with its section.
 - **Scroll reveals:** IntersectionObserver-driven fade + blur + rise, staggered. No animation library.
@@ -36,9 +36,9 @@ src/
     activity_heatmap.astro   # GitHub public-activity popover trigger
     book_call.astro          # Book-a-call form (mailto logic)
     category_switcher.astro  # Pill tab filter (projects + experience)
+    fit_lanes.astro          # Two-lane "where I fit" cards (absorbs zone fit lists)
     hero_home.astro          # Hub hero: name, title, stickers, stats
     icon.astro               # Inline SVG sprite (no icon dependency)
-    identity_hero.astro      # Zone hero (name + headline + expertise + tools)
     journey_row.astro        # Expandable experience timeline row
     secret_swap.astro        # Blur-crossfade word swap
     secret_tooltip.astro     # Dotted-underline joke tooltip
@@ -51,7 +51,6 @@ src/
     stat_counter.astro       # Animated proof-band metric
     sticker_pill.astro       # Brand-tinted link pill + preview popover
     theme_toggle.astro       # Light/dark toggle
-    track_index.astro        # Two-lane track picker rows
     verified_badge.astro     # Spinning rosette easter egg
     work_card.astro          # Expandable project card (grid)
     dither-kit/              # Pixel-dither canvas kit (currently unused)
@@ -60,9 +59,7 @@ src/
   layouts/
     layout.astro             # Global HTML shell + SEO meta + sidebar + scripts
   pages/
-    index.astro              # Hub: hero, tracks, work, experience, skills, contact
-    software.astro           # Software engineering zone (blue)
-    marketing.astro          # Growth marketing zone (orange)
+    index.astro              # Single-page hub: hero, fit lanes, work, experience, skills, contact
     404.astro                # Not found page
   scripts/
     card-media.ts            # Adds .is-loaded once card thumbs decode

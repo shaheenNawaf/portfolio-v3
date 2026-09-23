@@ -18,7 +18,6 @@ export interface Project {
   problem?: string;
   solution?: string;
   impact?: string;
-  caseStudyHref?: string;
   draft?: boolean;
 }
 
@@ -49,12 +48,6 @@ export const hub = {
   appointmentUrl: "" as string,
 };
 
-export const softwareSummary =
-  "Computer Science graduate at Ateneo de Davao. I build full-stack applications with a focus on performance and real-world utility. My background in marketing taught me to build systems that don't just work, but actually drive business results.";
-
-export const marketingSummary =
-  "In 4 months, I scaled a market from under $4K to $133K in peak monthly transaction volume, with $355K in total volume across the campaign period. The longer version: 4+ years of growth marketing, 25+ structured creator partnerships, a 4:1 ROAS across every influencer I've onboarded, and a track record of building the systems behind the results, not just running the plays.";
-
 export const contact = {
   email: "contact.shaheenaladwani@gmail.com",
   phone: "+63 917 786 5315",
@@ -71,7 +64,7 @@ export const resumes = {
     "https://docs.google.com/document/d/1yOaGJtXkOTe59ygH9QrlcFg2VB70k6qNKo0e-Hc_Aeg/export?format=pdf",
 };
 
-/** Flagship case IDs shown first on zone pages (depth over breadth) */
+/** Flagship case IDs shown first on the hub (depth over breadth) */
 export const featuredProjectIds = {
   marketing: [
     "campaign-rivalry-tribe-main",
@@ -89,7 +82,7 @@ export const hubStats = [
     num: 355,
     prefix: "$",
     suffix: "K+",
-    label: "Total Transaction Volume in just 4 months",
+    label: "Transaction volume in 4 months",
     sub: "Grew from $6K/mo to $355K total in just 4 months",
   },
   {
@@ -144,61 +137,6 @@ export const trustLogos = [
   { src: "/logos/epulze.png", alt: "Epulze" },
   { src: "/logos/ncgc.png", alt: "NCGC" },
 ] as const;
-
-export const softwareSkills = [
-  "Flutter & Dart",
-  "Java & Spring Boot",
-  "JavaScript & TypeScript",
-  "Next.js",
-  "Supabase & PostgreSQL",
-  "Firebase",
-  "REST APIs",
-  "AWS & Docker",
-  "ESP32 / IoT",
-  "Python",
-  "Figma",
-  "Astro",
-  "Agile / Scrum",
-  "Postman",
-] as const;
-
-export const marketingSkills = [
-  "Influencer & KOL Marketing",
-  "Creator Partnerships",
-  "Performance Marketing (ROAS)",
-  "Growth Strategy & UA",
-  "Community Building",
-  "Lifecycle Campaigns (Email, SMS, Push)",
-  "Automation & CRM",
-  "Paid Ads (Meta)",
-  "KPI Reporting & Dashboards",
-  "Partner Onboarding",
-  "Content Strategy & Briefing",
-  "A/B Testing & Creative Optimization",
-  "User Segmentation",
-  "Event-Based Campaign Planning",
-  "Negotiation & Contracts",
-] as const;
-
-/** Toolchains shown in each zone hero */
-export const softwareTools = [
-  "Cursor & VS Code",
-  "Android Studio",
-  "Postman",
-  "Firebase & Supabase",
-  "Bubble.io",
-  "Docker",
-] as const;
-
-export const marketingTools = [
-  "Meta Business Suite",
-  "Telegram & Viber",
-  "Figma & Canva",
-  "Notion & Airtable",
-  "HubSpot",
-] as const;
-
-export const sharedTools = ["Claude, ChatGPT & n8n"] as const;
 
 /** Categorized skills for the homepage Skills section (ATS-friendly) */
 export const skillGroups = {

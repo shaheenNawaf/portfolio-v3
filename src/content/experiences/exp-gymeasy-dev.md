@@ -1,7 +1,7 @@
 ---
 title: Project Manager & Back-end Developer
 company: gamatek
-date: June 2025 - Present
+date: "Jun 2025 - Present"
 location: Davao, Philippines
 category: software
 color: '#3b82f6'

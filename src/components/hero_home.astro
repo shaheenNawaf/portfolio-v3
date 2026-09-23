@@ -79,8 +79,10 @@ const subtextParts = hub.subtext.split(secrets.roas.trigger);
   <p class="mt-4 text-[15px] muted leading-[1.9] max-w-[56ch]">
     You can find me <ActivityHeatmap phrase="shipping" /> on{" "}
     <StickerPill social={socials[0]} idPrefix="hero-" />, hiring-side on{" "}
-    <StickerPill social={socials[1]} idPrefix="hero-" />, or reach me at{" "}
-    <StickerPill social={socials[2]} idPrefix="hero-" />.
+    <StickerPill social={socials[1]} idPrefix="hero-" />, or reach me{" "}
+    <span class="whitespace-nowrap">
+      at <StickerPill social={socials[2]} idPrefix="hero-" />
+    </span>.
   </p>
 
   <p class="mt-4 text-[13px]">
@@ -94,7 +96,7 @@ const subtextParts = hub.subtext.split(secrets.roas.trigger);
     <a
       href="#contact"
       data-ui-sound="crisp"
-      class="font-semibold fg hover:opacity-70 transition-opacity"
+      class="hit-expand font-semibold fg hover:opacity-70 transition-opacity"
     >
       {hub.ctaPrimary} →
     </a>

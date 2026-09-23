@@ -25,7 +25,7 @@
     --border-strong: #cfcfd6;
     --text: #1b1b1f;
     --text-muted: #5c5c66;
-    --text-faint: #7c7c86;
+    --text-faint: #71717b;
     --radius: 8px;
     --mkt: #ea580c;
     --sw: #2563eb;
@@ -44,12 +44,12 @@
   }
   html.dark {
     --bg: #272629;
-    --surface: #302f33;
-    --border: #3a393e;
-    --border-strong: #4c4b52;
+    --surface: #333238;
+    --border: #454449;
+    --border-strong: #5a5961;
     --text: #e9e9ec;
     --text-muted: #9c9ca4;
-    --text-faint: #90909a;
+    --text-faint: #9797a1;
     --mkt: #f97316;
     --sw: #60a5fa;
     --tint-gh-bg: #3a393e;   --tint-gh-fg: #e9e9ec;   --tint-gh-bd: #4c4b52;
@@ -60,8 +60,6 @@
     --card-shadow: 0 6px 20px rgb(0 0 0 / 0.28);
     color-scheme: dark;
   }
-  html[data-track="software"] { --accent: var(--sw); }
-  html[data-track="marketing"] { --accent: var(--mkt); }
 
   section[id], header[id] { scroll-margin-top: 1.5rem; }
 
@@ -309,7 +307,13 @@
   }
 
   .nudge-arrow { transition: transform 0.2s ease; }
-  .group\/see-all:hover .nudge-arrow { transform: translate(2px, -2px); }
+  .group\/see-all:hover .nudge-arrow { transform: translateX(3px); }
+
+  /* Invisible hit-area expansion for small inline links/pills (touch targets) */
+  .hit-expand { position: relative; }
+  .hit-expand::after {
+    content: ""; position: absolute; inset: -12px -8px;
+  }
 
   /* Sticker pill brand tints (per-pill scope via .sticker-*) */
   .sticker-gh   { --sticker-bg: var(--tint-gh-bg);   --sticker-fg: var(--tint-gh-fg);   --sticker-bd: var(--tint-gh-bd); }
@@ -362,10 +366,6 @@
     border-color: var(--node-c, var(--accent));
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--node-c, var(--accent)) 22%, transparent);
   }
-  /* Zone links carry their lane colour in the node + the label */
-  .rail-link--tinted { color: var(--node-c); }
-  .rail-link--tinted:hover { color: var(--node-c); }
-  .rail-link--tinted[aria-current="true"] { color: var(--node-c); font-weight: 600; }
 
   /* Bottom-sheet grabber (mobile only) */
   .rail-grab {

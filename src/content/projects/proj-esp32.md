@@ -12,7 +12,6 @@ tags:
   - "IoT"
   - "REST APIs"
   - "Firmware"
-caseStudyHref: "/software"
 draft: true
 ---
 

@@ -2,7 +2,7 @@
 category: "marketing"
 title: "Partnerships & Influencer Specialist"
 company: "Rivalry.com"
-date: "Sept 2021 - July 2024"
+date: "Sep 2021 - Jul 2024"
 location: "Remote"
 color: "#ef4444"
 details:
@@ -15,7 +15,7 @@ gallery:
   - "/rivalry/rivalry-tribe.jpg"
   - "/rivalry/pindabali.jpg"
   - "/rivalry/bali-1.jpg"
-video: "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fwatch%2F%3Fv%3D483447207175593&show_text=0"
+video: ""
 tech:
   - "Meta Business Suite"
   - "Telegram"

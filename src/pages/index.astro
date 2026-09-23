@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/layout.astro";
 import HeroHome from "../components/hero_home.astro";
-import TrackIndex from "../components/track_index.astro";
+import FitLanes from "../components/fit_lanes.astro";
 import SectionDivider from "../components/section_divider.astro";
 import SectionHead from "../components/section_head.astro";
 import SecretTooltip from "../components/secret_tooltip.astro";
@@ -28,14 +28,13 @@ const featuredSet = new Set<string>([
 <BaseLayout
   title={`${name} | Full-Stack Developer & Growth Marketer`}
   description="Full-stack developer (Flutter, Next.js) and growth marketer (4:1 ROAS, $355K campaign volume) in Davao, Philippines. 2 live SaaS products. Open to remote roles in SEA."
-  track="hub"
 >
   <main id="main" class="wrap flex flex-col gap-8 sm:gap-10 pt-10 md:pt-16 pb-4">
     <HeroHome />
 
     <div data-reveal style="--i:1">
       <SectionDivider />
-      <TrackIndex />
+      <FitLanes />
     </div>
 
     <div data-reveal style="--i:2">
@@ -162,7 +161,7 @@ const featuredSet = new Set<string>([
 
     categoryButtons.forEach((b) => {
       b.addEventListener("click", () => {
-        if (b.dataset.category !== "all") expanded = true;
+        expanded = b.dataset.category !== "all";
         setTimeout(apply, 0);
       });
     });

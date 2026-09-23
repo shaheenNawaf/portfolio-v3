@@ -12,7 +12,6 @@ tags:
   - "HubSpot"
   - "Meta Business Suite"
   - "Automation"
-caseStudyHref: "/marketing"
 draft: true
 ---
 

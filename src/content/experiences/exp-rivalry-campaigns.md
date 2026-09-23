@@ -2,7 +2,7 @@
 category: "marketing"
 title: "Campaign and Affiliates Specialist"
 company: "Rivalry.com"
-date: "Sept 2021 - Aug 2022"
+date: "Sep 2021 - Aug 2022"
 location: "Remote"
 color: "#643BF6"
 details:

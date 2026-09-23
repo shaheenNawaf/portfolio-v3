@@ -115,30 +115,18 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
         type="submit"
         id={`${id}-submit`}
         class:list={[
-          "inline-flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius)] border hairline text-[13px] font-semibold fg hover:border-[color:var(--border-strong)] transition-colors disabled:opacity-60 disabled:cursor-not-allowed",
+          "inline-flex items-center gap-2 px-5 py-3 rounded-[var(--radius)] border border-transparent bg-[color:var(--text)] text-[color:var(--bg)] text-[13px] font-semibold hover:opacity-85 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed",
           { "w-full": compact },
         ]}
       >
         <span class="btn-label">{hub.ctaPrimary}</span>
-        <svg
-          class="w-3.5 h-3.5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2.5"
-            d="M9 5l7 7-7 7"></path>
-        </svg>
+        <span aria-hidden="true" class="text-[15px] leading-none">→</span>
       </button>
       <p class="text-[11px] muted leading-snug max-w-xs">
         {
           appointmentUrl
             ? "Sends your note, then opens Google Appointments to pick a time."
-            : "Sends directly — I reply within 24–48 hours."
+            : "Takes 30 seconds — I read every note."
         }
       </p>
     </div>

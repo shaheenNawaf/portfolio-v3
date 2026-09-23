@@ -51,7 +51,9 @@ ready(() => {
     crisp();
   });
   document.addEventListener("pointerdown", (e) => {
-    const hit = (e.target as Element | null)?.closest?.('[data-ui-sound="crisp"]');
-    if (hit) crisp();
+    const hit = (e.target as Element | null)?.closest?.(
+      'a, button, summary, input, select, textarea, label, [role="button"], [role="menuitem"], [role="tab"], [data-ui-sound="crisp"]',
+    );
+    if (hit && !hit.closest("#sound-toggle")) crisp();
   });
 });

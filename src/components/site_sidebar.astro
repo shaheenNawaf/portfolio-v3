@@ -5,15 +5,11 @@ import StickerPill from "./sticker_pill.astro";
 import ThemeToggle from "./theme_toggle.astro";
 import SoundToggle from "./sound_toggle.astro";
 
-const path = Astro.url.pathname.replace(/\/$/, "");
-
 const navItems = [
-  { href: "/#work", label: "Work", spy: true, tint: "" },
-  { href: "/software", label: "Software", spy: false, tint: "var(--sw)" },
-  { href: "/marketing", label: "Growth", spy: false, tint: "var(--mkt)" },
-  { href: "/#experience", label: "Experience", spy: true, tint: "" },
-  { href: "/#skills", label: "Skills", spy: true, tint: "" },
-  { href: "/#contact", label: "Contact", spy: true, tint: "" },
+  { href: "/#work", label: "Work" },
+  { href: "/#experience", label: "Experience" },
+  { href: "/#skills", label: "Skills" },
+  { href: "/#contact", label: "Contact" },
 ];
 ---
 
@@ -55,13 +51,9 @@ const navItems = [
       navItems.map((item) => (
         <a
           href={item.href}
-          data-spy={item.spy ? item.href : undefined}
-          aria-current={!item.spy && path === item.href ? "true" : "false"}
-          class:list={[
-            "rail-link relative flex items-center py-2.5 pl-5 pr-2 text-[13px]",
-            { "rail-link--tinted": Boolean(item.tint) },
-          ]}
-          style={item.tint ? `--node-c: ${item.tint}` : undefined}
+          data-spy={item.href}
+          aria-current="false"
+          class="rail-link relative flex items-center py-2.5 max-lg:py-3 pl-5 pr-2 text-[13px]"
         >
           {item.label}
         </a>

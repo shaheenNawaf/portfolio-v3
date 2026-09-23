@@ -9,8 +9,9 @@ import { experienceTech } from "./resume";
  * wins for backwards-compat.
  */
 
-// Legacy order from resume.ts so the migration doesn't reshuffle the site.
-// New CMS entries (not in these lists) are appended at the end.
+// Display order: projects featured-first (legacy order), experiences
+// reverse-chronological with education last. New CMS entries (not in
+// these lists) are appended at the end.
 const projectOrder = [
   "campaign-rivalry-tribe-main",
   "campaign-rivalry-evergreen",
@@ -28,14 +29,16 @@ const projectOrder = [
 ];
 
 const experienceOrder = [
+  "exp-contentlab-ai",
+  "exp-contentlab-sourcing",
   "exp-gymeasy-dev",
-  "exp-jairosoft-intern",
-  "exp-addu-cs",
   "exp-yohoho-lead",
   "exp-yohoho-influ",
+  "exp-jairosoft-intern",
   "exp-rivalry-partnerships",
   "exp-rivalry-community",
   "exp-rivalry-campaigns",
+  "exp-addu-cs",
 ];
 
 function byOrder(order: readonly string[]) {
@@ -65,7 +68,6 @@ export async function getProjects(): Promise<Project[]> {
       problem: e.data.problem,
       solution: e.data.solution,
       impact: e.data.impact,
-      caseStudyHref: e.data.caseStudyHref,
       draft: e.data.draft,
       tags: e.data.tags,
     }))

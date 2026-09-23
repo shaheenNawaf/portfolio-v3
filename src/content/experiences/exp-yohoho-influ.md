@@ -2,7 +2,7 @@
 category: "marketing"
 title: "Influencer Specialist"
 company: "Yohoho"
-date: "June 2025 - October 2025"
+date: "Jun 2025 - Oct 2025"
 location: "Remote"
 color: "#B5F916"
 details:

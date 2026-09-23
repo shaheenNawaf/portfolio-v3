@@ -1,0 +1,71 @@
+---
+import { softwareFit, marketingFit, trustLogos } from "../data/resume";
+---
+
+<section id="fit">
+  <h2 class="text-[15px] font-semibold tracking-tight">Two lanes, one owner</h2>
+  <p class="mt-1 text-[13px] muted">
+    Engineering and growth, shipped by the same person. The work below filters
+    by lane — the hybrid is the point.
+  </p>
+  <div class="mt-6 grid gap-4 sm:grid-cols-2">
+    <div class="rounded-[var(--radius)] border p-5" style="border-color: var(--sw)">
+      <p class="eyebrow text-center text-[15px] font-bold">Software Engineering</p>
+      <ul class="mt-4 space-y-2.5">
+        {
+          softwareFit.map((item) => (
+            <li class="flex items-start gap-2.5 text-[13px] muted leading-[1.6]">
+              <span
+                class="mt-[7px] w-1 h-1 rounded-full shrink-0"
+                style="background-color: var(--sw)"
+                aria-hidden="true"
+              />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="rounded-[var(--radius)] border p-5" style="border-color: var(--mkt)">
+      <p class="eyebrow text-center text-[15px] font-bold">Growth Marketing</p>
+      <ul class="mt-4 space-y-2.5">
+        {
+          marketingFit.map((item) => (
+            <li class="flex items-start gap-2.5 text-[13px] muted leading-[1.6]">
+              <span
+                class="mt-[7px] w-1 h-1 rounded-full shrink-0"
+                style="background-color: var(--mkt)"
+                aria-hidden="true"
+              />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+  <div class="mt-6">
+    <p class="text-[12px] faint">Partnerships include</p>
+    <ul class="mt-3 flex flex-wrap items-center gap-4">
+      {
+        trustLogos.map((l) => (
+          <li class="flex items-center">
+            <img
+              src={l.src}
+              alt={`${l.alt} logo`}
+              width="150"
+              height="150"
+              loading="lazy"
+              decoding="async"
+              class:list={[
+                "h-9 w-auto object-contain",
+                l.alt === "Epulze" &&
+                  "brightness-0 opacity-75 dark:brightness-100 dark:opacity-100",
+              ]}
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
