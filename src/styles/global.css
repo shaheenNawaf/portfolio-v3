@@ -15,6 +15,10 @@
 }
 @import "tailwindcss";
 
+@theme {
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {

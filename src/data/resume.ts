@@ -136,6 +136,7 @@ export const trustLogos = [
   { src: "/logos/yohoho.png", alt: "Yohoho" },
   { src: "/logos/epulze.png", alt: "Epulze" },
   { src: "/logos/ncgc.png", alt: "NCGC" },
+  { src: "/logos/content-lab.png", alt: "Content Lab" },
 ] as const;
 
 /** Categorized skills for the homepage Skills section (ATS-friendly) */
