@@ -39,13 +39,16 @@ ready(() => {
   const btn = document.getElementById("sound-toggle");
   if (!btn) return;
   try {
-    enabled = localStorage.getItem("sound") === "on";
+    enabled =
+      localStorage.getItem("consent") === "all" &&
+      localStorage.getItem("sound") === "on";
   } catch {}
   paint(btn);
   btn.addEventListener("click", () => {
     enabled = !enabled;
     try {
-      localStorage.setItem("sound", enabled ? "on" : "off");
+      if (localStorage.getItem("consent") === "all")
+        localStorage.setItem("sound", enabled ? "on" : "off");
     } catch {}
     paint(btn);
     crisp();

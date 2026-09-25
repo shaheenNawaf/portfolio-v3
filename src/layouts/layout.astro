@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import themeInit from "../scripts/theme-init.js?raw";
 import SiteSidebar from "../components/site_sidebar.astro";
+import ConsentBanner from "../components/consent_banner.astro";
 import { contact, name as personName } from "../data/resume";
 
 interface Props {
@@ -148,6 +149,8 @@ const schema = {
     <a href="#main" class="skip-link">Skip to content</a>
 
     <slot />
+
+    <ConsentBanner />
 
     <script src="../scripts/reveal.ts"></script>
     <script src="../scripts/rail.ts"></script>

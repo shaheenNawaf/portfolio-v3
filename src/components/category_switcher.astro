@@ -83,7 +83,10 @@ const defaultId = categories[0]?.id ?? "all";
 
       let saved = defaultId;
       try {
-        saved = localStorage.getItem(storageKey) || defaultId;
+        saved =
+          localStorage.getItem("consent") === "all"
+            ? localStorage.getItem(storageKey) || defaultId
+            : defaultId;
       } catch {}
 
       const filterItems = (category: string) => {
@@ -125,7 +128,8 @@ const defaultId = categories[0]?.id ?? "all";
 
           filterItems(category);
           try {
-            localStorage.setItem(storageKey, category);
+            if (localStorage.getItem("consent") === "all")
+              localStorage.setItem(storageKey, category);
           } catch {}
         });
 

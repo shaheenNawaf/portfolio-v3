@@ -4,7 +4,10 @@
 
   var theme = "system";
   try {
-    theme = localStorage.getItem("theme") || "system";
+    theme =
+      localStorage.getItem("consent") === "all"
+        ? localStorage.getItem("theme") || "system"
+        : "system";
     localStorage.removeItem("track");
     localStorage.removeItem("rail");
   } catch (e) {}
