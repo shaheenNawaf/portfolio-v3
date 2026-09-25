@@ -113,23 +113,41 @@ const initRail = () => {
     setProgress(active);
   };
 
-  if (targets.length > 0 && "IntersectionObserver" in window) {
-    const spy = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          markActive(entry.target.id);
-        });
-      },
-      { rootMargin: "-20% 0px -70% 0px", threshold: 0 },
-    );
-    targets.forEach((t) => spy.observe(t));
-  }
+  const docTop = (el: HTMLElement) =>
+    el.getBoundingClientRect().top + window.scrollY;
 
-  window.addEventListener("resize", () => {
-    const current = links.find((l) => l.getAttribute("aria-current") === "true");
-    setProgress(current ?? null);
-  });
+  const onScroll = () => {
+    const line = window.scrollY + window.innerHeight * 0.5;
+    let active: HTMLElement | null = null;
+    for (const t of targets) {
+      if (docTop(t) <= line) active = t;
+    }
+    if (
+      window.scrollY + window.innerHeight >=
+      document.documentElement.scrollHeight - 2
+    ) {
+      active = targets[targets.length - 1] ?? active;
+    }
+    markActive(active ? active.id : null);
+  };
+
+  let ticking = false;
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        onScroll();
+        ticking = false;
+      });
+    },
+    { passive: true },
+  );
+
+  onScroll();
+
+  window.addEventListener("resize", onScroll);
 };
 
 ready(initRail);

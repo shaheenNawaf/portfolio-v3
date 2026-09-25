@@ -94,7 +94,7 @@ const outerAttrs = {
 
 {
   hasDepth ? (
-    <details {...outerAttrs}>
+    <details {...outerAttrs} open={featured}>
       <summary data-ui-sound="crisp">
         <div class:list={[frameClass, { "is-loaded": !thumb }]}>
           <div class="card-pulse" aria-hidden="true" />
@@ -117,6 +117,12 @@ const outerAttrs = {
         <div class="card-caption">
           <h3 class="card-title">{title}</h3>
           <p class="card-metric">{metric ?? description}</p>
+          {role && (
+            <p class="mt-0.5 text-[12px] faint">
+              {role}
+              {date ? ` · ${date}` : ""}
+            </p>
+          )}
           <div class="card-chips">
             <span class="card-chip">{categoryLabel}</span>
             {domainLabel && <span class="card-chip">{domainLabel}</span>}

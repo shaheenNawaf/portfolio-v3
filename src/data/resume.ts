@@ -64,16 +64,12 @@ export const resumes = {
     "https://docs.google.com/document/d/1yOaGJtXkOTe59ygH9QrlcFg2VB70k6qNKo0e-Hc_Aeg/export?format=pdf",
 };
 
-/** Flagship case IDs shown first on the hub (depth over breadth) */
-export const featuredProjectIds = {
-  marketing: [
-    "campaign-rivalry-tribe-main",
-    "campaign-kuyanic-ti",
-    "campaign-sgc-launch",
-  ],
-  software: ["proj-gymeasy", "proj-agripinoy", "proj-JCSD"],
-  systems: ["campaign-growth-automation", "proj-esp32"],
-} as const;
+/** Flagship projects rendered as always-open case studies at the top of the work grid, in display order. */
+export const showcaseProjectIds: readonly string[] = [
+  "campaign-rivalry-tribe-main",
+  "proj-gymeasy",
+  "campaign-kuyanic-ti",
+];
 
 /** Proof metrics shown in the hero proof band. `num`/`prefix`/`suffix` drive the count-up; `value` is the no-JS fallback. */
 export const hubStats = [
@@ -82,8 +78,9 @@ export const hubStats = [
     num: 355,
     prefix: "$",
     suffix: "K+",
-    label: "Transaction volume in 4 months",
+    label: "Transaction volume (4 mo)",
     sub: "Grew from $6K/mo to $355K total in just 4 months",
+    lane: "mkt",
   },
   {
     value: "22K+",
@@ -92,14 +89,16 @@ export const hubStats = [
     suffix: "K+",
     label: "Community members",
     sub: "Acquired and retained, KYC-gated",
+    lane: "mkt",
   },
   {
     value: "25+",
     num: 25,
     prefix: "",
     suffix: "+",
-    label: "Influencer partnerships",
+    label: "Influencer partners",
     sub: "SEA macro-creators managed end-to-end",
+    lane: "mkt",
   },
   {
     value: "4:1",
@@ -108,6 +107,7 @@ export const hubStats = [
     suffix: ":1",
     label: "Validated ROAS",
     sub: "Across every creator onboarded",
+    lane: "mkt",
   },
   {
     value: "2",
@@ -116,6 +116,7 @@ export const hubStats = [
     suffix: "",
     label: "Live SaaS products",
     sub: "In paid beta with real users",
+    lane: "sw",
   },
 ] as const;
 

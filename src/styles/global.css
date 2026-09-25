@@ -67,7 +67,7 @@
 
   section[id], header[id] { scroll-margin-top: 1.5rem; }
 
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; zoom: 1.1; }
   body {
     background-color: var(--bg);
     color: var(--text);
@@ -133,16 +133,23 @@
     transform: scaleY(0); transform-origin: top; transition: transform 0.3s ease;
   }
   .journey-item > summary:hover .journey-drop { transform: scaleY(1); }
+  @media (hover: none) {
+    .journey-item > summary:hover::after { transform: scaleX(0); }
+    .journey-item > summary:hover .journey-drop { transform: scaleY(0); }
+  }
+  .journey-item::after {
+    content: ""; position: absolute; top: 10px; bottom: -24px; left: 0; width: 1px;
+    background-color: color-mix(in srgb, var(--text) 40%, transparent);
+    transform: scaleY(0); transform-origin: top; transition: transform 0.3s ease;
+  }
+  .journey-item[open]::after { transform: scaleY(1); }
+  .journey-item[open] > summary::after { transform: scaleX(1); }
+  .journey-item[open] > summary:hover .journey-drop { transform: scaleY(0); }
   .journey-marker {
     width: 10px; height: 10px; flex-shrink: 0;
     margin-top: 6px;
     border-radius: 9999px;
     background-color: var(--marker-c, var(--border-strong));
-  }
-  /* Touch: no hover, so keep the connectors fully drawn instead of hover-drawn */
-  @media (hover: none) {
-    .journey-item > summary::after { transform: scaleX(1); }
-    .journey-drop { transform: scaleY(1); }
   }
   .journey-pill {
     display: inline-flex; white-space: nowrap; border-radius: 9999px; padding: 4px 8px;
@@ -235,6 +242,43 @@
   .card-links {
     display: flex; flex-wrap: wrap; gap: 1.25rem;
     font-size: 13px; font-weight: 600;
+  }
+
+  /* Mobile: archive tiles become a horizontal snap-scroll strip */
+  .work-strip {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .work-strip::-webkit-scrollbar {
+    display: none;
+  }
+  .work-strip > .work-card {
+    flex-shrink: 0;
+    width: 82%;
+    max-width: 320px;
+    scroll-snap-align: start;
+    align-self: flex-start;
+  }
+  @media (max-width: 639px) {
+    .work-strip > .work-card[data-featured="false"] .card-metric,
+    .work-strip > .work-card[data-featured="false"] .card-caption > p.faint {
+      display: none;
+    }
+  }
+  @media (min-width: 640px) {
+    .work-strip {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+    .work-strip > .work-card {
+      width: auto; max-width: none;
+    }
   }
 
   @media (max-width: 639px) {
@@ -429,7 +473,7 @@ details[open] > summary .row-chevron { transform: rotate(180deg); }
 
 @media (prefers-reduced-motion: reduce) {
   .row-chevron, .skip-link, .book-field { transition: none !important; }
-  .journey-item > summary::after, .journey-drop, .journey-pill { transition: none !important; }
+  .journey-item::after, .journey-item > summary::after, .journey-drop, .journey-pill, .stat-sub { transition: none !important; }
   html.js [data-reveal] {
     opacity: 1 !important; filter: none !important;
     transform: none !important; transition: none !important;

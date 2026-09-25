@@ -11,18 +11,17 @@ import JourneyRow from "../components/journey_row.astro";
 import SkillsGrid from "../components/skills_grid.astro";
 import BookCall from "../components/book_call.astro";
 import SiteFooter from "../components/site_footer.astro";
-import { name, featuredProjectIds, secrets } from "../data/resume";
+import { name, showcaseProjectIds, secrets } from "../data/resume";
 import { getExperiences, getProjects } from "../data/content";
 
 const projects = await getProjects();
 const experiences = await getExperiences();
 
 const visible = projects.filter((p) => !p.draft);
-const featuredSet = new Set<string>([
-  ...featuredProjectIds.marketing,
-  ...featuredProjectIds.software,
-  ...featuredProjectIds.systems,
-]);
+const showcase = showcaseProjectIds
+  .map((id) => visible.find((p) => p.id === id))
+  .filter((p) => p !== undefined);
+const archive = visible.filter((p) => !showcaseProjectIds.includes(p.id));
 ---
 
 <BaseLayout
@@ -43,14 +42,17 @@ const featuredSet = new Set<string>([
         <SectionHead
           title="Selected work"
           subtitle="Products, campaigns, and systems with measurable outcomes."
-          actionLabel="See all"
-          actionId="work-see-all"
         />
         <div class="mt-6"><CategorySwitcher /></div>
-        <div class="mt-6 grid grid-flow-row-dense grid-cols-1 gap-4 sm:grid-cols-2" data-project-grid>
+        <div class="mt-6 work-strip" data-project-grid>
           {
-            visible.map((p, i) => (
-              <WorkCard {...p} index={i} featured={featuredSet.has(p.id)} />
+            showcase.map((p, i) => (
+              <WorkCard {...p} index={i} featured={true} />
+            ))
+          }
+          {
+            archive.map((p, i) => (
+              <WorkCard {...p} index={i + showcase.length} />
             ))
           }
         </div>
@@ -119,55 +121,24 @@ const featuredSet = new Set<string>([
 <script>
   import { ready } from "../scripts/ready";
 
-  const initSeeAll = () => {
-    const btn = document.getElementById("work-see-all");
-    const grid = document.querySelector<HTMLElement>("[data-project-grid]");
-    if (!btn || !grid) return;
-
-    const label = btn.querySelector<HTMLElement>("[data-label]");
-    const cards = Array.from(grid.querySelectorAll<HTMLElement>("[data-project-card]"));
-    const switcher = document.querySelector<HTMLElement>(
-      '.category-switcher[data-target="[data-project-grid]"]',
-    );
-    const categoryButtons = switcher
-      ? Array.from(switcher.querySelectorAll<HTMLElement>(".category-btn"))
-      : [];
-
-    const activeCategory = () =>
-      switcher?.querySelector<HTMLElement>('.category-btn[aria-selected="true"]')?.dataset
-        .category ?? "all";
-
-    let expanded = activeCategory() !== "all";
-
-    const syncLabel = () => {
-      if (label) label.textContent = expanded ? "Show less" : "See all";
-    };
-
-    const apply = () => {
-      if (activeCategory() === "all") {
-        cards.forEach((c) => {
-          const show = expanded || c.dataset.featured === "true";
-          c.style.display = show ? "" : "none";
-          if (show) c.classList.add("is-in", "reveal-done");
-        });
-      }
-      syncLabel();
-    };
-
-    btn.addEventListener("click", () => {
-      expanded = !expanded;
-      apply();
-    });
-
-    categoryButtons.forEach((b) => {
-      b.addEventListener("click", () => {
-        expanded = b.dataset.category !== "all";
-        setTimeout(apply, 0);
+  const syncFeaturedOpen = () => {
+    const desktop = window.matchMedia("(min-width: 640px)").matches;
+    document
+      .querySelectorAll<HTMLElement>(".work-strip > .work-card[data-featured='true']")
+      .forEach((c) => {
+        if (desktop) c.setAttribute("open", "");
+        else c.removeAttribute("open");
       });
-    });
-
-    apply();
   };
 
-  ready(initSeeAll);
+  let wasDesktop = window.matchMedia("(min-width: 640px)").matches;
+
+  ready(syncFeaturedOpen);
+
+  window.addEventListener("resize", () => {
+    const isDesktop = window.matchMedia("(min-width: 640px)").matches;
+    if (isDesktop === wasDesktop) return;
+    wasDesktop = isDesktop;
+    syncFeaturedOpen();
+  });
 </script>

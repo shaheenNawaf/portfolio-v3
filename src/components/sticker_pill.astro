@@ -19,17 +19,17 @@ const rel = external
   : undefined;
 ---
 
-<span class={`group/social relative inline-flex align-baseline sticker-${tint}`}>
+<span class={`group/social relative inline-flex max-w-full align-baseline sticker-${tint}`}>
   <a
     href={href}
     target={external ? "_blank" : undefined}
     rel={rel}
     aria-describedby={tipId}
     data-ui-sound="none"
-    class="hit-expand inline-flex w-fit items-center gap-1 rounded-full border border-[color:var(--sticker-bd)] bg-[color:var(--sticker-bg)] px-2 py-0.5 text-xs font-medium text-[color:var(--sticker-fg)] transition-transform duration-150 hover:underline active:translate-y-px active:scale-[0.98] motion-reduce:transition-none"
+    class="hit-expand inline-flex w-fit min-w-0 items-center gap-1 rounded-full border border-[color:var(--sticker-bd)] bg-[color:var(--sticker-bg)] px-2 py-0.5 text-xs font-medium text-[color:var(--sticker-fg)] transition-transform duration-150 hover:underline active:translate-y-px active:scale-[0.98] motion-reduce:transition-none"
   >
     <Icon name={icon} class="w-3 h-3 shrink-0" />
-    {label}
+    <span class="truncate">{label}</span>
   </a>
   <span
     id={tipId}
