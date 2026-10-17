@@ -2,6 +2,7 @@
 import type { Category } from "../data/resume";
 import Icon from "./icon.astro";
 import Terms from "./terms.astro";
+import { cdn, cdnSrcset } from "../lib/img";
 
 interface Props {
   id: string;
@@ -102,7 +103,9 @@ const outerAttrs = {
           <div class="card-pulse" aria-hidden="true" />
           {thumb ? (
             <img
-              src={thumb}
+              src={cdn(thumb, 800)}
+              srcset={cdnSrcset(thumb, [400, 800])}
+              sizes="(min-width: 640px) 320px, 82vw"
               alt={`${title} preview`}
               loading="lazy"
               decoding="async"
@@ -177,7 +180,8 @@ const outerAttrs = {
         {media?.type === "video" && (
           <video
             src={media.url}
-            poster={media.thumbnail}
+            poster={media.thumbnail ? cdn(media.thumbnail, 1200) : undefined}
+            preload="none"
             controls
             class="w-full rounded-[var(--radius)] border hairline"
           />
@@ -187,7 +191,9 @@ const outerAttrs = {
           <div class="card-gallery">
             {gallery.map((g, gi) => (
               <img
-                src={g}
+                src={cdn(g, 960)}
+                srcset={cdnSrcset(g, [480, 960])}
+                sizes="(min-width: 640px) 220px, 45vw"
                 alt={`${title} — image ${gi + 1} of ${gallery.length}`}
                 loading="lazy"
                 decoding="async"

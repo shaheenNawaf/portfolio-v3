@@ -53,7 +53,6 @@ src/
     theme_toggle.astro       # Light/dark toggle
     verified_badge.astro     # Spinning rosette easter egg
     work_card.astro          # Expandable project card (grid)
-    dither-kit/              # Pixel-dither canvas kit (currently unused)
   data/
     resume.ts                # Profile, hero copy, stats, socials, skills, joke layer
     content.ts               # Loads projects/experiences from src/content (CMS) + display order

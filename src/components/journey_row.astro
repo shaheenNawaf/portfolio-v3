@@ -3,6 +3,7 @@ import type { Category } from "../data/resume";
 import { secrets } from "../data/resume";
 import SecretTooltip from "./secret_tooltip.astro";
 import Terms from "./terms.astro";
+import { cdn } from "../lib/img";
 
 interface Props {
   id: string;
@@ -110,6 +111,7 @@ const accentVar =
       video && video.length > 0 && (
         <video
           src={video}
+          preload="none"
           controls
           class="w-full rounded-[var(--radius)] border hairline"
         ></video>
@@ -121,7 +123,7 @@ const accentVar =
         <div class="flex flex-wrap gap-2">
           {gallery.map((g) => (
             <img
-              src={g}
+              src={cdn(g, 400)}
               alt={title}
               loading="lazy"
               class="h-24 w-auto rounded-[var(--radius)] border hairline"
