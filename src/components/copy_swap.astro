@@ -1,0 +1,77 @@
+---
+/**
+ * Click-to-copy text with a blur-crossfade hint (same motion as SecretSwap):
+ * `value` rests visible, `hint` replaces it on hover/focus, and a click copies
+ * `value` and briefly confirms.
+ */
+interface Props {
+  value: string;
+  hint: string;
+  copied?: string;
+}
+
+const { value, hint, copied = "copied — talk soon ✓" } = Astro.props;
+
+const layer =
+  "col-start-1 row-start-1 whitespace-nowrap transition-[opacity,transform,filter] duration-200 motion-reduce:transition-none";
+---
+
+<button
+  type="button"
+  data-copy-swap={value}
+  data-copied-text={copied}
+  aria-label={`Copy email address ${value}`}
+  class="group/copy inline-grid max-w-full items-baseline text-left font-medium fg border-b border-dotted border-current cursor-copy"
+>
+  <span
+    class:list={[
+      layer,
+      "group-hover/copy:-translate-y-1 group-hover/copy:opacity-0 group-hover/copy:blur-[2px]",
+      "group-focus-visible/copy:-translate-y-1 group-focus-visible/copy:opacity-0 group-focus-visible/copy:blur-[2px]",
+      "group-data-[copied=true]/copy:-translate-y-1 group-data-[copied=true]/copy:opacity-0 group-data-[copied=true]/copy:blur-[2px]",
+    ]}
+  >
+    {value}
+  </span>
+  <span
+    aria-hidden="true"
+    data-copy-hint
+    class:list={[
+      layer,
+      "muted translate-y-1 opacity-0 blur-[2px]",
+      "group-hover/copy:translate-y-0 group-hover/copy:opacity-100 group-hover/copy:blur-none",
+      "group-focus-visible/copy:translate-y-0 group-focus-visible/copy:opacity-100 group-focus-visible/copy:blur-none",
+      "group-data-[copied=true]/copy:translate-y-0 group-data-[copied=true]/copy:opacity-100 group-data-[copied=true]/copy:blur-none",
+    ]}
+  >
+    {hint}
+  </span>
+</button>
+<span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>("[data-copy-swap]").forEach((btn) => {
+    const hint = btn.querySelector<HTMLElement>("[data-copy-hint]");
+    const status = btn.nextElementSibling as HTMLElement | null;
+    const resting = hint?.textContent?.trim() ?? "";
+    let timer = 0;
+
+    btn.addEventListener("click", async () => {
+      let msg = btn.dataset.copiedText ?? "copied";
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copySwap ?? "");
+      } catch {
+        msg = "couldn't copy — select it instead";
+      }
+      if (hint) hint.textContent = msg;
+      if (status) status.textContent = msg;
+      btn.dataset.copied = "true";
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        btn.dataset.copied = "false";
+        if (hint) hint.textContent = resting;
+        if (status) status.textContent = "";
+      }, 1800);
+    });
+  });
+</script>

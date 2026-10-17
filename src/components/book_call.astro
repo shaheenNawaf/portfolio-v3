@@ -157,7 +157,7 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
       if (!form || form.dataset.bound === "true") return;
       form.dataset.bound = "true";
 
-      const status = section.querySelector("[role='status']") as HTMLElement | null;
+      const status = form.querySelector("[role='status']") as HTMLElement | null;
       const appointmentUrl = (section as HTMLElement).dataset.appointmentUrl ?? "";
       const contactEmail = (section as HTMLElement).dataset.contactEmail ?? "";
       const submitBtn = form.querySelector("button[type='submit']") as HTMLButtonElement | null;

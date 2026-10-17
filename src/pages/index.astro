@@ -12,6 +12,7 @@ import SkillsGrid from "../components/skills_grid.astro";
 import BookCall from "../components/book_call.astro";
 import SiteFooter from "../components/site_footer.astro";
 import StickerPill from "../components/sticker_pill.astro";
+import CopySwap from "../components/copy_swap.astro";
 import { name, showcaseProjectIds, secrets, hub, contact, socials } from "../data/resume";
 import { getExperiences, getProjects } from "../data/content";
 
@@ -137,17 +138,8 @@ const workCategories = [
               <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] muted">
                 <span>{contact.location} · {hub.availability}</span>
               </p>
-              <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[14px]">
-                <a href={`mailto:${contact.email}`} class="fg font-medium underline decoration-[color:var(--border-strong)] underline-offset-4 hover:decoration-current break-all">
-                  {contact.email}
-                </a>
-                <button
-                  type="button"
-                  data-copy={contact.email}
-                  class="rounded-full border hairline px-2 py-0.5 text-[12px] font-medium muted transition-colors hover:text-[color:var(--text)] hover:border-[color:var(--border-strong)]"
-                >
-                  <span data-copy-label>Copy</span>
-                </button>
+              <p class="text-[14px]">
+                <CopySwap value={contact.email} hint="yep, click it to copy my email" />
               </p>
               <div class="flex flex-wrap items-center gap-2">
                 {[socials[1], socials[3], socials[4]].map((s) => (
@@ -181,20 +173,6 @@ const workCategories = [
     featured.forEach((c) => {
       if (c.dataset.userToggled === "true") return;
       c.toggleAttribute("open", mq.matches);
-    });
-  });
-
-  // Copy-to-clipboard for the contact email.
-  document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((btn) => {
-    const label = btn.querySelector<HTMLElement>("[data-copy-label]");
-    btn.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(btn.dataset.copy ?? "");
-        if (label) label.textContent = "Copied";
-      } catch {
-        if (label) label.textContent = "Press Ctrl+C";
-      }
-      window.setTimeout(() => label && (label.textContent = "Copy"), 1800);
     });
   });
 </script>
