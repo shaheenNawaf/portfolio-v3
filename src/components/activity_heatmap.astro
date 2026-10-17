@@ -9,7 +9,7 @@ const { phrase } = Astro.props;
 ---
 
 <span
-  class="group/activity relative inline-flex align-baseline"
+  class="group/activity relative inline-flex align-baseline" data-tip-host
   data-activity-trigger
   data-activity-user={githubUser}
 >
@@ -23,7 +23,8 @@ const { phrase } = Astro.props;
   </button>
   <span
     role="status"
-    class="pointer-events-none absolute top-full left-0 z-50 mt-2 hidden w-[min(22rem,calc(100vw-2rem))] rounded-2xl border hairline bg-[color:var(--popover)] p-3 text-left text-[color:var(--popover-fg)] opacity-0 shadow-sm transition-[opacity,transform] duration-150 group-hover/activity:block group-hover/activity:opacity-100 group-focus-within/activity:block group-focus-within/activity:opacity-100 motion-reduce:transition-none"
+    data-tip
+    class="pointer-events-none absolute top-full left-0 z-50 mt-2 hidden w-[20rem] max-w-[80vw] rounded-2xl border hairline bg-[color:var(--popover)] p-3 text-left text-[color:var(--popover-fg)] opacity-0 shadow-sm transition-[opacity,transform] duration-150 group-hover/activity:block group-hover/activity:opacity-100 group-focus-within/activity:block group-focus-within/activity:opacity-100 motion-reduce:transition-none"
   >
     <span class="block text-xs font-medium">Public activity · last 90 days</span>
     <span

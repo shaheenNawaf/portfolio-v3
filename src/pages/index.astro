@@ -32,7 +32,7 @@ const firstDetailedExperience = experiences.findIndex((e) => e.details.length > 
 const workCategories = [
   { id: "all", label: "All" },
   { id: "software", label: "Software" },
-  { id: "marketing", label: "Growth Marketing" },
+  { id: "marketing", label: "Growth" },
   { id: "systems", label: "Systems" },
 ].filter((c) => c.id === "all" || visible.some((p) => p.category === c.id));
 ---
@@ -44,12 +44,12 @@ const workCategories = [
   <main id="main" class="wrap flex flex-col gap-8 sm:gap-10 pt-10 md:pt-16 pb-4">
     <HeroHome />
 
-    <div data-reveal style="--i:1">
+    <div data-reveal>
       <SectionDivider />
       <FitLanes />
     </div>
 
-    <div data-reveal style="--i:2">
+    <div data-reveal>
       <SectionDivider />
       <section id="work">
         <SectionHead
@@ -84,7 +84,7 @@ const workCategories = [
       </section>
     </div>
 
-    <div data-reveal style="--i:3">
+    <div data-reveal>
       <SectionDivider />
       <section id="experience">
         <SectionHead
@@ -99,11 +99,11 @@ const workCategories = [
             categories={[
               { id: "all", label: "All" },
               { id: "software", label: "Software" },
-              { id: "marketing", label: "Growth Marketing" },
+              { id: "marketing", label: "Growth" },
             ]}
           />
         </div>
-        <div class="mt-4 timeline" data-experience-list>
+        <div class="mt-6 timeline" data-experience-list>
           {
             experiences.map((exp, i) => (
               <div data-experience-row data-category={exp.category}>
@@ -115,12 +115,12 @@ const workCategories = [
       </section>
     </div>
 
-    <div data-reveal style="--i:4">
+    <div data-reveal>
       <SectionDivider />
       <SkillsGrid />
     </div>
 
-    <div data-reveal style="--i:5">
+    <div data-reveal>
       <SectionDivider />
       <section id="contact">
         <p class="eyebrow">

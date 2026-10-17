@@ -91,7 +91,8 @@ const outerAttrs = {
   "data-category": category,
   "data-featured": featured ? "true" : "false",
   "data-reveal": true,
-  "style": `--i:${index}; --card-accent:${accentVar}`,
+  // Stagger only within a row of two; cards reveal as they scroll in anyway.
+  "style": `--i:${index % 2}; --card-accent:${accentVar}`,
 };
 ---
 
@@ -137,12 +138,6 @@ const outerAttrs = {
       </summary>
 
       <div class="card-body">
-        {role && (
-          <p class="max-w-[68ch] text-[12px] faint">
-            {role}
-            {date ? ` · ${date}` : ""}
-          </p>
-        )}
 
         {problem || solution || impact ? (
           <div class="flex max-w-[68ch] flex-col gap-4">

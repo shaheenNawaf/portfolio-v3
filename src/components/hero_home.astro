@@ -16,6 +16,10 @@ import StatCounter from "./stat_counter.astro";
 import ActivityHeatmap from "./activity_heatmap.astro";
 
 const subtextParts = hub.subtext.split(secrets.roas.trigger);
+// Keep the surname ("Al Adwani") and badge together when the name wraps on
+// narrow phones.
+const nameWords = name.split(" ");
+const nameLast = nameWords.splice(Math.min(1, nameWords.length - 1)).join(" ");
 ---
 
 <section id="hero" class="pt-2">
@@ -52,10 +56,11 @@ const subtextParts = hub.subtext.split(secrets.roas.trigger);
     <div class="flex flex-col min-w-0">
       <h1
         id="hero-name"
-        class="flex items-center gap-1 text-[22px] md:text-[26px] font-medium tracking-[-0.01em] leading-[1.2]"
+        class="text-h1 md:text-h1-lg font-semibold tracking-[-0.02em] leading-[1.15]"
       >
-        {name}
-        <VerifiedBadge />
+        {nameWords.join(" ")}{nameWords.length ? " " : ""}<span class="inline-flex items-center gap-1 whitespace-nowrap"
+          >{nameLast}<VerifiedBadge /></span
+        >
       </h1>
       <span class="muted">
         <SecretSwap from={swaps.position.from} to={swaps.position.to} />
@@ -84,8 +89,8 @@ const subtextParts = hub.subtext.split(secrets.roas.trigger);
       trigger={secrets.location.trigger}
       reveal={secrets.location.reveal}
     />
-    <span aria-hidden="true" class="faint">·</span>
-    <span>{hub.availability}</span>
+    <span aria-hidden="true" class="faint max-sm:hidden">·</span>
+    <span class="max-sm:basis-full">{hub.availability}</span>
   </p>
 
   <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-3 text-[13px]">

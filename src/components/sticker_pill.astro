@@ -19,7 +19,7 @@ const rel = external
   : undefined;
 ---
 
-<span class={`group/social relative inline-flex max-w-full align-baseline sticker-${tint}`}>
+<span class={`group/social relative inline-flex max-w-full align-baseline sticker-${tint}`} data-tip-host>
   <a
     href={href}
     target={external ? "_blank" : undefined}
@@ -34,7 +34,7 @@ const rel = external
   <span
     id={tipId}
     role="tooltip"
-    class="pointer-events-none absolute bottom-full left-0 z-50 mb-2 hidden w-max max-w-64 translate-y-1 rounded-md border hairline bg-[color:var(--popover)] p-2 text-left text-[color:var(--popover-fg)] opacity-0 shadow-sm transition-[opacity,transform] duration-150 group-hover/social:block group-hover/social:translate-y-0 group-hover/social:opacity-100 group-focus-within/social:block group-focus-within/social:translate-y-0 group-focus-within/social:opacity-100 motion-reduce:transition-none"
+    class="sticker-tip pointer-events-none absolute bottom-full left-0 z-50 mb-2 hidden w-max max-w-64 translate-y-1 rounded-md border hairline bg-[color:var(--popover)] p-2 text-left text-[color:var(--popover-fg)] opacity-0 shadow-sm transition-[opacity,transform] duration-150 group-hover/social:block group-hover/social:translate-y-0 group-hover/social:opacity-100 group-focus-within/social:block group-focus-within/social:translate-y-0 group-focus-within/social:opacity-100 motion-reduce:transition-none"
   >
     <span class="block break-words text-xs font-medium">{popover.handle}</span>
     <span class="block text-[0.7rem] muted">{popover.network}</span>

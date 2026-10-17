@@ -19,7 +19,7 @@ const navItems = [
   aria-label="Open navigation"
   aria-expanded="false"
   aria-controls="rail-panel"
-  class="fixed bottom-4 left-4 z-30 inline-flex items-center gap-2 rounded-full border hairline bg-[color:var(--surface)] px-3.5 py-2 text-[13px] font-semibold shadow-md lg:hidden"
+  class="fixed bottom-4 left-4 z-30 inline-flex items-center gap-2 rounded-full border hairline bg-[color:var(--surface)] px-3.5 py-2 text-[13px] font-semibold shadow-[var(--float-shadow)] lg:hidden"
 >
   <Icon name="menu" class="w-4 h-4" />
   Menu
@@ -35,7 +35,7 @@ const navItems = [
 <aside
   id="rail-panel"
   aria-label="Primary"
-  class="fixed bottom-3 left-3 w-[55%] z-50 flex max-lg:max-h-[75dvh] max-lg:overflow-y-auto flex-col rounded-[20px] bg-[color:var(--rail-bg)] p-4 lg:top-16 lg:bottom-0 lg:left-0 lg:right-auto lg:w-[12.75rem] lg:max-w-none lg:rounded-none lg:bg-transparent lg:px-5 lg:py-6"
+  class="fixed bottom-3 left-3 w-[min(17rem,calc(100%-1.5rem))] z-50 flex max-lg:border max-lg:border-[color:var(--border)] max-lg:max-h-[75dvh] max-lg:overflow-y-auto flex-col rounded-[20px] bg-[color:var(--rail-bg)] p-4 lg:top-16 lg:bottom-0 lg:left-0 lg:right-auto lg:w-[12.75rem] lg:max-w-none lg:rounded-none lg:bg-transparent lg:px-5 lg:py-6"
 >
   <div class="rail-grab lg:hidden" id="rail-grab" aria-hidden="true"></div>
   <button

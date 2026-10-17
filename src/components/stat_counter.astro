@@ -1,5 +1,6 @@
 ---
 import type { Stat } from "../data/resume";
+import Icon from "./icon.astro";
 
 interface Props {
   stat: Stat;
@@ -10,7 +11,7 @@ const { stat } = Astro.props;
 
 <div class="group/stat flex flex-col gap-1 rounded-[var(--radius)]" tabindex="0">
   <span
-    class="stat-number text-[28px] font-semibold tracking-[-0.02em] leading-[1.15] fg"
+    class="stat-number text-[24px] sm:text-[28px] font-semibold tracking-[-0.02em] leading-[1.15] fg"
     data-count-to={stat.num}
     data-count-prefix={stat.prefix}
     data-count-suffix={stat.suffix}
@@ -24,19 +25,10 @@ const { stat } = Astro.props;
       aria-hidden="true"
     ></span>
     {stat.label}
-    <svg
+    <Icon
+      name="chevron-down"
       class="stat-chevron row-chevron mt-[2px] w-3 h-3 shrink-0 group-hover/stat:rotate-180"
-      style="transition-property: rotate; transition-duration: 200ms;"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M6 9l6 6 6-6"></path>
-    </svg>
+    />
   </span>
   <div
     class="stat-sub grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-300 ease-out group-hover/stat:grid-rows-[1fr] group-hover/stat:opacity-100 group-focus-visible/stat:grid-rows-[1fr] group-focus-visible/stat:opacity-100"

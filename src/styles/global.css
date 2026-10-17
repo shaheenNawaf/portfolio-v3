@@ -16,7 +16,14 @@
 @import "tailwindcss";
 
 @theme {
+  --font-sans: "Geist Sans", system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
+  /* Type scale: h1 > h2 > h3 ≥ body, so section heads read as heads. */
+  --text-h1: 22px;
+  --text-h1-lg: 30px;
+  --text-h2: 18px;
+  --text-h3: 15px;
+  --text-body: 15px;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -42,8 +49,11 @@
     --tint-li-bg: #eaf1fb;   --tint-li-fg: #1d4ed8;   --tint-li-bd: #d5e2f7;
     --tint-mail-bg: #fdf1e7; --tint-mail-fg: #c2410c; --tint-mail-bd: #f8e0cc;
     --tint-doc-bg: #eef7f0;  --tint-doc-fg: #15803d;  --tint-doc-bd: #d8ecdd;
-    --hm-0: #ebedf0; --hm-1: #9be9a8; --hm-2: #40c463; --hm-3: #30a14e; --hm-4: #216e39;
+    --hm-0: #dedfe5; --hm-1: #9be9a8; --hm-2: #40c463; --hm-3: #30a14e; --hm-4: #216e39;
     --rail: 12.75rem;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --float-shadow: 0 6px 16px -4px rgb(0 0 0 / 0.12);
     --rail-bg: color-mix(in srgb, var(--bg) 90%, #fff 10%);
     --card-shadow: 0 6px 20px rgb(0 0 0 / 0.1);
     color-scheme: light;
@@ -54,8 +64,8 @@
     --border: #454449;
     --border-strong: #5a5961;
     --text: #e9e9ec;
-    --text-muted: #9c9ca4;
-    --text-faint: #9797a1;
+    --text-muted: #a9a9b1;
+    --text-faint: #8e8e98;
     --mkt: #f97316;
     --mkt-text: #f97316;
     --sw: #60a5fa;
@@ -66,6 +76,7 @@
     --tint-doc-bg: #052e16;  --tint-doc-fg: #86efac;  --tint-doc-bd: #14532d;
     --hm-0: #2a2a2e; --hm-1: #0e4429; --hm-2: #006d32; --hm-3: #26a641; --hm-4: #39d353;
     --card-shadow: 0 6px 20px rgb(0 0 0 / 0.28);
+    --float-shadow: 0 8px 22px -4px rgb(0 0 0 / 0.55);
     color-scheme: dark;
   }
 
@@ -75,13 +86,10 @@
   body {
     background-color: var(--bg);
     color: var(--text);
-    font-family: "Geist Sans", system-ui, sans-serif;
+    font-family: var(--font-sans);
   }
   h1, h2, h3 { text-wrap: balance; }
   ::selection { background-color: color-mix(in srgb, var(--accent) 30%, transparent); }
-  .font-mono {
-    font-family: "Geist Mono", ui-monospace, monospace;
-  }
   a:focus-visible, button:focus-visible, summary:focus-visible,
   [role="button"]:focus-visible, [tabindex]:focus-visible {
     outline: 2px solid var(--accent);
@@ -103,10 +111,16 @@
     text-transform: uppercase;
     color: var(--text-faint);
   }
-  .accent-marketing { color: var(--mkt); }
-  .accent-software { color: var(--sw); }
-  .row-hover { border-radius: var(--radius); transition: background-color 150ms ease; }
-  .row-hover:hover { background-color: var(--surface); }
+  /* Lane label (Fit / Skills): a coloured dot + caps, deliberately not a pill
+     so it doesn't read as a clickable control. */
+  .lane-label {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--lane, var(--text-muted));
+  }
+  .lane-label::before {
+    content: ""; width: 6px; height: 6px; border-radius: 9999px; background-color: currentColor;
+  }
 
   /* Journey timeline (reference pattern: rail + hover-drawn connectors) */
   .timeline {
@@ -174,7 +188,7 @@
     padding: 1rem;
     border: 1px solid transparent;
     border-radius: var(--radius);
-    transition: box-shadow 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: box-shadow 0.5s ease, transform 0.5s var(--ease-spring);
     transform-style: preserve-3d;
   }
   .work-card:hover {
@@ -193,7 +207,7 @@
     display: flex; flex-direction: column; align-items: center; text-align: center;
   }
   .card-title {
-    margin-top: 0.75rem; font-size: 0.875rem; line-height: 1.35;
+    margin-top: 0.75rem; font-size: var(--text-h3); line-height: 1.35;
     font-weight: 600; letter-spacing: -0.03em; color: var(--text);
   }
   .card-metric {
@@ -252,6 +266,8 @@
     display: flex; flex-wrap: wrap; gap: 1.25rem;
     font-size: 13px; font-weight: 600;
   }
+  .card-links a { text-underline-offset: 4px; }
+  .card-links a:hover { text-decoration: underline; }
 
   /* Mobile: archive tiles become a horizontal snap-scroll strip */
   .work-strip {
@@ -331,7 +347,7 @@
     border-color: transparent var(--bg) transparent transparent;
     filter: drop-shadow(-1px 1px 1px rgb(0 0 0 / 0.25));
     transform: scale(0); transform-origin: top right;
-    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.35s var(--ease-spring);
     pointer-events: none;
   }
   .work-card:hover .card-media::after { transform: scale(1); }
@@ -342,9 +358,9 @@
     filter: blur(6px);
     transform: translateY(12px);
     transition:
-      opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-      filter 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity 0.5s var(--ease-out-expo),
+      filter 0.5s var(--ease-out-expo),
+      transform 0.5s var(--ease-out-expo);
     transition-delay: calc(var(--i, 0) * 60ms);
     will-change: opacity, transform;
   }
@@ -361,15 +377,6 @@
     box-shadow: var(--card-shadow);
     transition-duration: 0.15s;
   }
-
-  /* Reference hover squash: shrink on hover, spring back on leave */
-  .squash { transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
-  .squash:hover {
-    transform: scale(0.98);
-    transition-duration: 0.15s;
-    transition-timing-function: ease-out;
-  }
-  .squash:active { transform: scale(0.96); }
 
   /* Faint per-section divider */
   .section-divider {
@@ -403,7 +410,7 @@
     content: ""; position: absolute; left: var(--line-x); top: 10px;
     width: 1px; height: var(--rail-progress, 0px);
     background-color: var(--accent);
-    transition: height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    transition: height 0.35s var(--ease-out-expo),
       left 0.2s ease;
   }
   .rail-nav::before { transition: left 0.2s ease; }
@@ -424,7 +431,7 @@
     border-radius: 9999px;
     border: 1.5px solid var(--node-c, var(--border-strong));
     background-color: var(--node-bg, var(--bg));
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transition: transform 0.25s var(--ease-spring),
       background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease,
       left 0.2s ease;
   }
@@ -511,7 +518,7 @@
 
 details > summary { list-style: none; cursor: pointer; }
 details > summary::-webkit-details-marker { display: none; }
-.row-chevron { transition: transform 200ms ease; color: var(--text-faint); }
+.row-chevron { transition: transform 200ms ease, rotate 200ms ease; color: var(--text-faint); }
 details[open] > summary .row-chevron { transform: rotate(180deg); }
 
 @keyframes card-pulse {
@@ -526,7 +533,8 @@ details[open] > summary .row-chevron { transform: rotate(180deg); }
     opacity: 1 !important; filter: none !important;
     transform: none !important; transition: none !important;
   }
-  .squash, .squash:hover, .squash:active { transform: none !important; transition: none !important; }
+  .rail-nav::before, .rail-nav::after, .rail-link, .rail-link::before,
+  .card-media, .stat-chevron, .btn-primary, body { transition: none !important; }
   .nudge-arrow { transition: none !important; }
   .work-card, .work-card:hover { transform: none !important; transition: none !important; }
   .card-media::after { transition: none !important; }
@@ -536,16 +544,19 @@ details[open] > summary .row-chevron { transform: rotate(180deg); }
 }
 
 /* Touch screens have no hover: show stat context outright and drop the
-   chevron that promised an expand. Unlayered so it beats the utilities. */
+   chevron that promised an expand. Link-preview popovers just get in the way
+   of a tap (the email address is shown in Contact). Unlayered so it beats
+   the utilities. */
 @media (hover: none) {
   .stat-sub { grid-template-rows: 1fr; opacity: 1; }
   .stat-chevron { display: none; }
+  .sticker-tip { display: none !important; }
 }
 
 /* Rail panel positioning. Unlayered on purpose: the transform must outrank
    any Tailwind transform utility on #rail-panel. */
 #rail-panel {
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.28s var(--ease-out-expo);
   /* Bottom sheet (mobile): parked below the viewport until opened */
   transform: translateY(calc(100% + 2rem));
   --node-bg: var(--rail-bg);
@@ -553,7 +564,7 @@ details[open] > summary .row-chevron { transform: rotate(180deg); }
 /* Mobile sheet surface — deliberately soft */
 @media (max-width: 1023.98px) {
   #rail-panel {
-    box-shadow: 0 6px 16px -4px rgb(0 0 0 / 0.04);
+    box-shadow: var(--float-shadow);
   }
 }
 #rail-panel.is-open { transform: translate(0, 0); }
