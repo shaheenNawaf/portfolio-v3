@@ -231,7 +231,7 @@ export const socials: Social[] = [
   },
   {
     id: 'resume-swe',
-    label: 'Engineering resume',
+    label: 'Software Eng resume',
     href: resumes.software,
     icon: 'doc',
     tint: 'doc',

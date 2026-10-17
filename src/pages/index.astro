@@ -24,10 +24,6 @@ const showcase = showcaseProjectIds
   .filter((p) => p !== undefined);
 const archive = visible.filter((p) => !showcaseProjectIds.includes(p.id));
 
-// Start the most recent role that has bullets open, so its outcomes are
-// visible without a click.
-const firstDetailedExperience = experiences.findIndex((e) => e.details.length > 0);
-
 // Only offer filters that have something to show.
 const workCategories = [
   { id: "all", label: "All" },
@@ -105,9 +101,9 @@ const workCategories = [
         </div>
         <div class="mt-6 timeline" data-experience-list>
           {
-            experiences.map((exp, i) => (
+            experiences.map((exp) => (
               <div data-experience-row data-category={exp.category}>
-                <JourneyRow {...exp} open={i === firstDetailedExperience} />
+                <JourneyRow {...exp} />
               </div>
             ))
           }

@@ -14,6 +14,7 @@ import SecretTooltip from "./secret_tooltip.astro";
 import StickerPill from "./sticker_pill.astro";
 import StatCounter from "./stat_counter.astro";
 import ActivityHeatmap from "./activity_heatmap.astro";
+import Icon from "./icon.astro";
 
 const subtextParts = hub.subtext.split(secrets.roas.trigger);
 // Keep the surname ("Al Adwani") and badge together when the name wraps on
@@ -93,7 +94,7 @@ const nameLast = nameWords.splice(Math.min(1, nameWords.length - 1)).join(" ");
     <span class="max-sm:basis-full">{hub.availability}</span>
   </p>
 
-  <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-3 text-[13px]">
+  <div class="hero-actions mt-6 flex flex-wrap items-center gap-x-3 gap-y-2.5 text-[13px] max-sm:flex-col max-sm:items-stretch">
     <a
       href="#contact"
       data-ui-sound="crisp"
@@ -101,8 +102,14 @@ const nameLast = nameWords.splice(Math.min(1, nameWords.length - 1)).join(" ");
     >
       {hub.ctaPrimary} <span aria-hidden="true">→</span>
     </a>
-    <StickerPill social={socials[3]} idPrefix="hero-" />
-    <StickerPill social={socials[4]} idPrefix="hero-" />
+    {
+      [socials[3], socials[4]].map((s) => (
+        <a href={s.href} target="_blank" rel="noopener noreferrer" class="btn-secondary">
+          <Icon name="doc" class="w-3.5 h-3.5 shrink-0 text-[color:var(--tint-doc-fg)]" />
+          {s.label}
+        </a>
+      ))
+    }
   </div>
 
   <div

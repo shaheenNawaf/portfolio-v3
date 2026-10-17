@@ -111,16 +111,6 @@
     text-transform: uppercase;
     color: var(--text-faint);
   }
-  /* Lane label (Fit / Skills): a coloured dot + caps, deliberately not a pill
-     so it doesn't read as a clickable control. */
-  .lane-label {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--lane, var(--text-muted));
-  }
-  .lane-label::before {
-    content: ""; width: 6px; height: 6px; border-radius: 9999px; background-color: currentColor;
-  }
 
   /* Journey timeline (reference pattern: rail + hover-drawn connectors) */
   .timeline {
@@ -467,16 +457,24 @@
     .skip-link { left: calc(50% - 21rem); }
   }
 
-  /* Primary action: solid pill (hero CTA). The form submit shares the palette. */
-  .btn-primary {
+  /* Action buttons (hero row, form submit). Primary and secondary share one
+     box — same border width, padding, radius and type — so they line up. */
+  .btn-primary, .btn-secondary {
     display: inline-flex; align-items: center; gap: 0.375rem;
-    border-radius: 9999px; padding: 0.4rem 0.95rem;
-    background-color: var(--text); color: var(--bg);
-    font-size: 13px; font-weight: 600; letter-spacing: -0.01em;
-    transition: transform 0.15s ease, background-color 0.15s ease;
+    border: 1px solid transparent; border-radius: 9999px; padding: 0.4rem 0.95rem;
+    font-size: 13px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25;
+    transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
   }
+  .btn-primary { background-color: var(--text); color: var(--bg); }
   .btn-primary:hover { background-color: color-mix(in srgb, var(--text) 86%, var(--bg)); }
-  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary { border-color: var(--border-strong); color: var(--text); background-color: transparent; }
+  .btn-secondary:hover { background-color: var(--surface); border-color: var(--text-faint); }
+  .btn-primary:active, .btn-secondary:active { transform: translateY(1px); }
+  /* Phones: the three hero actions can't share a row, so stack them full-width
+     instead of letting them wrap into ragged widths. */
+  @media (max-width: 639px) {
+    .hero-actions > a { justify-content: center; padding-block: 0.55rem; }
+  }
 
   /* Industry acronyms: faint dotted rule, distinct from the joke tooltips' full-colour one. */
   abbr.term {
@@ -534,7 +532,7 @@ details[open] > summary .row-chevron { transform: rotate(180deg); }
     transform: none !important; transition: none !important;
   }
   .rail-nav::before, .rail-nav::after, .rail-link, .rail-link::before,
-  .card-media, .stat-chevron, .btn-primary, body { transition: none !important; }
+  .card-media, .stat-chevron, .btn-primary, .btn-secondary, body { transition: none !important; }
   .nudge-arrow { transition: none !important; }
   .work-card, .work-card:hover { transform: none !important; transition: none !important; }
   .card-media::after { transition: none !important; }

@@ -58,9 +58,7 @@ const accentVar =
 
     <span class="flex shrink-0 items-center gap-2 self-start">
       {date.includes("Present") ? (
-        <span class="journey-pill">
-          <SecretTooltip trigger={date} reveal={secrets.present.reveal} passive />
-        </span>
+        <SecretTooltip trigger={date} reveal={secrets.present.reveal} passive />
       ) : (
         <span class="journey-pill">{date}</span>
       )}

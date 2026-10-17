@@ -10,7 +10,11 @@ const mkt = skillGroups.marketing;
   <SectionHead title="Skills" />
   <div class="mt-6 grid sm:grid-cols-2">
     <div class="pb-8 sm:pb-0 sm:pr-8">
-      <p class="lane-label" style="--lane: var(--sw)">Software engineering</p>
+      <p
+        class="sticker-li inline-flex w-fit items-center rounded-full border border-[color:var(--sticker-bd)] bg-[color:var(--sticker-bg)] px-2 py-0.5 text-xs font-medium text-[color:var(--sticker-fg)]"
+      >
+        Engineering
+      </p>
       <div class="mt-5 space-y-3">
         {
           Object.entries(eng).map(([label, items]) => (
@@ -23,7 +27,11 @@ const mkt = skillGroups.marketing;
       </div>
     </div>
     <div class="border-t hairline pt-8 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-8">
-      <p class="lane-label" style="--lane: var(--mkt-text)">Growth marketing</p>
+      <p
+        class="sticker-mail inline-flex w-fit items-center rounded-full border border-[color:var(--sticker-bd)] bg-[color:var(--sticker-bg)] px-2 py-0.5 text-xs font-medium text-[color:var(--sticker-fg)]"
+      >
+        Marketing
+      </p>
       <div class="mt-5 space-y-3">
         {
           Object.entries(mkt).map(([label, items]) => (
