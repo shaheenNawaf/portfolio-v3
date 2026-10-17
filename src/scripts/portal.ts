@@ -3,18 +3,34 @@
  * drops an infinitely looping Companion Cube, and displays GLaDOS dialog.
  */
 const initPortalEgg = () => {
-  const trigger = document.getElementById('heart-trigger');
+  const trigger = document.getElementById("heart-trigger");
   if (!trigger) return;
 
   let activated = false;
+  const spawned: HTMLElement[] = [];
+  let onKey: ((e: KeyboardEvent) => void) | null = null;
 
-  trigger.addEventListener('click', () => {
+  /** Tear everything down so the page is usable again (and the egg can re-run). */
+  const cleanup = () => {
+    spawned.splice(0).forEach((el) => el.remove());
+    document.querySelectorAll(".glados-terminal").forEach((el) => el.remove());
+    if (onKey) document.removeEventListener("keydown", onKey);
+    onKey = null;
+    activated = false;
+  };
+
+  const run = () => {
     if (activated) return;
     activated = true;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-    // 1. Inject fully isolated hardware-accelerated Portal styles
-    const style = document.createElement('style');
-    style.innerHTML = `
+    // 1. Inject fully isolated hardware-accelerated Portal styles (once)
+    if (!document.getElementById("portal-egg-style")) {
+      const style = document.createElement("style");
+      style.id = "portal-egg-style";
+      style.innerHTML = `
       .portal-ring {
         position: fixed;
         left: 50%;
@@ -51,7 +67,7 @@ const initPortalEgg = () => {
         z-index: 99998;
         pointer-events: auto;
         cursor: grab;
-        animation: terminal-velocity 2.2s linear infinite;
+        animation: terminal-velocity 2.2s linear 6;
       }
       @keyframes terminal-velocity {
         0% {
@@ -98,21 +114,29 @@ const initPortalEgg = () => {
         10%, 85% { opacity: 1; transform: translate(-50%, 0); }
         100% { opacity: 0; transform: translate(-50%, -10px); }
       }
+      @media (prefers-reduced-motion: reduce) {
+        .portal-blue, .portal-orange { animation: none; }
+        .companion-cube { display: none; }
+        .glados-terminal { animation: none; opacity: 1; }
+      }
     `;
-    document.head.appendChild(style);
+      document.head.appendChild(style);
+    }
 
     // 2. Create ceiling (Blue) and floor (Orange) Portal elements
-    const bluePortal = document.createElement('div');
-    bluePortal.className = 'portal-ring portal-blue';
+    const bluePortal = document.createElement("div");
+    bluePortal.className = "portal-ring portal-blue";
     document.body.appendChild(bluePortal);
+    spawned.push(bluePortal);
 
-    const orangePortal = document.createElement('div');
-    orangePortal.className = 'portal-ring portal-orange';
+    const orangePortal = document.createElement("div");
+    orangePortal.className = "portal-ring portal-orange";
     document.body.appendChild(orangePortal);
+    spawned.push(orangePortal);
 
     // 3. Create the flat-vector Weighted Companion Cube SVG
-    const cube = document.createElement('div');
-    cube.className = 'companion-cube';
+    const cube = document.createElement("div");
+    cube.className = "companion-cube";
     cube.innerHTML = `
       <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="10" y="10" width="80" height="80" rx="12" fill="#52525b" stroke="#18181b" stroke-width="6"/>
@@ -125,26 +149,38 @@ const initPortalEgg = () => {
       </svg>
     `;
     document.body.appendChild(cube);
+    spawned.push(cube);
+    // The cube falls a fixed number of loops, then the whole egg packs itself away.
+    cube.addEventListener("animationend", cleanup);
 
     // 4. Create the GLaDOS console container
-    const terminal = document.createElement('div');
-    terminal.className = 'glados-terminal';
+    const terminal = document.createElement("div");
+    terminal.className = "glados-terminal";
     terminal.innerHTML = `
       <div style="font-weight: bold; margin-bottom: 6px; text-transform: uppercase;">[GLaDOS v3.5-Flash]:</div>
       <div id="glados-text"></div>
     `;
     document.body.appendChild(terminal);
+    spawned.push(terminal);
+    if (reduced) window.setTimeout(cleanup, 8000);
+
+    onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") cleanup();
+    };
+    document.addEventListener("keydown", onKey);
 
     const quotes = [
       "Hello and again welcome to the Aperture Science computer-aided enrichment center.",
       "The Enrichment Center reminds you that the Weighted Companion Cube will never threaten to stab you and, in fact, cannot speak.",
       "Please note that we have added a consequence for failure. Any contact with the chamber floor will result in an unsatisfactory mark.",
-      "The cake is a lie. But Shaheen's marketing experience and full-stack architecture is 100% certified."
+      "The cake is a lie. But Shaheen's marketing experience and full-stack architecture is 100% certified.",
     ];
 
     const selectedQuote = quotes[Math.floor(Math.random() * quotes.length)];
-    const textContainer = document.getElementById('glados-text');
-    if (textContainer) {
+    const textContainer = document.getElementById("glados-text");
+    if (textContainer && reduced) {
+      textContainer.textContent = selectedQuote;
+    } else if (textContainer) {
       let charIndex = 0;
       const typeWriter = () => {
         if (charIndex < selectedQuote.length) {
@@ -157,41 +193,48 @@ const initPortalEgg = () => {
     }
 
     // 5. Interactive click on the cube: spikes loop velocity and prints reactions
-    cube.addEventListener('click', (e) => {
+    cube.addEventListener("click", (e) => {
       e.stopPropagation();
-      cube.style.animationDuration = '1.1s'; // Double acceleration speed
+      cube.style.animationDuration = "1.1s"; // Double acceleration speed
       setTimeout(() => {
-        cube.style.animationDuration = '2.2s'; // Restore default speed
+        cube.style.animationDuration = "2.2s"; // Restore default speed
       }, 2200);
 
       const reactions = [
         "Stop that. We must proceed with the software testing.",
         "Enrichment Center regulations forbid aggressive interaction with the Cube.",
-        "Excellent speed index. The portal loops are running within stable parameters."
+        "Excellent speed index. The portal loops are running within stable parameters.",
       ];
       const reaction = reactions[Math.floor(Math.random() * reactions.length)];
-      
-      const existingTerminal = document.querySelector('.glados-terminal');
+
+      const existingTerminal = document.querySelector(".glados-terminal");
       if (existingTerminal) {
         existingTerminal.remove();
       }
 
-      const newTerminal = document.createElement('div');
-      newTerminal.className = 'glados-terminal';
+      const newTerminal = document.createElement("div");
+      newTerminal.className = "glados-terminal";
       newTerminal.innerHTML = `
         <div style="font-weight: bold; margin-bottom: 6px; text-transform: uppercase;">[GLaDOS v3.5-Flash]:</div>
         <div>${reaction}</div>
       `;
       document.body.appendChild(newTerminal);
     });
+  };
+
+  trigger.addEventListener("click", run);
+  trigger.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      run();
+    }
   });
 };
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initPortalEgg);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initPortalEgg);
 } else {
   initPortalEgg();
 }
-document.addEventListener('astro:after-swap', initPortalEgg);
 
 export {};

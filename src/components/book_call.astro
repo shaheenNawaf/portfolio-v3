@@ -52,7 +52,9 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
       >
     </p>
     <div class="md:col-span-1">
-      <label class="book-label" for={`${id}-name`}>Name</label>
+      <label class="book-label" for={`${id}-name`}
+        >Name <span aria-hidden="true" class="faint">*</span></label
+      >
       <input
         id={`${id}-name`}
         name="name"
@@ -61,11 +63,15 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
         autocomplete="name"
         class="book-field"
         placeholder="Your name"
+        aria-describedby={`${id}-name-error`}
       />
+      <p id={`${id}-name-error`} class="book-error hidden" data-field-error></p>
     </div>
 
     <div class="md:col-span-1">
-      <label class="book-label" for={`${id}-email`}>Work email</label>
+      <label class="book-label" for={`${id}-email`}
+        >Work email <span aria-hidden="true" class="faint">*</span></label
+      >
       <input
         id={`${id}-email`}
         name="email"
@@ -74,12 +80,14 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
         autocomplete="email"
         class="book-field"
         placeholder="you@company.com"
+        aria-describedby={`${id}-email-error`}
       />
+      <p id={`${id}-email-error`} class="book-error hidden" data-field-error></p>
     </div>
 
     <div class="md:col-span-2">
       <label class="book-label" for={`${id}-interest`}>Hiring for</label>
-      <select id={`${id}-interest`} name="interest" class="book-field" required>
+      <select id={`${id}-interest`} name="interest" class="book-field">
         <option value="hybrid" selected={defaultInterest === "hybrid"}
           >Hybrid / either track</option
         >
@@ -139,7 +147,7 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
   </form>
   <p class="mt-3 text-[11px] faint">
     By sending a note you agree to the
-    <a href="/privacy" class="fg hover:opacity-70 transition-opacity">privacy policy</a>.
+    <a href="/privacy/" class="fg hover:opacity-70 transition-opacity">privacy policy</a>.
   </p>
 </section>
 
@@ -157,36 +165,49 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
       const label = submitBtn?.querySelector(".btn-label") as HTMLElement | null;
       const idleLabel = label?.textContent ?? "Book a Call";
 
-      const say = (msg: string) => {
-        if (status) {
-          status.classList.remove("hidden");
-          status.textContent = msg;
+      /** Status line; optional mailto fallback link appended after the message. */
+      const say = (msg: string, mailHref?: string) => {
+        if (!status) return;
+        status.classList.remove("hidden");
+        status.textContent = msg;
+        if (mailHref) {
+          const a = document.createElement("a");
+          a.href = mailHref;
+          a.className = "fg underline underline-offset-2";
+          a.textContent = `Email ${contactEmail} instead →`;
+          status.append(" ", a);
         }
       };
 
       const setBusy = (busy: boolean) => {
         if (submitBtn) submitBtn.disabled = busy;
-        if (label) label.textContent = busy ? "Sending..." : idleLabel;
+        if (label) label.textContent = busy ? "Sending…" : idleLabel;
       };
 
-      const openMailDraft = (name: string, email: string, interest: string, note: string) => {
-        const subject = encodeURIComponent(
-          `Intro call request - ${interest} - ${name}`,
-        );
+      const fieldError = (input: HTMLInputElement | null, msg: string) => {
+        if (!input) return;
+        const err = document.getElementById(input.getAttribute("aria-describedby") ?? "");
+        input.setAttribute("aria-invalid", msg ? "true" : "false");
+        if (err) {
+          err.textContent = msg;
+          err.classList.toggle("hidden", !msg);
+        }
+      };
+
+      const mailDraft = (name: string, email: string, interest: string, note: string) => {
+        const subject = encodeURIComponent(`Portfolio enquiry - ${interest} - ${name}`);
         const body = encodeURIComponent(
-          [
-            `Name: ${name}`,
-            `Email: ${email}`,
-            `Interest: ${interest}`,
-            note ? `Note: ${note}` : null,
-            "",
-            "Sent from shaheen.works book-call form.",
-          ]
+          [`Name: ${name}`, `Email: ${email}`, `Hiring for: ${interest}`, note ? `Note: ${note}` : null]
             .filter(Boolean)
             .join("\n"),
         );
-        window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
+        return `mailto:${contactEmail}?subject=${subject}&body=${body}`;
       };
+
+      const nameInput = form.querySelector<HTMLInputElement>("input[name='name']");
+      const emailInput = form.querySelector<HTMLInputElement>("input[name='email']");
+      nameInput?.addEventListener("input", () => fieldError(nameInput, ""));
+      emailInput?.addEventListener("input", () => fieldError(emailInput, ""));
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -196,13 +217,16 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
         const interest = String(data.get("interest") ?? "hybrid");
         const note = String(data.get("note") ?? "").trim();
 
-        if (!name || !email) {
-          say("Name and work email are required.");
-          return;
-        }
-
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          say("Please enter a valid work email.");
+        const nameMsg = name ? "" : "Please add your name.";
+        const emailMsg = !email
+          ? "Please add your work email."
+          : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+            ? ""
+            : "That email doesn't look right.";
+        fieldError(nameInput, nameMsg);
+        fieldError(emailInput, emailMsg);
+        if (nameMsg || emailMsg) {
+          (nameMsg ? nameInput : emailInput)?.focus();
           return;
         }
 
@@ -214,25 +238,38 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
 
         fetch("/api/contact", {
           method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
+          },
           body: encoded.toString(),
         })
-          .then((res) => {
-            if (!res.ok) throw new Error(`form-${res.status}`);
-            form.reset();
+          .then(async (res) => {
             setBusy(false);
-            if (appointmentUrl) {
-              window.open(appointmentUrl, "_blank", "noopener,noreferrer");
-              say("Note sent. Opening the calendar — pick a slot to lock it in.");
-            } else {
-              say("Sent. I reply within 24–48 hours.");
+            if (res.ok) {
+              form.reset();
+              say(
+                appointmentUrl
+                  ? "Note sent. Pick a slot in the calendar tab to lock it in."
+                  : "Sent. I reply within 24–48 hours.",
+              );
+              return;
             }
+            if (res.status >= 400 && res.status < 500) {
+              // The server rejected the input — show its reason, keep the form filled.
+              const body = (await res.json().catch(() => null)) as { error?: string } | null;
+              say(body?.error ? `${body.error}.` : "Something in the form needs another look.");
+              return;
+            }
+            say(
+              "Delivery failed on my end — your note wasn't sent.",
+              mailDraft(name, email, interest, note),
+            );
           })
           .catch(() => {
-            // Form service unreachable (offline, blocker): fall back to mail app.
+            // Offline or blocked: nothing reached the server.
             setBusy(false);
-            openMailDraft(name, email, interest, note);
-            say("Couldn't reach the form service — opened your email app with the note instead.");
+            say("Couldn't reach the form service.", mailDraft(name, email, interest, note));
           });
       });
     });
@@ -243,5 +280,4 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
   } else {
     bindBookForms();
   }
-  document.addEventListener("astro:after-swap", bindBookForms);
 </script>

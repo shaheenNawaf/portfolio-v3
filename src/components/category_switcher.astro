@@ -81,12 +81,21 @@ const defaultId = categories[0]?.id ?? "all";
 
       const cards = grid.querySelectorAll<HTMLElement>(itemSelector);
 
+      // Hide filters that would show an empty grid (e.g. every item is a draft).
+      buttons.forEach((btn) => {
+        const cat = btn.getAttribute("data-category");
+        if (cat === "all") return;
+        const has = Array.from(cards).some((c) => c.getAttribute("data-category") === cat);
+        btn.hidden = !has;
+      });
+      const valid = (id: string | null) =>
+        Array.from(buttons).some((b) => !b.hidden && b.getAttribute("data-category") === id);
+
       let saved = defaultId;
       try {
-        saved =
-          localStorage.getItem("consent") === "all"
-            ? localStorage.getItem(storageKey) || defaultId
-            : defaultId;
+        const stored =
+          localStorage.getItem("consent") === "all" ? localStorage.getItem(storageKey) : null;
+        if (valid(stored)) saved = stored as string;
       } catch {}
 
       const filterItems = (category: string) => {
@@ -134,7 +143,7 @@ const defaultId = categories[0]?.id ?? "all";
         });
 
         btn.addEventListener("keydown", (e) => {
-          const btnArray = Array.from(buttons);
+          const btnArray = Array.from(buttons).filter((b) => !b.hidden);
           const index = btnArray.indexOf(btn);
 
           if (e.key === "ArrowRight" || e.key === "ArrowDown") {
@@ -158,5 +167,4 @@ const defaultId = categories[0]?.id ?? "all";
   } else {
     initCategorySwitcher();
   }
-  document.addEventListener("astro:after-swap", initCategorySwitcher);
 </script>

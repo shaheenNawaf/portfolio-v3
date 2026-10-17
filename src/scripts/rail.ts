@@ -2,44 +2,80 @@ import { ready } from "./ready";
 
 const LINE_TOP = 10;
 
-const setProgress = (active: HTMLElement | null) => {
-  const nav = active?.closest<HTMLElement>(".rail-nav");
+const setProgress = (nav: HTMLElement | null, active: HTMLElement | null) => {
   if (!nav) return;
   const px = active ? Math.max(0, active.offsetTop + active.offsetHeight / 2 - LINE_TOP) : 0;
   nav.style.setProperty("--rail-progress", `${px}px`);
 };
+
+const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 const initRail = () => {
   const panel = document.getElementById("rail-panel");
   const open = document.getElementById("rail-open");
   const close = document.getElementById("rail-close");
   const backdrop = document.getElementById("rail-backdrop");
+  const nav = document.querySelector<HTMLElement>(".rail-nav");
+  const desktopMq = window.matchMedia("(min-width: 1024px)");
+  const isDesktop = () => desktopMq.matches;
+  const isOpen = () => Boolean(panel?.classList.contains("is-open"));
 
-  const setOpen = (next: boolean) => {
+  // Off-screen sheet must not be reachable by Tab / screen readers on mobile.
+  const syncInert = () => {
+    if (panel) panel.inert = !isDesktop() && !isOpen();
+  };
+
+  const setOpen = (next: boolean, restoreFocus = true) => {
     if (!panel) return;
+    const was = isOpen();
     panel.classList.toggle("is-open", next);
     backdrop?.classList.toggle("opacity-0", !next);
     backdrop?.classList.toggle("pointer-events-none", !next);
     open?.setAttribute("aria-expanded", String(next));
     document.body.style.overflow = next ? "hidden" : "";
+    syncInert();
     if (next) close?.focus();
-    else open?.focus();
+    else if (was && restoreFocus) open?.focus();
   };
 
-  open?.addEventListener("click", () => {
-    if (!panel) return;
-    setOpen(!panel.classList.contains("is-open"));
-  });
+  open?.addEventListener("click", () => setOpen(!isOpen()));
   close?.addEventListener("click", () => setOpen(false));
   backdrop?.addEventListener("click", () => setOpen(false));
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && panel && panel.classList.contains("is-open")) {
+    if (!panel || !isOpen()) return;
+    if (e.key === "Escape") {
       setOpen(false);
+      return;
+    }
+    // Keep Tab inside the open sheet.
+    if (e.key === "Tab") {
+      const items = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
+        (el) => el.offsetParent !== null,
+      );
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     }
   });
-  if (window.matchMedia("(min-width: 1024px)").matches) setOpen(false);
-
-  const isDesktop = () => window.matchMedia("(min-width: 1024px)").matches;
+  // Tapping a section link closes the sheet so the page can scroll to it.
+  panel?.querySelectorAll<HTMLAnchorElement>(".rail-link").forEach((link) => {
+    link.addEventListener("click", () => {
+      if (!isDesktop() && isOpen()) setOpen(false, false);
+    });
+  });
+  // Rotation / resize across the breakpoint: drop the sheet state and scroll lock.
+  desktopMq.addEventListener("change", () => {
+    if (isOpen()) setOpen(false, false);
+    syncInert();
+  });
+  syncInert();
 
   /* Option 5: swipe inward from the left edge to open (mobile only) */
   let edgeX: number | null = null;
@@ -101,7 +137,7 @@ const initRail = () => {
   if (links.length === 0) return;
 
   const initial = links.find((l) => l.getAttribute("aria-current") === "true");
-  if (initial) setProgress(initial);
+  if (initial) setProgress(nav, initial);
 
   const markActive = (id: string | null) => {
     let active: HTMLElement | null = null;
@@ -110,7 +146,7 @@ const initRail = () => {
       l.setAttribute("aria-current", on ? "true" : "false");
       if (on) active = l;
     });
-    setProgress(active);
+    setProgress(nav, active);
   };
 
   const docTop = (el: HTMLElement) =>

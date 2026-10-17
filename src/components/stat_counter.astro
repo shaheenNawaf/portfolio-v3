@@ -8,7 +8,7 @@ interface Props {
 const { stat } = Astro.props;
 ---
 
-<div class="group/stat flex flex-col gap-1 outline-none" tabindex="0">
+<div class="group/stat flex flex-col gap-1 rounded-[var(--radius)]" tabindex="0">
   <span
     class="stat-number text-[28px] font-semibold tracking-[-0.02em] leading-[1.15] fg"
     data-count-to={stat.num}

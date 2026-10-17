@@ -32,7 +32,9 @@
     --text-faint: #71717b;
     --radius: 8px;
     --mkt: #ea580c;
+    --mkt-text: #c2410c;
     --sw: #2563eb;
+    --danger: #b91c1c;
     --accent: var(--text);
     --popover: var(--surface);
     --popover-fg: var(--text);
@@ -55,7 +57,9 @@
     --text-muted: #9c9ca4;
     --text-faint: #9797a1;
     --mkt: #f97316;
+    --mkt-text: #f97316;
     --sw: #60a5fa;
+    --danger: #f87171;
     --tint-gh-bg: #3a393e;   --tint-gh-fg: #e9e9ec;   --tint-gh-bd: #4c4b52;
     --tint-li-bg: #172554;   --tint-li-fg: #93c5fd;   --tint-li-bd: #1e3a8a;
     --tint-mail-bg: #431407; --tint-mail-fg: #fdba74; --tint-mail-bd: #7c2d12;
@@ -78,7 +82,8 @@
   .font-mono {
     font-family: "Geist Mono", ui-monospace, monospace;
   }
-  a:focus-visible, button:focus-visible, summary:focus-visible {
+  a:focus-visible, button:focus-visible, summary:focus-visible,
+  [role="button"]:focus-visible, [tabindex]:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
     border-radius: 4px;
@@ -159,6 +164,10 @@
   }
   .journey-item > summary:hover .journey-pill { background-color: var(--text); color: var(--bg); }
   .journey-body { padding-left: 24px; }
+  /* Passive secret tooltips (inside <summary>) reveal when the row has keyboard focus. */
+  summary:focus-visible .secret-passive [role="tooltip"] {
+    display: block; opacity: 1; --tw-translate-y: 0;
+  }
 
   /* Works cards (reference pattern: preview tile + centered caption + pill) */
   .work-card {
@@ -326,8 +335,10 @@
     transition-delay: calc(var(--i, 0) * 60ms);
     will-change: opacity, transform;
   }
-  html.js [data-reveal="hero"] { transform: translateY(8px); }
-  html.js [data-reveal].is-in { opacity: 1; filter: none; transform: none; will-change: auto; }
+  html.js [data-reveal].is-in,
+  html.no-reveal [data-reveal] { opacity: 1; filter: none; transform: none; will-change: auto; }
+  html.no-reveal .card-thumb { opacity: 1; }
+  html.no-reveal .card-pulse { display: none; }
   /* After the reveal finishes, drop the stagger delay so hover/tilt transitions are immediate. */
   html.js [data-reveal].reveal-done { transition-delay: 0ms; }
   html.js .work-card[data-reveal].reveal-done {
@@ -455,7 +466,13 @@
     font-size: 0.875rem; transition: border-color 0.2s ease;
   }
   .book-field::placeholder { color: var(--text-faint); }
-  .book-field:focus { outline: none; border-color: var(--border-strong); }
+  .book-field:focus { outline: none; }
+  .book-field:focus-visible {
+    border-color: var(--text-muted);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--text) 14%, transparent);
+  }
+  .book-field[aria-invalid="true"] { border-color: var(--danger); }
+  .book-error { margin-top: 0.35rem; font-size: 12px; color: var(--danger); }
   ::-webkit-scrollbar { width: 8px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }

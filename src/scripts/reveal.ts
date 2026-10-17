@@ -4,6 +4,7 @@ const REVEAL_MS = 500;
 const STAGGER_MS = 60;
 
 const initReveal = () => {
+  document.documentElement.classList.add("reveal-ready");
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const items = document.querySelectorAll<HTMLElement>("[data-reveal]");
 

@@ -5,7 +5,8 @@ const initCardImages = () => {
     const frame = img.closest(".card-media");
     if (!frame) return;
     const done = () => frame.classList.add("is-loaded");
-    if (img.complete && img.naturalWidth > 0) {
+    // `complete` is also true for images that already failed; either way stop the skeleton.
+    if (img.complete) {
       done();
     } else {
       img.addEventListener("load", done, { once: true });

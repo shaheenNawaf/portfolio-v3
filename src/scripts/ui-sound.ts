@@ -57,6 +57,6 @@ ready(() => {
     const hit = (e.target as Element | null)?.closest?.(
       'a, button, summary, input, select, textarea, label, [role="button"], [role="menuitem"], [role="tab"], [data-ui-sound="crisp"]',
     );
-    if (hit && !hit.closest("#sound-toggle")) crisp();
+    if (hit && !hit.closest("#sound-toggle") && hit.getAttribute("data-ui-sound") !== "none") crisp();
   });
 });

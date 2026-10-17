@@ -22,6 +22,14 @@ const showcase = showcaseProjectIds
   .map((id) => visible.find((p) => p.id === id))
   .filter((p) => p !== undefined);
 const archive = visible.filter((p) => !showcaseProjectIds.includes(p.id));
+
+// Only offer filters that have something to show.
+const workCategories = [
+  { id: "all", label: "All" },
+  { id: "software", label: "Software" },
+  { id: "marketing", label: "Growth Marketing" },
+  { id: "systems", label: "Systems" },
+].filter((c) => c.id === "all" || visible.some((p) => p.category === c.id));
 ---
 
 <BaseLayout
@@ -43,7 +51,7 @@ const archive = visible.filter((p) => !showcaseProjectIds.includes(p.id));
           title="Selected work"
           subtitle="Products, campaigns, and systems with measurable outcomes."
         />
-        <div class="mt-6"><CategorySwitcher /></div>
+        <div class="mt-6"><CategorySwitcher categories={workCategories} /></div>
         <div class="mt-6 work-strip" data-project-grid>
           {
             showcase.map((p, i) => (
@@ -56,6 +64,15 @@ const archive = visible.filter((p) => !showcaseProjectIds.includes(p.id));
             ))
           }
         </div>
+        <script is:inline>
+          // Featured cards render open (desktop case studies); collapse them on
+          // phones before first paint so the strip doesn't jump on load.
+          if (!window.matchMedia("(min-width: 640px)").matches) {
+            document
+              .querySelectorAll(".work-strip > .work-card[data-featured='true']")
+              .forEach(function (c) { c.removeAttribute("open"); });
+          }
+        </script>
       </section>
     </div>
 
@@ -119,26 +136,22 @@ const archive = visible.filter((p) => !showcaseProjectIds.includes(p.id));
 </BaseLayout>
 
 <script>
-  import { ready } from "../scripts/ready";
+  // Initial open/closed state is set by the inline script under the work strip.
+  // Here we only follow breakpoint changes, and never override a card the
+  // visitor has opened or closed themselves.
+  const featured = document.querySelectorAll<HTMLElement>(
+    ".work-strip > .work-card[data-featured='true']",
+  );
+  featured.forEach((c) =>
+    c.querySelector("summary")?.addEventListener("click", () => {
+      c.dataset.userToggled = "true";
+    }),
+  );
 
-  const syncFeaturedOpen = () => {
-    const desktop = window.matchMedia("(min-width: 640px)").matches;
-    document
-      .querySelectorAll<HTMLElement>(".work-strip > .work-card[data-featured='true']")
-      .forEach((c) => {
-        if (desktop) c.setAttribute("open", "");
-        else c.removeAttribute("open");
-      });
-  };
-
-  let wasDesktop = window.matchMedia("(min-width: 640px)").matches;
-
-  ready(syncFeaturedOpen);
-
-  window.addEventListener("resize", () => {
-    const isDesktop = window.matchMedia("(min-width: 640px)").matches;
-    if (isDesktop === wasDesktop) return;
-    wasDesktop = isDesktop;
-    syncFeaturedOpen();
+  window.matchMedia("(min-width: 640px)").addEventListener("change", (mq) => {
+    featured.forEach((c) => {
+      if (c.dataset.userToggled === "true") return;
+      c.toggleAttribute("open", mq.matches);
+    });
   });
 </script>

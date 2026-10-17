@@ -25,11 +25,23 @@ const load = async (trigger: HTMLElement) => {
   }
 
   try {
-    const res = await fetch(
-      `https://api.github.com/users/${encodeURIComponent(user)}/events/public?per_page=100`,
-    );
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const events = (await res.json()) as Array<{ created_at?: string }>;
+    // The events API returns at most 100 per page (300 total, 90 days); one page
+    // only covers a few busy days, so walk pages until we pass the window.
+    const since = Date.now() - 91 * 86_400_000;
+    const events: Array<{ created_at?: string }> = [];
+    for (let page = 1; page <= 3; page++) {
+      const res = await fetch(
+        `https://api.github.com/users/${encodeURIComponent(user)}/events/public?per_page=100&page=${page}`,
+      );
+      if (!res.ok) {
+        if (page === 1) throw new Error(`HTTP ${res.status}`);
+        break;
+      }
+      const batch = (await res.json()) as Array<{ created_at?: string }>;
+      events.push(...batch);
+      const oldest = batch[batch.length - 1]?.created_at;
+      if (batch.length < 100 || !oldest || Date.parse(oldest) < since) break;
+    }
 
     const counts = new Map<string, number>();
     events.forEach((e) => {

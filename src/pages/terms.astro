@@ -1,12 +1,13 @@
 ---
 import BaseLayout from "../layouts/layout.astro";
+import SiteFooter from "../components/site_footer.astro";
 ---
 
 <BaseLayout
   title="Terms of Use — Shaheen Al Adwani"
   description="The terms that apply when using shaheen.works: content license, ownership, third-party trademarks, and disclaimers."
 >
-  <main id="main" class="wrap pt-10 pb-16">
+  <main id="main" class="wrap pt-10 md:pt-16 pb-4">
     <h1 class="text-[22px] md:text-[26px] font-medium tracking-[-0.01em]">
       Terms of Use
     </h1>
@@ -120,4 +121,6 @@ import BaseLayout from "../layouts/layout.astro";
       </section>
     </div>
   </main>
+
+  <SiteFooter />
 </BaseLayout>

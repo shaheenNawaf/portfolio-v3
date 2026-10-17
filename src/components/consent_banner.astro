@@ -8,7 +8,7 @@
   <p class="text-[12px] muted leading-[1.6]">
     This site stores a few preferences in your browser (theme, sound, filters) —
     no cookies, no analytics, no tracking.
-    <a href="/privacy" class="fg font-medium hover:opacity-70 transition-opacity">Privacy policy</a>.
+    <a href="/privacy/" class="fg font-medium hover:opacity-70 transition-opacity">Privacy policy</a>.
   </p>
   <div class="mt-3 flex flex-wrap items-center gap-2">
     <button
@@ -52,9 +52,13 @@
     hide();
   });
 
+  // Every preference key the site writes when consent is "all".
+  const PREF_KEYS = ["theme", "sound", "project-category", "experience-category"];
+
   document.getElementById("consent-essential")?.addEventListener("click", () => {
     try {
       localStorage.setItem(KEY, "essential");
+      PREF_KEYS.forEach((k) => localStorage.removeItem(k));
     } catch {}
     hide();
   });

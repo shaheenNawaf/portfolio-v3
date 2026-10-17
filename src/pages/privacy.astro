@@ -1,12 +1,13 @@
 ---
 import BaseLayout from "../layouts/layout.astro";
+import SiteFooter from "../components/site_footer.astro";
 ---
 
 <BaseLayout
   title="Privacy Policy — Shaheen Al Adwani"
   description="How shaheen.works handles personal information: what the contact form collects, browser preference storage, and your rights."
 >
-  <main id="main" class="wrap pt-10 pb-16">
+  <main id="main" class="wrap pt-10 md:pt-16 pb-4">
     <h1 class="text-[22px] md:text-[26px] font-medium tracking-[-0.01em]">
       Privacy Policy
     </h1>
@@ -66,14 +67,15 @@ import BaseLayout from "../layouts/layout.astro";
       <section class="space-y-3">
         <h2 class="text-[15px] font-semibold tracking-tight fg">Browser preference storage</h2>
         <p>
-          The site can store four values in your browser's local storage: your
+          The site can store five values in your browser's local storage: your
           theme choice (light or dark), interface sound on or off, your
-          selected work filter, and your consent choice itself. These values
-          never leave your browser, are not readable by other sites, and can be
-          cleared at any time in your browser settings. Preference values are
-          written only after you choose "Allow preferences"; if you choose
-          "Essential only", only the consent record itself is stored, so the
-          site remembers your choice.
+          selected work filter, your selected experience filter, and your
+          consent choice itself. These values never leave your browser, are not
+          readable by other sites, and can be cleared at any time in your
+          browser settings. Preference values are written only after you choose
+          "Allow preferences"; if you choose "Essential only", any stored
+          preferences are removed and only the consent record itself is kept,
+          so the site remembers your choice.
         </p>
       </section>
 
@@ -81,7 +83,10 @@ import BaseLayout from "../layouts/layout.astro";
         <h2 class="text-[15px] font-semibold tracking-tight fg">Third-party content and links</h2>
         <p>
           Some project videos are streamed from Cloudinary; like any CDN, its
-          servers see the IP address used to request the video. The site also
+          servers see the IP address used to request the video. Hovering or
+          focusing the "shipping" link in the introduction loads a public
+          activity summary directly from GitHub's API, so GitHub sees the IP
+          address of that request; nothing is sent unless you do. The site also
           links to third-party services (for example Google Appointments,
           GitHub, LinkedIn). Once you follow a link, the destination's own
           privacy policy applies.
@@ -139,4 +144,6 @@ import BaseLayout from "../layouts/layout.astro";
       </section>
     </div>
   </main>
+
+  <SiteFooter />
 </BaseLayout>

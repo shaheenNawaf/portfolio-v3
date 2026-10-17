@@ -1,6 +1,10 @@
 (() => {
   var root = document.documentElement;
   root.classList.add("js");
+  // Fail-safe: if reveal.ts never boots (blocked/failed module), show everything.
+  setTimeout(function () {
+    if (!root.classList.contains("reveal-ready")) root.classList.add("no-reveal");
+  }, 2500);
 
   var theme = "system";
   try {

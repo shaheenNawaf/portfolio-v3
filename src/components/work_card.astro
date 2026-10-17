@@ -68,9 +68,10 @@ const categoryLabel =
     : category === "software"
       ? "Software"
       : "Systems";
+// Text-safe accent: --mkt-text keeps orange copy above 4.5:1 in light mode.
 const accentVar =
   category === "marketing"
-    ? "var(--mkt)"
+    ? "var(--mkt-text)"
     : category === "software"
       ? "var(--sw)"
       : "var(--text)";
