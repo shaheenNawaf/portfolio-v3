@@ -2,6 +2,7 @@
 import type { Category } from "../data/resume";
 import { secrets } from "../data/resume";
 import SecretTooltip from "./secret_tooltip.astro";
+import Terms from "./terms.astro";
 
 interface Props {
   id: string;
@@ -16,6 +17,7 @@ interface Props {
   gallery?: readonly string[];
   video?: string;
   tech?: readonly string[];
+  open?: boolean;
 }
 
 const {
@@ -29,6 +31,7 @@ const {
   gallery = [],
   video,
   tech = [],
+  open = false,
 } = Astro.props;
 
 const accentVar =
@@ -39,7 +42,7 @@ const accentVar =
       : "var(--text)";
 ---
 
-<details class="journey-item" data-category={category}>
+<details class="journey-item" data-category={category} open={open}>
   <summary>
     <span class="journey-drop" aria-hidden="true"></span>
 
@@ -73,7 +76,7 @@ const accentVar =
   </summary>
 
   <div class="journey-body mt-3 pb-1 space-y-3">
-    <p class="text-[14px] muted leading-[1.7]">{description}</p>
+    <p class="text-[14px] muted leading-[1.7]"><Terms text={description} /></p>
 
     {
       details.length > 0 && (
@@ -84,7 +87,7 @@ const accentVar =
                 class="mt-[7px] w-1 h-1 rounded-full shrink-0"
                 style={`background-color: ${accentVar}`}
               ></span>
-              {item}
+              <span><Terms text={item} /></span>
             </li>
           ))}
         </ul>

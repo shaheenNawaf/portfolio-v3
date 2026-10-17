@@ -19,4 +19,4 @@ tech:
   - "Telegram"
 ---
 
-Kept running costs down while ensuring a strict-4:1 ROAS.
+Kept running costs down while ensuring a strict 4:1 ROAS.

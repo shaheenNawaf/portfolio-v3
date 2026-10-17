@@ -38,14 +38,21 @@ export interface Experience {
 
 export const name = "Shaheen Al Adwani";
 
+/** Calendar booking link (Cal.com / Google Appointments). Empty = no booking; CTAs say "Get in touch". */
+const appointmentUrl = "" as string;
+
 /** Conversion funnel copy + booking config */
 export const hub = {
   position: "Growth Marketer × Software Engineer",
   subtext:
     "Full-stack engineer and growth operator. Two live SaaS products, $355K+ in campaign volume, 4:1 ROAS, 22K-member communities. Open to full-time roles and select freelance.",
   status: "Open to SWE & MKT roles · Project work",
-  ctaPrimary: "Book a Call",
-  appointmentUrl: "" as string,
+  /** Plain-text availability shown beside the location (no joke layer). */
+  availability: "GMT+8 · Open to remote roles",
+  /** Only promise a booking when there is a calendar to book on. */
+  ctaPrimary: appointmentUrl ? "Book a call" : "Get in touch",
+  submitLabel: appointmentUrl ? "Send & pick a time" : "Send message",
+  appointmentUrl,
 };
 
 export const contact = {
@@ -143,10 +150,9 @@ export const trustLogos = [
 /** Categorized skills for the homepage Skills section (ATS-friendly) */
 export const skillGroups = {
   engineering: {
-    Backend: ["Supabase", "PostgreSQL", "REST APIs", "Firebase", "Spring Boot", "Python"],
+    Backend: ["Java", "Spring Boot", "Python", "REST APIs"],
     Frontend: ["Flutter", "Dart", "Riverpod", "Next.js", "TypeScript"],
-    Cloud: ["Firebase", "Supabase", "Docker", "AWS"],
-    Databases: ["PostgreSQL", "Supabase", "Firebase"],
+    "Data & cloud": ["PostgreSQL", "Supabase", "Firebase", "Docker", "AWS"],
   },
   marketing: {
     Growth: ["Influencer Marketing", "Creator Partnerships", "Paid Ads", "Product Growth", "Community Building"],
@@ -225,7 +231,7 @@ export const socials: Social[] = [
   },
   {
     id: 'resume-swe',
-    label: 'SWE Resume',
+    label: 'Engineering resume',
     href: resumes.software,
     icon: 'doc',
     tint: 'doc',
@@ -238,7 +244,7 @@ export const socials: Social[] = [
   },
   {
     id: 'resume-mkt',
-    label: 'MKT Resume',
+    label: 'Marketing resume',
     href: resumes.marketing,
     icon: 'doc',
     tint: 'doc',

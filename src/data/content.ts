@@ -9,22 +9,23 @@ import { experienceTech } from "./resume";
  * wins for backwards-compat.
  */
 
-// Display order: projects featured-first (legacy order), experiences
-// reverse-chronological with education last. New CMS entries (not in
-// these lists) are appended at the end.
+// Display order: showcase first, then the two lanes interleaved so a
+// software reader doesn't have to swipe past every campaign (and vice
+// versa). Experiences are reverse-chronological with education last.
+// New CMS entries (not in these lists) are appended at the end.
 const projectOrder = [
   "campaign-rivalry-tribe-main",
-  "campaign-rivalry-evergreen",
-  "campaign-slamdunk-slips",
+  "proj-gymeasy",
   "campaign-kuyanic-ti",
+  "campaign-rivalry-evergreen",
+  "proj-agripinoy",
+  "campaign-slamdunk-slips",
+  "proj-staysafe",
   "campaign-sgc-launch",
+  "proj-JCSD",
   "campaign-rampage-report",
   "campaign-valentines-parlay",
   "campaign-growth-automation",
-  "proj-gymeasy",
-  "proj-agripinoy",
-  "proj-staysafe",
-  "proj-JCSD",
   "proj-esp32",
 ];
 

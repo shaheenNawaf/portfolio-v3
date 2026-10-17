@@ -1,6 +1,7 @@
 ---
 import type { Category } from "../data/resume";
 import Icon from "./icon.astro";
+import Terms from "./terms.astro";
 
 interface Props {
   id: string;
@@ -116,8 +117,8 @@ const outerAttrs = {
         </div>
 
         <div class="card-caption">
-          <h3 class="card-title">{title}</h3>
-          <p class="card-metric">{metric ?? description}</p>
+          <h3 class="card-title"><Terms text={title} /></h3>
+          <p class="card-metric"><Terms text={metric ?? description} /></p>
           {role && (
             <p class="mt-0.5 text-[12px] faint">
               {role}
@@ -145,30 +146,30 @@ const outerAttrs = {
             {problem && (
               <div>
                 <p class="eyebrow mb-1">Problem</p>
-                <p class="muted leading-[1.7]">{problem}</p>
+                <p class="muted leading-[1.7]"><Terms text={problem} /></p>
               </div>
             )}
             {solution && (
               <div>
                 <p class="eyebrow mb-1">Solution</p>
-                <p class="muted leading-[1.7]">{solution}</p>
+                <p class="muted leading-[1.7]"><Terms text={solution} /></p>
               </div>
             )}
             {impact && (
               <div>
                 <p class="eyebrow mb-1">Impact</p>
-                <p class="muted leading-[1.7]">{impact}</p>
+                <p class="muted leading-[1.7]"><Terms text={impact} /></p>
               </div>
             )}
           </div>
         ) : (
-          <p class="max-w-[68ch] muted leading-[1.7]">{description}</p>
+          <p class="max-w-[68ch] muted leading-[1.7]"><Terms text={description} /></p>
         )}
 
         {listItems.length > 0 && (
           <div class="flex flex-wrap gap-1.5">
             {listItems.slice(0, 8).map((item: string) => (
-              <span class="card-chip">{item}</span>
+              <span class="card-chip"><Terms text={item} /></span>
             ))}
           </div>
         )}
@@ -229,8 +230,8 @@ const outerAttrs = {
         </div>
       </div>
       <div class="card-caption">
-        <h3 class="card-title">{title}</h3>
-        <p class="card-metric">{metric ?? description}</p>
+        <h3 class="card-title"><Terms text={title} /></h3>
+        <p class="card-metric"><Terms text={metric ?? description} /></p>
         <div class="card-chips">
           <span class="card-chip">{categoryLabel}</span>
           {linkHref && (

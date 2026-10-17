@@ -1,0 +1,12 @@
+---
+// Renders text with industry acronyms wrapped in <abbr> (see data/glossary.ts).
+import { glossary, splitTerms } from "../data/glossary";
+
+interface Props {
+  text: string;
+}
+
+const parts = splitTerms(Astro.props.text ?? "");
+---
+
+{parts.map((p, i) => (i % 2 === 1 ? <abbr class="term" title={glossary[p]}>{p}</abbr> : p))}

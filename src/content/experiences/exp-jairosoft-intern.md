@@ -15,4 +15,4 @@ tech:
   - "Figma"
 ---
 
-Developed core pages and corrected structural database design flaws within JairoSoft Institutes Learning Management System.
+Developed core pages and corrected structural database design flaws within JairoSoft Institute's Learning Management System.

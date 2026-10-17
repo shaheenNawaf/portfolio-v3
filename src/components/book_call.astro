@@ -28,9 +28,10 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
 >
   <div class:list={["mb-6 md:mb-8 max-w-xl", { hidden: compact }]}>
     <h2 class="text-[15px] font-semibold tracking-tight">{title}</h2>
-    <p class="mt-2 muted text-[13px] leading-relaxed max-w-prose">
+    <p class="mt-1 muted text-[13px] leading-relaxed max-w-prose">
       {subtitle}
     </p>
+    <slot name="direct" />
   </div>
 
   <form
@@ -107,7 +108,7 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
         name="note"
         rows="3"
         class="book-field resize-y min-h-[80px]"
-        placeholder="Role, timeline, or anything useful before the call"
+        placeholder="Role, team, timeline — anything useful"
       ></textarea>
     </div>
 
@@ -125,13 +126,13 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
           { "w-full": compact },
         ]}
       >
-        <span class="btn-label">{hub.ctaPrimary}</span>
+        <span class="btn-label">{hub.submitLabel}</span>
         <span aria-hidden="true" class="text-[15px] leading-none">→</span>
       </button>
       <p class="text-[11px] muted leading-snug max-w-xs">
         {
           appointmentUrl
-            ? "Sends your note, then opens Google Appointments to pick a time."
+            ? "Sends your note and opens my calendar in a new tab."
             : "Takes 30 seconds — I read every note."
         }
       </p>
@@ -163,7 +164,7 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
       const contactEmail = (section as HTMLElement).dataset.contactEmail ?? "";
       const submitBtn = form.querySelector("button[type='submit']") as HTMLButtonElement | null;
       const label = submitBtn?.querySelector(".btn-label") as HTMLElement | null;
-      const idleLabel = label?.textContent ?? "Book a Call";
+      const idleLabel = label?.textContent ?? "Send message";
 
       /** Status line; optional mailto fallback link appended after the message. */
       const say = (msg: string, mailHref?: string) => {
@@ -232,6 +233,9 @@ const appointmentUrl = hub.appointmentUrl?.trim() ?? "";
 
         setBusy(true);
         say("Sending…");
+        // Open the calendar synchronously inside the click; after the await,
+        // popup blockers would stop it.
+        if (appointmentUrl) window.open(appointmentUrl, "_blank", "noopener,noreferrer");
 
         const encoded = new URLSearchParams();
         data.forEach((value, key) => encoded.append(key, String(value)));

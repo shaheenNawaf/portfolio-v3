@@ -18,14 +18,14 @@ Built for recruiters who want to see both sides of the same person.
 
 - **Dual-lane identity:** blue marks software items/links, orange marks marketing items/links — as category accents on a single page (work filters, timeline markers, skills groups, fit lanes).
 - **Sidebar navigation:** fixed 12.75rem left rail (no name, no divider, no container — it sits flat on the page background) whose single list is a vertical timeline — line + node per entry with an accent progress line — covering the on-page sections; below 1024px it becomes a bottom sheet (grabber + left-edge swipe-in, drag-down to dismiss) opened by a bottom-left button. At ≥1280px the rail docks 20px left of the centred content column and travels with it; at 1024–1279px it docks at the viewport edge.
-- **Reference-style Works grid:** 2-column cards with hover-reveal thumbnails (hidden at rest, 70% on hover), 3D tilt, shadow bloom, sticker-peel corner, and expandable full-width case-study bodies (Problem/Solution/Impact, gallery, Live/GitHub links). Featured-first with a "See all" expander on the hub.
+- **Reference-style Works grid:** 2-column cards with hover-reveal thumbnails (hidden at rest, 70% on hover), 3D tilt, shadow bloom, sticker-peel corner, and expandable full-width case-study bodies (Problem/Solution/Impact, gallery, Live/GitHub links). Three showcase case studies open first (desktop), then the archive with the software and marketing lanes interleaved; on phones the grid becomes a swipe strip.
 - **Faint section dividers:** a 1px hairline between every section, revealed on scroll with its section.
 - **Scroll reveals:** IntersectionObserver-driven fade + blur + rise, staggered. No animation library.
 - **Light + dark themes:** class-based, system default, persisted, FOUC-free via a blocking head script.
 - **Sticker link pills:** GitHub / LinkedIn / Email / resumes as brand-tinted pills with press physics and hover preview popovers.
 - **Signature quirks:** verified-badge easter egg, secret dotted-underline joke tooltips, blur-crossfade text swaps, avatar sunglasses, animated stat count-ups, GitHub public-activity heatmap popover, opt-in WebAudio UI sounds, and the Portal/GLaDOS footer egg (now on every page).
 - **Category filtering:** pill filters for the work grid and experience timeline, persisted per section.
-- **Book-a-call form:** minimal contact form on every route; submit opens the mail client (scheduler-ready via `hub.appointmentUrl`).
+- **Contact form:** posts to a Netlify function (`netlify/functions/contact.mjs`) that emails via Resend; inline field errors, and a mailto fallback link if delivery fails. CTAs say "Get in touch" until `hub.appointmentUrl` is set, then switch to "Book a call".
 - **Reduced-motion friendly:** every animation has a `prefers-reduced-motion` off-ramp; content is fully visible with JS disabled.
 
 ## Directory Structure
@@ -55,7 +55,9 @@ src/
     work_card.astro          # Expandable project card (grid)
     dither-kit/              # Pixel-dither canvas kit (currently unused)
   data/
-    resume.ts                # Single source of truth for all content
+    resume.ts                # Profile, hero copy, stats, socials, skills, joke layer
+    content.ts               # Loads projects/experiences from src/content (CMS) + display order
+    glossary.ts              # Industry acronyms expanded via <abbr> (components/terms.astro)
   layouts/
     layout.astro             # Global HTML shell + SEO meta + sidebar + scripts
   pages/

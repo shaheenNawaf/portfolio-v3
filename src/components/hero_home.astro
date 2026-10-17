@@ -63,42 +63,38 @@ const subtextParts = hub.subtext.split(secrets.roas.trigger);
     </div>
   </div>
 
-  <p class="mt-6 text-[15px] muted leading-[1.7] max-w-[52ch]">
-    {
-      subtextParts.map((part, i) => (
-        <span>
-          {part}
-          {i < subtextParts.length - 1 && (
-            <SecretTooltip trigger={secrets.roas.trigger} reveal={secrets.roas.reveal} />
-          )}
-        </span>
-      ))
-    }
+  <p class="mt-6 text-[15px] muted leading-[1.7] max-w-[56ch]">
+    {subtextParts[0]}<SecretTooltip
+      trigger={secrets.roas.trigger}
+      reveal={secrets.roas.reveal}
+    />{subtextParts.slice(1).join(secrets.roas.trigger)}
   </p>
 
   <p class="mt-4 text-[15px] muted leading-[1.9] max-w-[56ch]">
     You can find me <ActivityHeatmap phrase="shipping" /> on{" "}
     <StickerPill social={socials[0]} idPrefix="hero-" />, hiring-side on{" "}
     <StickerPill social={socials[1]} idPrefix="hero-" />, or reach me{" "}
-    <span class="whitespace-nowrap">
-      at <StickerPill social={socials[2]} idPrefix="hero-" />
-    </span>.
+    <span class="whitespace-nowrap"
+      >at <StickerPill social={socials[2]} idPrefix="hero-" />.</span
+    >
   </p>
 
-  <p class="mt-4 text-[13px]">
+  <p class="mt-4 flex flex-wrap items-baseline gap-x-1.5 text-[13px] muted">
     <SecretTooltip
       trigger={secrets.location.trigger}
       reveal={secrets.location.reveal}
     />
+    <span aria-hidden="true" class="faint">·</span>
+    <span>{hub.availability}</span>
   </p>
 
-  <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-[13px]">
+  <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-3 text-[13px]">
     <a
       href="#contact"
       data-ui-sound="crisp"
-      class="hit-expand font-semibold fg hover:opacity-70 transition-opacity"
+      class="btn-primary"
     >
-      {hub.ctaPrimary} →
+      {hub.ctaPrimary} <span aria-hidden="true">→</span>
     </a>
     <StickerPill social={socials[3]} idPrefix="hero-" />
     <StickerPill social={socials[4]} idPrefix="hero-" />

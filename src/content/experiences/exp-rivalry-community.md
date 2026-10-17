@@ -23,4 +23,4 @@ tech:
   - "Notion"
 ---
 
-Scaled direct-to-consumer marketing communities through Facebook and Viber
+Scaled direct-to-consumer marketing communities through Facebook and Viber.

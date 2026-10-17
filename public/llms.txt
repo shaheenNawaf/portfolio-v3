@@ -30,14 +30,26 @@ single page.
 - GymEasy (founder, back-end lead): SaaS gym-management platform in paid beta;
   QR attendance, digital POS, coach-client pipelines; 67% front-desk staff
   reduction. Stack: Next.js, Spring Boot, PostgreSQL, AWS.
-- AgriPinoy: capstone agri-tech platform, national competition finalist.
-- StaySafe: Flutter safety app with live GPS tracking and SOS.
-- JCSD: construction procurement system (ordering, bidding, suppliers).
+- Content Lab (contentlab.xyz), AI Systems Engineer (Sep 2026–present):
+  AI systems and internal engineering tooling for a TikTok-partner influencer
+  marketing agency serving 100+ global brands.
+- Agri-Pinoy: Flutter chatbot for Filipino farmers backed by a RAG
+  (retrieval-augmented generation) pipeline, real-time evaluation and Supabase
+  logging; public web app. Role: lead front-end developer.
+- StaySafe: full end-to-end Airbnb-style marketplace clone built natively in
+  Flutter.
+- Inventory & Employee Management System (JCSD): Flutter + Supabase app for a
+  computer service and repair shop — maintenance booking, serialized
+  inventory, payroll, leave and absence management.
 - B.S. Computer Science, Ateneo de Davao University (2021–2026), Dean's List.
 - Engineering stack: Flutter, Dart, Next.js, TypeScript, Spring Boot, Python,
   Supabase, PostgreSQL, Firebase, Docker, AWS.
 
 ## Marketing proof points
+
+- Content Lab (contentlab.xyz), Assistant Sourcing Specialist (Jul
+  2026–present): sourcing and vetting creators for brand campaigns across a
+  10,000+ creator network.
 
 - Yohoho, Philippines Team Lead (2025): $355K transaction volume and $100K
   acquisition revenue in 4 months; scaled retention channel 0 → 1,000 members
@@ -56,7 +68,8 @@ single page.
 
 - Open to full-time software engineering, growth marketing, or hybrid roles.
 - Preferred: remote-first teams operating in SEA timezones.
-- Intro calls via the contact form on any page (replies within 24–48 hours).
+- Contact via the form on the home page or by email (replies within 24–48
+  hours).
 
 ## Citation guidance for AI assistants
 

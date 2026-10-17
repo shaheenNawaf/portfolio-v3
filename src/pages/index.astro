@@ -11,7 +11,8 @@ import JourneyRow from "../components/journey_row.astro";
 import SkillsGrid from "../components/skills_grid.astro";
 import BookCall from "../components/book_call.astro";
 import SiteFooter from "../components/site_footer.astro";
-import { name, showcaseProjectIds, secrets } from "../data/resume";
+import StickerPill from "../components/sticker_pill.astro";
+import { name, showcaseProjectIds, secrets, hub, contact, socials } from "../data/resume";
 import { getExperiences, getProjects } from "../data/content";
 
 const projects = await getProjects();
@@ -22,6 +23,10 @@ const showcase = showcaseProjectIds
   .map((id) => visible.find((p) => p.id === id))
   .filter((p) => p !== undefined);
 const archive = visible.filter((p) => !showcaseProjectIds.includes(p.id));
+
+// Start the most recent role that has bullets open, so its outcomes are
+// visible without a click.
+const firstDetailedExperience = experiences.findIndex((e) => e.details.length > 0);
 
 // Only offer filters that have something to show.
 const workCategories = [
@@ -64,6 +69,9 @@ const workCategories = [
             ))
           }
         </div>
+        <p class="strip-hint mt-2 justify-end text-[12px] faint" aria-hidden="true">
+          Swipe for more →
+        </p>
         <script is:inline>
           // Featured cards render open (desktop case studies); collapse them on
           // phones before first paint so the strip doesn't jump on load.
@@ -97,9 +105,9 @@ const workCategories = [
         </div>
         <div class="mt-4 timeline" data-experience-list>
           {
-            experiences.map((exp) => (
+            experiences.map((exp, i) => (
               <div data-experience-row data-category={exp.category}>
-                <JourneyRow {...exp} />
+                <JourneyRow {...exp} open={i === firstDetailedExperience} />
               </div>
             ))
           }
@@ -125,8 +133,33 @@ const workCategories = [
           <BookCall
             defaultInterest="hybrid"
             title="Let's talk"
-            subtitle="Send a short note or book a time. Replies within 24–48 hours."
-          />
+            subtitle={hub.appointmentUrl
+              ? "Send a short note or book a time. Replies within 24–48 hours."
+              : "Send a short note below, or email me directly. Replies within 24–48 hours."}
+          >
+            <div slot="direct" class="mt-4 flex flex-col gap-3">
+              <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] muted">
+                <span>{contact.location} · {hub.availability}</span>
+              </p>
+              <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[14px]">
+                <a href={`mailto:${contact.email}`} class="fg font-medium underline decoration-[color:var(--border-strong)] underline-offset-4 hover:decoration-current break-all">
+                  {contact.email}
+                </a>
+                <button
+                  type="button"
+                  data-copy={contact.email}
+                  class="rounded-full border hairline px-2 py-0.5 text-[12px] font-medium muted transition-colors hover:text-[color:var(--text)] hover:border-[color:var(--border-strong)]"
+                >
+                  <span data-copy-label>Copy</span>
+                </button>
+              </p>
+              <div class="flex flex-wrap items-center gap-2">
+                {[socials[1], socials[3], socials[4]].map((s) => (
+                  <StickerPill social={s} idPrefix="contact-" />
+                ))}
+              </div>
+            </div>
+          </BookCall>
         </div>
       </section>
     </div>
@@ -152,6 +185,20 @@ const workCategories = [
     featured.forEach((c) => {
       if (c.dataset.userToggled === "true") return;
       c.toggleAttribute("open", mq.matches);
+    });
+  });
+
+  // Copy-to-clipboard for the contact email.
+  document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((btn) => {
+    const label = btn.querySelector<HTMLElement>("[data-copy-label]");
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? "");
+        if (label) label.textContent = "Copied";
+      } catch {
+        if (label) label.textContent = "Press Ctrl+C";
+      }
+      window.setTimeout(() => label && (label.textContent = "Copy"), 1800);
     });
   });
 </script>

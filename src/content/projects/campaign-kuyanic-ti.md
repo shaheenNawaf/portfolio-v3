@@ -1,6 +1,6 @@
 ---
 category: "marketing"
-title: "Rivalry x KuyaNic: O2O Watch Party"
+title: "Rivalry x KuyaNic: Offline-to-Online Watch Party"
 date: "The International (TI) 11 - 2022"
 role: "Campaigns & Affiliate Specialist"
 color: "#6366f1"
@@ -8,7 +8,7 @@ results: "1,000+ New Verified Users in 5 Days"
 deliverables:
   - "O2O (Offline-to-Online) Strategy"
   - "Experiential Booth Design"
-  - "High-Barrier UA Funnel"
+  - "High-Barrier User Acquisition Funnel"
   - "B2B Partnership Management"
 media:
   type: "video"
