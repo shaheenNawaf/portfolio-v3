@@ -56,24 +56,36 @@ const layer =
 </script>
 
 <style>
-  /* One dotted rule under the button, sized to the visible text and animated
-     between the email (rest) and the hint / confirmation (hover, focus, copied).
-     Without JS it falls back to the full button width. */
-  .copy-rule {
-    position: absolute; left: 0; bottom: 0; height: 0;
+  /* The button itself resizes to the visible text — email at rest, hint /
+     confirmation on hover, focus or copied — so the sentence closes up
+     around it. Widths are measured in JS; without JS it stays auto width. */
+  [data-copy-swap] {
+    width: var(--w-rest, auto);
+    transition: width 0.22s var(--ease-out-expo);
+  }
+  [data-copy-swap]:hover,
+  [data-copy-swap]:focus-visible,
+  [data-copy-swap][data-copied="true"] {
+    width: var(--w-hint, auto);
+  }
+  /* Invisible email-width hover area: once the box shrinks, a pointer near
+     its old right edge is still "on" it, so hover can't flicker on/off. */
+  [data-copy-swap]::after {
+    content: ""; position: absolute; top: 0; bottom: 0; left: 0;
     width: var(--w-rest, 100%);
+  }
+  /* Dotted rule spans the (resizing) button. */
+  .copy-rule {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 0;
     border-bottom: 1px dotted currentColor;
-    transition: width 0.22s var(--ease-out-expo), color 0.2s ease;
+    transition: color 0.2s ease;
     pointer-events: none;
   }
   [data-copy-swap]:hover .copy-rule,
   [data-copy-swap]:focus-visible .copy-rule,
-  [data-copy-swap][data-copied="true"] .copy-rule {
-    width: var(--w-hint, 100%);
-    color: var(--text-muted);
-  }
+  [data-copy-swap][data-copied="true"] .copy-rule { color: var(--text-muted); }
   @media (prefers-reduced-motion: reduce) {
-    .copy-rule { transition: none; }
+    [data-copy-swap] { transition: none; }
   }
 </style>
 
