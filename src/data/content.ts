@@ -14,6 +14,7 @@ import { experienceTech } from "./resume";
 // versa). Experiences are reverse-chronological with education last.
 // New CMS entries (not in these lists) are appended at the end.
 const projectOrder = [
+  "proj-cardforge",
   "campaign-rivalry-tribe-main",
   "proj-gymeasy",
   "campaign-kuyanic-ti",

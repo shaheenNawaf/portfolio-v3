@@ -33,6 +33,11 @@ single page.
 - Content Lab (contentlab.xyz), AI Systems Engineer (Sep 2026–present):
   AI systems and internal engineering tooling for a TikTok-partner influencer
   marketing agency serving 100+ global brands.
+- CardForge (cardforge.shaheen.works, Aug 2026–present, solo build): end-to-end
+  marketplace for game accounts — 4K inventory card editor, one-click listing
+  publishing with live viewer counts, filterable marketplace, owner dashboard;
+  Supabase Postgres with row-level security. 167 active listings, 3 sellers,
+  1,037-skin catalog (Oct 2026).
 - Agri-Pinoy: Flutter chatbot for Filipino farmers backed by a RAG
   (retrieval-augmented generation) pipeline, real-time evaluation and Supabase
   logging; public web app. Role: lead front-end developer.

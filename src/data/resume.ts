@@ -73,6 +73,7 @@ export const resumes = {
 
 /** Flagship projects rendered as always-open case studies at the top of the work grid, in display order. */
 export const showcaseProjectIds: readonly string[] = [
+  "proj-cardforge",
   "campaign-rivalry-tribe-main",
   "proj-gymeasy",
   "campaign-kuyanic-ti",

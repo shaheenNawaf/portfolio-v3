@@ -136,8 +136,10 @@
     transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease;
   }
   .journey-item > summary:hover::after { transform: scaleX(1); }
+  /* Drop lines run to the NEXT row's connector: row gap (24px) + connector
+     offset (10px). */
   .journey-drop {
-    position: absolute; top: 10px; bottom: -24px; left: 0; width: 1px;
+    position: absolute; top: 10px; bottom: -34px; left: 0; width: 1px;
     background-color: color-mix(in srgb, var(--text) 40%, transparent);
     transform: scaleY(0); transform-origin: top; transition: transform 0.3s ease;
   }
@@ -147,13 +149,16 @@
     .journey-item > summary:hover .journey-drop { transform: scaleY(0); }
   }
   .journey-item::after {
-    content: ""; position: absolute; top: 10px; bottom: -24px; left: 0; width: 1px;
+    content: ""; position: absolute; top: 10px; bottom: -34px; left: 0; width: 1px;
     background-color: color-mix(in srgb, var(--text) 40%, transparent);
     transform: scaleY(0); transform-origin: top; transition: transform 0.3s ease;
   }
   .journey-item[open]::after { transform: scaleY(1); }
   .journey-item[open] > summary::after { transform: scaleX(1); }
   .journey-item[open] > summary:hover .journey-drop { transform: scaleY(0); }
+  /* Nothing below the last row to connect to. */
+  [data-experience-row]:last-child .journey-drop,
+  [data-experience-row]:last-child .journey-item::after { display: none; }
   .journey-marker {
     width: 10px; height: 10px; flex-shrink: 0;
     margin-top: 6px;
