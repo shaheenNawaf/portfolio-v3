@@ -11,9 +11,8 @@ import JourneyRow from "../components/journey_row.astro";
 import SkillsGrid from "../components/skills_grid.astro";
 import BookCall from "../components/book_call.astro";
 import SiteFooter from "../components/site_footer.astro";
-import StickerPill from "../components/sticker_pill.astro";
 import CopySwap from "../components/copy_swap.astro";
-import { name, showcaseProjectIds, secrets, hub, contact, socials } from "../data/resume";
+import { name, showcaseProjectIds, secrets, hub, contact } from "../data/resume";
 import { getExperiences, getProjects } from "../data/content";
 
 const projects = await getProjects();
@@ -126,27 +125,13 @@ const workCategories = [
             reveal={secrets.status.reveal}
           />
         </p>
-        <div class="mt-3">
-          <BookCall
-            defaultInterest="hybrid"
-            title="Let's talk"
-            subtitle={hub.appointmentUrl
-              ? "Send a short note or book a time. Replies within 24–48 hours."
-              : "Send a short note below, or email me directly. Replies within 24–48 hours."}
-          >
-            <div slot="direct" class="mt-4 flex flex-col gap-3">
-              <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] muted">
-                <span>{contact.location} · {hub.availability}</span>
-              </p>
-              <p class="text-[14px]">
-                <CopySwap value={contact.email} hint="yep, click it to copy my email" />
-              </p>
-              <div class="flex flex-wrap items-center gap-2">
-                {[socials[1], socials[3], socials[4]].map((s) => (
-                  <StickerPill social={s} idPrefix="contact-" />
-                ))}
-              </div>
-            </div>
+        <div class="mt-2">
+          <BookCall defaultInterest="hybrid" title="Let's talk">
+            <p slot="direct" class="mt-1.5 text-[13px] muted leading-relaxed">
+              {hub.appointmentUrl ? "Send a short note or book a time" : "Send a short note"}, or
+              email <CopySwap value={contact.email} hint="yep, click it to copy my email" />.
+              Replies within 24–48 hours.
+            </p>
           </BookCall>
         </div>
       </section>

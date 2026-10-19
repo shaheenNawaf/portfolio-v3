@@ -501,9 +501,15 @@
     display: block; font-size: 13px; font-weight: 500; line-height: 1.4;
     color: var(--text); margin-bottom: 0.4rem;
   }
+  /* Contact form panel: same quiet surface as an open case-study card. */
+  .book-panel {
+    padding: 1.25rem; border: 1px solid var(--border); border-radius: var(--radius);
+    background-color: color-mix(in srgb, var(--surface) 45%, transparent);
+  }
+  @media (min-width: 768px) { .book-panel { padding: 1.5rem; } }
   .book-field {
     width: 100%; border-radius: var(--radius); border: 1px solid var(--border);
-    background: transparent; color: var(--text); padding: 0.65rem 0.85rem;
+    background: var(--bg); color: var(--text); padding: 0.65rem 0.85rem;
     font-size: 0.875rem; transition: border-color 0.2s ease;
   }
   .book-field::placeholder { color: var(--text-faint); }

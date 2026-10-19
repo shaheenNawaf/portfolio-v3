@@ -16,6 +16,33 @@ const layer =
   "col-start-1 row-start-1 whitespace-nowrap transition-[opacity,transform,filter] duration-200 motion-reduce:transition-none";
 ---
 
+<script>
+  document.querySelectorAll<HTMLButtonElement>("[data-copy-swap]").forEach((btn) => {
+    const hint = btn.querySelector<HTMLElement>("[data-copy-hint]");
+    const status = btn.nextElementSibling as HTMLElement | null;
+    const resting = hint?.textContent?.trim() ?? "";
+    let timer = 0;
+
+    btn.addEventListener("click", async () => {
+      let msg = btn.dataset.copiedText ?? "copied";
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copySwap ?? "");
+      } catch {
+        msg = "couldn't copy — select it instead";
+      }
+      if (hint) hint.textContent = msg;
+      if (status) status.textContent = msg;
+      btn.dataset.copied = "true";
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        btn.dataset.copied = "false";
+        if (hint) hint.textContent = resting;
+        if (status) status.textContent = "";
+      }, 1800);
+    });
+  });
+</script>
+
 <button
   type="button"
   data-copy-swap={value}
@@ -46,32 +73,5 @@ const layer =
   >
     {hint}
   </span>
-</button>
-<span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
-
-<script>
-  document.querySelectorAll<HTMLButtonElement>("[data-copy-swap]").forEach((btn) => {
-    const hint = btn.querySelector<HTMLElement>("[data-copy-hint]");
-    const status = btn.nextElementSibling as HTMLElement | null;
-    const resting = hint?.textContent?.trim() ?? "";
-    let timer = 0;
-
-    btn.addEventListener("click", async () => {
-      let msg = btn.dataset.copiedText ?? "copied";
-      try {
-        await navigator.clipboard.writeText(btn.dataset.copySwap ?? "");
-      } catch {
-        msg = "couldn't copy — select it instead";
-      }
-      if (hint) hint.textContent = msg;
-      if (status) status.textContent = msg;
-      btn.dataset.copied = "true";
-      window.clearTimeout(timer);
-      timer = window.setTimeout(() => {
-        btn.dataset.copied = "false";
-        if (hint) hint.textContent = resting;
-        if (status) status.textContent = "";
-      }, 1800);
-    });
-  });
-</script>
+</button><span class="sr-only" role="status" aria-live="polite" data-copy-status
+></span>
