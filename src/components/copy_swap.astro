@@ -20,8 +20,18 @@ const layer =
   document.querySelectorAll<HTMLButtonElement>("[data-copy-swap]").forEach((btn) => {
     const hint = btn.querySelector<HTMLElement>("[data-copy-hint]");
     const status = btn.nextElementSibling as HTMLElement | null;
+    const value = btn.querySelector<HTMLElement>("[data-copy-value]");
     const resting = hint?.textContent?.trim() ?? "";
     let timer = 0;
+
+    // The underline tracks whichever text is showing: measure both layers.
+    const measure = () => {
+      if (value) btn.style.setProperty("--w-rest", `${value.offsetWidth}px`);
+      if (hint) btn.style.setProperty("--w-hint", `${hint.offsetWidth}px`);
+    };
+    measure();
+    void document.fonts?.ready.then(measure);
+    window.addEventListener("resize", measure);
 
     btn.addEventListener("click", async () => {
       let msg = btn.dataset.copiedText ?? "copied";
@@ -31,26 +41,51 @@ const layer =
         msg = "couldn't copy — select it instead";
       }
       if (hint) hint.textContent = msg;
+      measure();
       if (status) status.textContent = msg;
       btn.dataset.copied = "true";
       window.clearTimeout(timer);
       timer = window.setTimeout(() => {
         btn.dataset.copied = "false";
         if (hint) hint.textContent = resting;
+        measure();
         if (status) status.textContent = "";
       }, 1800);
     });
   });
 </script>
 
+<style>
+  /* One dotted rule under the button, sized to the visible text and animated
+     between the email (rest) and the hint / confirmation (hover, focus, copied).
+     Without JS it falls back to the full button width. */
+  .copy-rule {
+    position: absolute; left: 0; bottom: 0; height: 0;
+    width: var(--w-rest, 100%);
+    border-bottom: 1px dotted currentColor;
+    transition: width 0.22s var(--ease-out-expo), color 0.2s ease;
+    pointer-events: none;
+  }
+  [data-copy-swap]:hover .copy-rule,
+  [data-copy-swap]:focus-visible .copy-rule,
+  [data-copy-swap][data-copied="true"] .copy-rule {
+    width: var(--w-hint, 100%);
+    color: var(--text-muted);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .copy-rule { transition: none; }
+  }
+</style>
+
 <button
   type="button"
   data-copy-swap={value}
   data-copied-text={copied}
   aria-label={`Copy email address ${value}`}
-  class="group/copy inline-grid max-w-full items-baseline text-left fg border-b border-dotted border-current cursor-copy"
+  class="group/copy relative inline-grid max-w-full items-baseline justify-items-start text-left fg cursor-copy"
 >
   <span
+    data-copy-value
     class:list={[
       layer,
       "group-hover/copy:-translate-y-1 group-hover/copy:opacity-0 group-hover/copy:blur-[2px]",
@@ -73,5 +108,6 @@ const layer =
   >
     {hint}
   </span>
+  <span class="copy-rule" aria-hidden="true"></span>
 </button><span class="sr-only" role="status" aria-live="polite" data-copy-status
 ></span>
